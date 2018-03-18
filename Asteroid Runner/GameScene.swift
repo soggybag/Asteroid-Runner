@@ -14,6 +14,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   var shipSpeed: CGFloat = 5
   
+  var asteroidSize = AsteroidSize.average
+  var asteroidSpeed = AsteroidSpeed.average
+  var asteroidDensity = AsteroidDensity.average
+  
   var gameState: GKStateMachine!
   var readyState: GKState!
   var playingState: GKState!
@@ -104,20 +108,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   func setupPhysicsWorld() {
+    // Physics delegate
     physicsWorld.contactDelegate = self
+    // Gravity
     physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     
-    // setup edge loop
+    // Inner edge
     guard let view = view else { return }
     physicsBody = SKPhysicsBody(edgeLoopFrom: view.frame)
     
     physicsBody?.categoryBitMask = PhysicsCategory.Edge
     physicsBody?.collisionBitMask = PhysicsCategory.Ship
     physicsBody?.contactTestBitMask = PhysicsCategory.None
-    
+    // Outer edge
     let outerHitBox = SKNode()
     addChild(outerHitBox)
-    let outerHitBoxRect = view.frame.insetBy(dx: -40, dy: -40)
+    let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -121)
     outerHitBox.physicsBody = SKPhysicsBody(edgeLoopFrom: outerHitBoxRect)
     outerHitBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterEdge
     outerHitBox.physicsBody?.collisionBitMask = PhysicsCategory.None
@@ -168,6 +174,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     run(SKAction.repeatForever(seq))
   }
   
+  
   func makeAsteroid() {
     changeIndex -= 0
     if changeIndex < 0 {
@@ -193,8 +200,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       powerup.position.y = size.height
       
     default:
-      let asteroidSize = CGFloat.random(min: 1, max: 4) * 10
-      let asteroid = Asteroid(size: CGSize(width: asteroidSize, height: asteroidSize))
+      let sz = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive][Int.random(n: 6)]
+      let sp = [AsteroidSpeed.slow, .average, .fast, .veryFast][Int.random(n: 4)]
+      
+      let asteroid = Asteroid(size: sz, speed: sp, density: asteroidDensity)
       addChild(asteroid)
     }
   }
