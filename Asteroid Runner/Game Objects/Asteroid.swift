@@ -28,6 +28,9 @@ Asteroid types
 import SpriteKit
 
 class Asteroid: SKSpriteNode {
+  
+  
+  
   init(size: CGSize) {
     super.init(texture: nil, color: .brown, size: size)
     
@@ -50,7 +53,7 @@ class Asteroid: SKSpriteNode {
     physicsBody?.collisionBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile
     physicsBody?.contactTestBitMask = PhysicsCategory.Ship | PhysicsCategory.Missile | PhysicsCategory.Edge
     
-    let r = (CGFloat(arc4random_uniform(10)) - 5) * 0.25
+    let r = CGFloat.random(min: -5, max: 5) * 0.25
     physicsBody?.angularVelocity = r
     
     physicsBody?.linearDamping = 0
@@ -58,43 +61,50 @@ class Asteroid: SKSpriteNode {
   }
   
   func configure() {
-    let r = arc4random_uniform(12)
+    let r = Int.random(min: 0, max: 12)
+    
+    let centerY = Screen.sharedInstance.centerY
+    
+    var x: CGFloat
+    var y: CGFloat
+    var dx: CGFloat
+    var dy: CGFloat
+    
     switch r {
     case 0: // Starts on Left
-      let x: CGFloat = -20
-      let y = CGFloat.random(min: 0, max: Screen.sharedInstance.centerY)
-      position = CGPoint(x: x, y: y)
-      let dx = CGFloat.random(min: 15, max: 50)
-      let dy = CGFloat.random(min: 25, max: 60) * -1
-      physicsBody?.velocity = CGVector(dx: dx, dy: dy)
+      x = -20
+      y = CGFloat.random(min: centerY, max: centerY * 2)
+      dx = CGFloat.random(min: 15, max: 50)
+      dy = CGFloat.random(min: 25, max: 80) * -1
       
     case 1: // Starts on the Right
-      let x: CGFloat = Screen.sharedInstance.width + 20
-      let y = CGFloat.random(min: 0, max: Screen.sharedInstance.centerY)
-      position = CGPoint(x: x, y: y)
-      let dx = CGFloat.random(min: 15, max: 50) * -1
-      let dy = CGFloat.random(min: 25, max: 60) * -1
-      physicsBody?.velocity = CGVector(dx: dx, dy: dy)
+      x = Screen.sharedInstance.width + 20
+      y = CGFloat.random(min: centerY, max: centerY * 2)
+      dx = CGFloat.random(min: 15, max: 50) * -1
+      dy = CGFloat.random(min: 25, max: 80) * -1
       
     case 2: // Down from Top
-      let x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      let y = Screen.sharedInstance.height + 20
-      position = CGPoint(x: x, y: y)
-      physicsBody?.velocity = CGVector(dx: 0, dy: -20)
+      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
+      y = Screen.sharedInstance.height + 20
+      dx = CGFloat.random(min: -10, max: 10)
+      dy = CGFloat.random(min: 40, max: 100) * -1
       
     default: // Normal
-      let x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      let y = Screen.sharedInstance.height + 20
-      position = CGPoint(x: x, y: y)
-      physicsBody?.velocity = CGVector(dx: 0, dy: -20)
+      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
+      y = Screen.sharedInstance.height + 20
+      dx = 0
+      dy = -20
       
     }
+    
+    position = CGPoint(x: x, y: y)
+    physicsBody?.velocity = CGVector(dx: dx, dy: dy)
   }
   
   func randomColor() -> UIColor {
-    let r = CGFloat(arc4random_uniform(50) + 100)
-    let g = CGFloat(arc4random_uniform(30) + 70)
-    let b = CGFloat(arc4random_uniform(20) + 20)
+    let r = CGFloat.random(min: 100, max: 160)
+    let g = CGFloat.random(min: 70, max: 110)
+    let b = CGFloat.random(min: 20, max: 40)
     
     return UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: 1)
   }

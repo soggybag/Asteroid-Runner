@@ -10,9 +10,19 @@ import SpriteKit
 
 class Ship: SKSpriteNode {
   
+  let shipSpeedSlow: CGFloat = 0.1
+  let shipSpeedMed: CGFloat = 0.25
+  let shipSpeedFast: CGFloat = 0.5
+  
+  let shipDampingSlow: CGFloat = 0.25
+  let shipDampingMed: CGFloat = 0.5
+  let shipDampingFast: CGFloat = 1
+  
+  var shipSpeed: CGFloat = 0.25
+  
   init() {
     let size = CGSize(width: 20, height: 40)
-    super.init(texture: nil, color: .red, size: size)
+    super.init(texture: nil, color: Colors.shipBlue, size: size)
     
     name = "Ship"
     
@@ -41,6 +51,21 @@ class Ship: SKSpriteNode {
   }
   
   func move(x: CGFloat) {
-    physicsBody?.applyImpulse(CGVector(dx: x, dy: 0))
+    physicsBody?.applyImpulse(CGVector(dx: x * shipSpeed, dy: 0))
+  }
+  
+  func setShipSpeedSlow() {
+    shipSpeed = shipSpeedSlow
+    physicsBody?.linearDamping = shipDampingSlow
+  }
+  
+  func setShipSpeedMed() {
+    shipSpeed = shipSpeedMed
+    physicsBody?.linearDamping = shipDampingMed
+  }
+  
+  func setShipSpeedFast() {
+    shipSpeed = shipSpeedFast
+    physicsBody?.linearDamping = shipDampingFast
   }
 }

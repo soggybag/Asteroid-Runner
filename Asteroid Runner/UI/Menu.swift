@@ -23,12 +23,14 @@ class Menu: SKSpriteNode {
     
     let button = Button()
     addChild(button)
+    button.title = "Play Again"
     button.buttonAction = {
       self.tapToPlay()
     }
     
     label = SKLabelNode()
     addChild(label)
+    label.fontName = Fonts.fontName
     label.position = button.position
     label.position.y = label.position.y - 100
   }

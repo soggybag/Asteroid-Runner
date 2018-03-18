@@ -12,6 +12,8 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
+  var shipSpeed: CGFloat = 5
+  
   var gameState: GKStateMachine!
   var readyState: GKState!
   var playingState: GKState!
@@ -98,9 +100,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let cam = SKCameraNode()
     camera = cam
     cam.position = Screen.sharedInstance.center
-    
-    print(Screen.sharedInstance.center)
-    print(Screen.sharedInstance.centerX, Screen.sharedInstance.centerY)
     addChild(cam)
   }
   
@@ -129,6 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     addChild(ship)
     ship.position.x = Screen.sharedInstance.centerX
     ship.position.y = 60
+    ship.setShipSpeedMed()
   }
   
   func setupStarfield() {
@@ -141,6 +141,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     hud = Hud()
     addChild(hud)
     
+    hud.button1Action = {
+      self.ship.setShipSpeedFast()
+      Missile.setPowerLow()
+    }
+    
+    hud.button2Action = {
+      self.ship.setShipSpeedMed()
+      Missile.setPowerMed()
+    }
+    
+    hud.button3Action = {
+      self.ship.setShipSpeedSlow()
+      Missile.setPowerHi()
+    }
   }
   
   //
@@ -161,28 +175,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     score += 1
-    let r = arc4random_uniform(24)
+    let r = Int.random(min: 0, max: 24)
+    
+    print("Asteroid Type: \(r)")
     
     switch r {
     case 0:
       let powerup = PowerUpBomb()
       addChild(powerup)
-      powerup.position.x = CGFloat(arc4random_uniform(UInt32(size.width)))
+      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
-    case 1 ... 2:
+    case 1:
       let powerup = PowerUp()
       addChild(powerup)
-      powerup.position.x = CGFloat(arc4random_uniform(UInt32(size.width)))
+      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     default:
-      let asteroidSize = CGFloat((arc4random_uniform(4) + 1) * 10)
-      
+      let asteroidSize = CGFloat.random(min: 1, max: 4) * 10
       let asteroid = Asteroid(size: CGSize(width: asteroidSize, height: asteroidSize))
       addChild(asteroid)
-      asteroid.position.x = CGFloat(arc4random_uniform(UInt32(size.width)))
-      asteroid.position.y = size.height
     }
   }
   
@@ -190,7 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let missile = Missile()
     addChild(missile)
     missile.position = ship.position
-    missile.position.y = 100
+    missile.position.y = 80
   }
   
   //
@@ -221,6 +234,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     switch collision {
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
       // print("Missile Hits Asteroid")
+      // print(contact.collisionImpulse)
       if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
         contact.bodyA.node?.removeFromParent()
       } else {
@@ -228,7 +242,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       }
       
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
-      print("Asteroid Hits Ship")
+      // print("Asteroid Hits Ship")
       guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
       shipExplosion.position = self.ship.position
       self.addChild(shipExplosion)
@@ -276,7 +290,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       
       if contact.bodyA.node?.name == "Powerup Bomb" || contact.bodyB.node?.name == "Powerup Bomb" {
         // destroy all rocks
-        print("destroy all asteroids")
+        // print("destroy all asteroids")
         destroyAllAsteroids()
       }
       
@@ -317,15 +331,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func shakeScreen() {
     let wait = 0.03
     let count = 19
-    let offset: UInt32 = 8
+    let offset: CGFloat = 8
     
     let waitAction = SKAction.wait(forDuration: wait)
     let wiggle = SKAction.run {
       guard let camera = self.camera else { return }
       let cx = Screen.sharedInstance.centerX
       let cy = Screen.sharedInstance.centerY
-      let dx = cx + CGFloat(arc4random_uniform(offset * 2)) - CGFloat(offset)
-      let dy = cy + CGFloat(arc4random_uniform(offset * 2)) - CGFloat(offset)
+      let dx = cx + CGFloat.random(min: -offset, max: offset)
+      let dy = cy + CGFloat.random(min: -offset, max: offset)
       camera.position = CGPoint(x: dx, y: dy)
     }
     let seq = SKAction.sequence([waitAction, wiggle])
@@ -340,11 +354,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   //
   
   override func update(_ currentTime: TimeInterval) {
-// if (hudVisible) {
-//   hud.position.y -= hud.position.y * 0.5
-// } else {
-//   hud.position.y -= (hud.position.y - size.height + 40) * 0.5
-// }
+    // if (hudVisible) {
+    //   hud.position.y -= hud.position.y * 0.5
+    // } else {
+    //   hud.position.y -= (hud.position.y - size.height + 40) * 0.5
+    // }
   }
   
 }
@@ -385,18 +399,18 @@ extension GameScene {
   @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
     switch gesture.direction {
     case .right:
-      ship.move(x: 5)
+      ship.move(x: shipSpeed)
       
     case .left:
-      ship.move(x: -5)
+      ship.move(x: -shipSpeed)
       
     case .down:
-      print("Swipe Down")
-      // hudVisible = false
+      // print("Swipe Down")
+      hudVisible = false
       
     case .up:
-      print("Swipe Up")
-      // hudVisible = true
+      // print("Swipe Up")
+      hudVisible = true
       
     default:
       return

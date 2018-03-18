@@ -13,7 +13,7 @@ class PowerUpBomb: PowerUp {
     super.init()
     name = "Powerup Bomb"
     
-    color = .orange
+    color = Colors.fuschia
     setupPhysics()
   }
   

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82D19E2205E34DF00807C85 /* Fonts.swift */; };
 		D84E3731205CD3B500512E12 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3730205CD3B500512E12 /* Ship.swift */; };
 		D84E3733205CD55200512E12 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3732205CD55200512E12 /* Asteroid.swift */; };
 		D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3734205CDAF400512E12 /* PhysicsCategory.swift */; };
@@ -27,6 +28,7 @@
 		D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3756205DAB0000512E12 /* PublicExtension.swift */; };
 		D84E3759205DAB3000512E12 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3758205DAB3000512E12 /* Screen.swift */; };
 		D84E375B205DCC6E00512E12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E375A205DCC6E00512E12 /* Colors.swift */; };
+		D8B1F2F9205EC27800418F40 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B1F2F8205EC27800418F40 /* SpriteKit.framework */; };
 		D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */; };
 		D8DB9C19205CD2DB006455F9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C18205CD2DB006455F9 /* GameScene.swift */; };
 		D8DB9C1B205CD2DB006455F9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C1A205CD2DB006455F9 /* GameViewController.swift */; };
@@ -36,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D82D19E2205E34DF00807C85 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		D84E3730205CD3B500512E12 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		D84E3732205CD55200512E12 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
 		D84E3734205CDAF400512E12 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
@@ -56,6 +59,7 @@
 		D84E3756205DAB0000512E12 /* PublicExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicExtension.swift; sourceTree = "<group>"; };
 		D84E3758205DAB3000512E12 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		D84E375A205DCC6E00512E12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		D8B1F2F8205EC27800418F40 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		D8DB9C0F205CD2DB006455F9 /* Asteroid Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Asteroid Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8DB9C18205CD2DB006455F9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -71,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8B1F2F9205EC27800418F40 /* SpriteKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,11 +106,11 @@
 		D84E375E205DD17600512E12 /* Game Objects */ = {
 			isa = PBXGroup;
 			children = (
+				D84E3732205CD55200512E12 /* Asteroid.swift */,
+				D84E3736205CDC1300512E12 /* Missile.swift */,
 				D84E3744205D0A3E00512E12 /* PowerUp.swift */,
 				D84E3746205D6A4000512E12 /* PowerUpBomb.swift */,
 				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
-				D84E3732205CD55200512E12 /* Asteroid.swift */,
-				D84E3736205CDC1300512E12 /* Missile.swift */,
 				D84E3730205CD3B500512E12 /* Ship.swift */,
 			);
 			path = "Game Objects";
@@ -116,6 +121,7 @@
 			children = (
 				D84E3734205CDAF400512E12 /* PhysicsCategory.swift */,
 				D84E375A205DCC6E00512E12 /* Colors.swift */,
+				D82D19E2205E34DF00807C85 /* Fonts.swift */,
 				D84E3758205DAB3000512E12 /* Screen.swift */,
 				D84E3756205DAB0000512E12 /* PublicExtension.swift */,
 			);
@@ -132,11 +138,20 @@
 			path = Particles;
 			sourceTree = "<group>";
 		};
+		D8B1F2F7205EC27700418F40 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8B1F2F8205EC27800418F40 /* SpriteKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D8DB9C06205CD2DB006455F9 = {
 			isa = PBXGroup;
 			children = (
 				D8DB9C11205CD2DB006455F9 /* Asteroid Runner */,
 				D8DB9C10205CD2DB006455F9 /* Products */,
+				D8B1F2F7205EC27700418F40 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -249,6 +264,7 @@
 				D84E3745205D0A3E00512E12 /* PowerUp.swift in Sources */,
 				D84E3755205D941800512E12 /* Menu.swift in Sources */,
 				D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */,
+				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,
 				D84E375B205DCC6E00512E12 /* Colors.swift in Sources */,
@@ -401,6 +417,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 753UQ7TNXJ;
 				INFOPLIST_FILE = "Asteroid Runner/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.webdevils.Asteroid-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -416,6 +433,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 753UQ7TNXJ;
 				INFOPLIST_FILE = "Asteroid Runner/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.webdevils.Asteroid-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";

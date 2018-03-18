@@ -14,6 +14,18 @@ class Hud: SKSpriteNode {
   var showAction: SKAction!
   var hideAction: SKAction!
   
+  var button1Action = {
+    print("Button 1 Activated from Game Scene")
+  }
+  
+  var button2Action = {
+    print("Button 2 Activated from Game Scene")
+  }
+  
+  var button3Action = {
+    print("Button 3 Activated from Game Scene")
+  }
+  
   var button1 = Button()
   var button2 = Button()
   var button3 = Button()
@@ -41,9 +53,14 @@ class Hud: SKSpriteNode {
   
   func setupLabel() {
     addChild(scoreLabel)
-    scoreLabel.horizontalAlignmentMode = .left
+    scoreLabel.fontSize = 24
+    scoreLabel.position.x = Screen.sharedInstance.width - 10
+    scoreLabel.position.y = 5
+    scoreLabel.horizontalAlignmentMode = .right
     scoreLabel.verticalAlignmentMode = .bottom
     scoreLabel.text = "000000"
+    scoreLabel.fontColor = Colors.buttonLabelColor
+    scoreLabel.fontName = Fonts.fontName
   }
   
   func setupActions() {
@@ -52,23 +69,38 @@ class Hud: SKSpriteNode {
   }
   
   func setupButtons() {
-    addChild(button1)
-    button1.position.x = size.width / 2
-    button1.position.y = size.height / 2
-    button1.buttonAction = {
-      print("Button 1 Action ")
-    }
     addChild(button2)
+    button2.select()
+    button2.title = "Speed = Power"
     button2.position.x = size.width / 2
-    button2.position.y = button1.position.y + 100
+    button2.position.y = size.height / 2
     button2.buttonAction = {
-      print("Button 2 Action ")
+      self.button2Action()
+      self.button1.deselect()
+      self.button2.select()
+      self.button3.deselect()
     }
+    
+    addChild(button1)
+    button1.title = "Speed > Power"
+    button1.position.x = size.width / 2
+    button1.position.y = button2.position.y + 100
+    button1.buttonAction = {
+      self.button1Action()
+      self.button1.select()
+      self.button2.deselect()
+      self.button3.deselect()
+    }
+    
     addChild(button3)
+    button3.title = "Speed < Power"
     button3.position.x = size.width / 2
-    button3.position.y = button1.position.y - 100
+    button3.position.y = button2.position.y - 100
     button3.buttonAction = {
-      print("Button 3 Action ")
+      self.button3Action()
+      self.button1.deselect()
+      self.button2.deselect()
+      self.button3.select()
     }
   }
   
