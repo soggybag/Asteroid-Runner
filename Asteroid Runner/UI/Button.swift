@@ -12,7 +12,9 @@ import SpriteKit
 
 class Button: SKSpriteNode {
   
-  let label = SKLabelNode()
+  let label       = SKLabelNode()
+  let strokeNode  = SKShapeNode()
+  let fillNode    = SKShapeNode()
   
   var buttonAction = {
     print("Button Action")
@@ -25,13 +27,13 @@ class Button: SKSpriteNode {
   }
   
   init() {
-    
     let size = CGSize(width: 140, height: 40)
     
-    super.init(texture: nil, color: Colors.buttonColorNormal, size: size)
+    super.init(texture: nil, color: .clear, size: size)
     
     isUserInteractionEnabled = true
     
+    setupShape()
     setupLabel()
   }
   
@@ -41,6 +43,27 @@ class Button: SKSpriteNode {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     buttonAction()
+  }
+  
+  func setupShape() {
+    //// StrokePath Drawing
+    let strokePath = UIBezierPath(roundedRect: CGRect(x: -70, y: -20, width: 140, height: 40), cornerRadius: 20)
+    
+    strokeNode.path = strokePath.cgPath
+    strokeNode.lineWidth = 3
+    strokeNode.strokeColor = Colors.buttonColorNormal
+    
+    
+    //// fillPath Drawing
+    let fillPath = UIBezierPath(roundedRect: CGRect(x: -65, y: -15, width: 130, height: 30), cornerRadius: 15)
+    fillNode.path = fillPath.cgPath
+    fillNode.fillColor = Colors.buttonColorNormal
+    fillNode.strokeColor = UIColor.clear
+    
+    addChild(strokeNode)
+    addChild(fillNode)
+    
+    deselect()
   }
   
   func setupLabel() {
@@ -53,10 +76,10 @@ class Button: SKSpriteNode {
   }
   
   func select() {
-    color = Colors.buttonColorSelected
+    fillNode.isHidden = false
   }
   
   func deselect() {
-    color = Colors.buttonColorNormal
+    fillNode.isHidden = true
   }
 }
