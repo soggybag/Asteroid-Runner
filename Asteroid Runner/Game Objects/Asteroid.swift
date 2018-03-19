@@ -6,87 +6,64 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
-/*
- 
-Asteroid types
- 
- 1. Normal
- 2. Glassteroid - transparent but shatters when hit
- 3. Blacksteroids - dark and hard to see against space background
- 4. Gasteroids - Explode when hit
- 5. Brasserteroids - Super massive
- 6. Commets - Fly fast at an angle
- 7. Icestroids - shard when hit
- 8. Asteroids - break up when hit enough
- 9. Asteroid Turret - Has turret that fires, can be broken to destroy turret
-10. Low mass asteroids -
-11. Elastroids - Bouncey asteroids
-12. Coins - 
- 
-*/
 
 import SpriteKit
 
 enum AsteroidSize: CGFloat {
   // set the radius
-  case tiny = 5
-  case small = 10
-  case average = 15
-  case large = 20
-  case huge = 25
-  case massive = 30
+  case tiny     = 5
+  case small    = 10
+  case average  = 15
+  case large    = 20
+  case huge     = 25
+  case massive  = 30
 }
 
 enum AsteroidSpeed: CGFloat {
   // set the velocity
-  case slow = 0.5
-  case average = 1.0
-  case fast = 2.0
+  case slow     = 0.5
+  case average  = 1.0
+  case fast     = 2.0
   case veryFast = 4.0
 }
 
 enum AsteroidDensity: CGFloat {
   // Set the mass
-  case light = 0.5
-  case average = 1.0
-  case dense = 2.0
+  case light    = 0.5
+  case average  = 1.0
+  case dense    = 2.0
   
 }
 
 
 class Asteroid: SKSpriteNode {
   
-  init(size: AsteroidSize, speed: AsteroidSpeed, density: AsteroidDensity) {
-    let radius = size.rawValue
+  var hits: CGFloat = 0
+  
+  init(asteroidSize: AsteroidSize, speed: AsteroidSpeed, density: AsteroidDensity) {
+    let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
     super.init(texture: nil, color: .white, size: size)
     // Set name 
     name = "Asteroid"
+    // Set hits
+    hits = asteroidSize.rawValue
     // Set the random color
     color = randomColor()
     // Configure physics for types
     configurePhysics(radius: radius, density: density, speed: speed)
   }
   
-  init(size: CGSize) {
-    if Int.random(min: 0, max: 10) == 0 {
-      print("*** BIG Stroid ***")
-      let s = CGSize(width: size.width * 3, height: size.width * 3)
-      super.init(texture: nil, color: .brown, size: s)
-    } else {
-      super.init(texture: nil, color: .brown, size: size)
-    }
-    
-    color = randomColor()
-    
-    name = "Asteroid"
-    
-    setupPhysics()
-    configure()
-  }
-  
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func hitAsteroid() -> Bool {
+    hits -= 1
+    if hits < 0 {
+      return true
+    }
+    return false
   }
   
   func configurePhysics(radius: CGFloat, density: AsteroidDensity, speed: AsteroidSpeed) {
@@ -148,11 +125,8 @@ class Asteroid: SKSpriteNode {
     position = CGPoint(x: x, y: y)
     physicsBody.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
     physicsBody.mass = physicsBody.mass * density.rawValue
+    print("Asteroid Mass: \(physicsBody.mass)")
   }
-  
-  
-  
-  
   
   func setupPhysics() {
     

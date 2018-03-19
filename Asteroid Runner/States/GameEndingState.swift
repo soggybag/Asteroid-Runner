@@ -9,7 +9,7 @@
 import GameplayKit
 import SpriteKit
 
-class GameOverState: GKState {
+class GameEndingState: GKState {
   
   unowned let scene: GameScene
   
@@ -18,22 +18,26 @@ class GameOverState: GKState {
   }
   
   override func didEnter(from previousState: GKState?) {
-    print("Enter Game Over State")
-    scene.menu.show()
+    print("Enter Game Ending State")
+    // Wait then go to Game over
+    scene.run(SKAction.sequence([
+      SKAction.wait(forDuration: 3),
+      SKAction.run({
+        print("????")
+        self.scene.gameState.enter(GameOverState.self)
+      })]))
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-    // print("Game Over is valid next state")
-    if stateClass == ReadyState.self {
-      // print("\(stateClass) is valid next state")
+    // print("Game Ending is valid next state: \(stateClass)")
+    if stateClass == GameOverState.self {
       return true
     }
-    print("\(stateClass) is NOT valid next state")
     return false
   }
   
   override func willExit(to nextState: GKState) {
-    
+    // print("Game Ending will exit")
   }
   
   override func update(deltaTime seconds: TimeInterval) {

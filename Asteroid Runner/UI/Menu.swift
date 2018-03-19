@@ -11,13 +11,18 @@ import SpriteKit
 class Menu: SKSpriteNode {
   
   var label: SKLabelNode!
+  var message = "" {
+    didSet {
+      label.text = message
+    }
+  }
   
   var tapToPlay = {
     print("Tap To Play")
   }
   
   init() {
-    let color = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+    let color = UIColor(white: 0, alpha: 0.5)
     let size = Screen.sharedInstance.size
     super.init(texture: nil, color: color, size: size)
     
@@ -30,6 +35,7 @@ class Menu: SKSpriteNode {
     
     label = SKLabelNode()
     addChild(label)
+    label.fontColor = Colors.buttonLabelColor
     label.fontName = Fonts.fontName
     label.position = button.position
     label.position.y = label.position.y - 100
@@ -48,7 +54,7 @@ class Menu: SKSpriteNode {
   }
   
   func show(message: String) {
-    label.text = message
+    self.message = message
     show()
   }
 }

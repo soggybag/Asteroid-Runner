@@ -6,6 +6,8 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
+// TODO: Move makeAsteroids to PlayingState
+
 import SpriteKit
 import GameplayKit
 import CoreMotion
@@ -19,10 +21,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var asteroidDensity = AsteroidDensity.average
   
   var gameState: GKStateMachine!
-  var readyState: GKState!
-  var playingState: GKState!
-  var gameOverState: GKState!
-  var countDownState: GKState!
   
   let ship = Ship()
   var menu: Menu!
@@ -58,10 +56,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     Screen.sharedInstance.setSize(size: size)
     
     name = "Scene"
+    backgroundColor = UIColor(white: 0, alpha: 1)
     
     setupMenu()
     setupStateMachine()
-    setupParticles()
     setupCamera()
     // setupMotion()
     setupGestures()
@@ -70,6 +68,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupship()
     setupHud()
     makeAsteroids()
+    
+    gameState.enter(ReadyState.self)
   }
   
   // -----------
@@ -81,23 +81,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     menu.position = Screen.sharedInstance.center
     menu.hide()
     menu.tapToPlay = {
+      self.clearScreen()
       self.menu.hide()
       self.ship.show()
       self.changeIndex = 100
+      self.gameState.enter(ReadyState.self)
     }
   }
   
   func setupStateMachine() {
-    readyState = ReadyState(scene: self)
-    playingState = PlayingState(scene: self)
-    gameOverState = GameOverState(scene: self)
-    countDownState = CountDownState(scene: self)
+    let readyState = ReadyState(scene: self)
+    let playingState = PlayingState(scene: self)
+    let gameOverState = GameOverState(scene: self)
+    let countDownState = CountDownState(scene: self)
+    let gameEndingState = GameEndingState(scene: self)
     
-    gameState = GKStateMachine(states: [readyState, playingState, gameOverState, countDownState])
-  }
-  
-  func setupParticles() {
-    
+    gameState = GKStateMachine(states: [readyState, playingState, gameOverState, countDownState, gameEndingState])
   }
   
   func setupCamera() {
@@ -108,19 +107,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   func setupPhysicsWorld() {
-    // Physics delegate
-    physicsWorld.contactDelegate = self
     // Gravity
     physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     
-    // Inner edge
+    // Inner edge - keeps ship within the bounds of the screen
     guard let view = view else { return }
     physicsBody = SKPhysicsBody(edgeLoopFrom: view.frame)
     
     physicsBody?.categoryBitMask = PhysicsCategory.Edge
     physicsBody?.collisionBitMask = PhysicsCategory.Ship
     physicsBody?.contactTestBitMask = PhysicsCategory.None
-    // Outer edge
+    
+    // Outer edge - Objects that hit this boundary are removed
     let outerHitBox = SKNode()
     addChild(outerHitBox)
     let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -121)
@@ -184,7 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     score += 1
     let r = Int.random(min: 0, max: 24)
     
-    print("Asteroid Type: \(r)")
+    // print("Asteroid Type: \(r)")
     
     switch r {
     case 0:
@@ -203,7 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       let sz = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive][Int.random(n: 6)]
       let sp = [AsteroidSpeed.slow, .average, .fast, .veryFast][Int.random(n: 4)]
       
-      let asteroid = Asteroid(size: sz, speed: sp, density: asteroidDensity)
+      let asteroid = Asteroid(asteroidSize: sz, speed: sp, density: asteroidDensity)
       addChild(asteroid)
     }
   }
@@ -233,86 +231,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
   }
   
-  // ------------
-  
-  func didBegin(_ contact: SKPhysicsContact) {
-    let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-    
-    // print("Begin Contact", contact.bodyA.node?.name, contact.bodyB.node?.name)
-    
-    switch collision {
-    case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
-      // print("Missile Hits Asteroid")
-      // print(contact.collisionImpulse)
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
-        contact.bodyA.node?.removeFromParent()
-      } else {
-        contact.bodyB.node?.removeFromParent()
-      }
-      
-    case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
-      // print("Asteroid Hits Ship")
-      guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
-      shipExplosion.position = self.ship.position
-      self.addChild(shipExplosion)
-      let wait = SKAction.wait(forDuration: 2)
-      let remove = SKAction.removeFromParent()
-      shipExplosion.run(SKAction.sequence([wait, remove]))
-      clearScreen()
-      changeIndex = -1
-      ship.hide()
-      menu.show(message: "Your score is: \(score)")
-      score = 0
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid:
-      // print("Asteroid hit Edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Asteroid {
-        contact.bodyA.node?.removeFromParent()
-      } else {
-        contact.bodyB.node?.removeFromParent()
-      }
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.Missile:
-      // print("Missile hit Edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
-        contact.bodyA.node?.removeFromParent()
-      } else {
-        contact.bodyB.node?.removeFromParent()
-      }
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
-      // print("Powerup hit edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        contact.bodyA.node?.removeFromParent()
-      } else {
-        contact.bodyB.node?.removeFromParent()
-      }
-      
-    case PhysicsCategory.Ship | PhysicsCategory.PowerUp:
-      // print("Ship hit Powerup")
-      score += 10
-      if contact.bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        contact.bodyA.node?.removeFromParent()
-      } else {
-        contact.bodyB.node?.removeFromParent()
-      }
-      
-      if contact.bodyA.node?.name == "Powerup Bomb" || contact.bodyB.node?.name == "Powerup Bomb" {
-        // destroy all rocks
-        // print("destroy all asteroids")
-        destroyAllAsteroids()
-      }
-      
-    default:
-      return
-    }
-  }
-  
-  func didEnd(_ contact: SKPhysicsContact) {
-    // print("End Contact", contact.bodyA.node?.name, contact.bodyB.node?.name)
-  }
-  
-  //
+  // ----------
   
   func clearScreen() {
     enumerateChildNodes(withName: "Asteroid") { (asteroid, stop) in
@@ -408,17 +327,19 @@ extension GameScene {
   @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
     switch gesture.direction {
     case .right:
+      print("Swipe Right")
       ship.move(x: shipSpeed)
       
     case .left:
+      print("Swipe Left")
       ship.move(x: -shipSpeed)
       
     case .down:
-      // print("Swipe Down")
+      print("Swipe Down")
       hudVisible = false
       
     case .up:
-      // print("Swipe Up")
+      print("Swipe Up")
       hudVisible = true
       
     default:

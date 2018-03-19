@@ -21,5 +21,5 @@ struct Colors {
   static let buttonColorActive   = UIColor(red: 0, green: 150 / 255, blue: 0, alpha: 1)
   static let buttonColorSelected = UIColor(red: 0, green: 150 / 255, blue: 0, alpha: 1)
   
-  static let buttonLabelColor = UIColor(red: 0, green: 50 / 255, blue: 0, alpha: 1)
+  static let buttonLabelColor = UIColor(red: 0, green: 255 / 255, blue: 0, alpha: 1)
 }

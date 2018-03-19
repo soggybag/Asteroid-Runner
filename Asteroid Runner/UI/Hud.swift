@@ -6,6 +6,8 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
+// TODO: Add a scanline fill to background
+
 import SpriteKit
 
 class Hud: SKSpriteNode {

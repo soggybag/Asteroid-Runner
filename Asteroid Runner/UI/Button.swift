@@ -6,6 +6,8 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
+// TODO: Add custom rounded ends to button
+
 import SpriteKit
 
 class Button: SKSpriteNode {

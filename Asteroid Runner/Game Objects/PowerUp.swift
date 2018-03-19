@@ -6,24 +6,6 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
-/*
- 
-Powerup Types
- 
- 1. Smart Bomb - Tapping asteroids destroys them
- 2. Smarter Bomb - Destroys all asteroids on screen
- 3. Coins - gain extra points
- 4. Missile PU - Missiles do more damage
- 5. Shield - Puts up a shield for limited time
- 6. Rapid fire - Fires alot
- 7. Scatter Gun - Fires in all directions
- 8. Time Dilation - Slows the game
- 9. Time Expansion - Speeds the game
- 10. Shrinker - ...
- 11. Manuever Jets - Makes controling the easier
- 
- */
-
 import SpriteKit
 
 class PowerUp: SKSpriteNode {
