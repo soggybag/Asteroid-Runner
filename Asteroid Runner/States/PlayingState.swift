@@ -39,7 +39,10 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
   
   // This method is called by the state machine when this is the current state.
   override func update(deltaTime seconds: TimeInterval) {
-    // print("Playing State update:\(seconds)")
+    if let accelerationData = MotionManager.sharedInstance.accelerometer {
+      let x = CGFloat(accelerationData.acceleration.x)
+      scene.ship.moveForce(x: x * 100)
+    }
   }
   
   func didBegin(_ contact: SKPhysicsContact) {

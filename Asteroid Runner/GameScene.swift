@@ -25,7 +25,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   let ship = Ship()
   var menu: Menu!
   
-  let motion = CMMotionManager()
   var hud: Hud!
   var starfield: Starfield!
   let swipeRight  = UISwipeGestureRecognizer()
@@ -61,7 +60,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupMenu()
     setupStateMachine()
     setupCamera()
-    // setupMotion()
     setupGestures()
     setupPhysicsWorld()
     // setupStarfield()
@@ -280,13 +278,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   //
-  
+  var lastUpdateTime: TimeInterval = 0
   override func update(_ currentTime: TimeInterval) {
-    // if (hudVisible) {
-    //   hud.position.y -= hud.position.y * 0.5
-    // } else {
-    //   hud.position.y -= (hud.position.y - size.height + 40) * 0.5
-    // }
+    let deltaTime = currentTime - lastUpdateTime
+    lastUpdateTime = currentTime
+    gameState.update(deltaTime: deltaTime)
   }
   
 }
@@ -347,29 +343,3 @@ extension GameScene {
     }
   }
 }
-
-// - Motion Manager -----------------------
-extension GameScene {
-  func setupMotion() {
-    // https://www.hackingwithswift.com/read/26/3/tilt-to-move-cmmotionmanager
-    if motion.isAccelerometerAvailable {
-      motion.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: { (data, error) in
-        // var currentX = self.ship.position.x
-        guard let data = data else { return }
-        let x = CGFloat(data.acceleration.x)
-        let v = CGVector(dx: x, dy: 0)
-        self.ship.physicsBody?.applyForce(v)
-      })
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-

@@ -54,6 +54,10 @@ class Ship: SKSpriteNode {
     physicsBody?.applyImpulse(CGVector(dx: x * shipSpeed, dy: 0))
   }
   
+  func moveForce(x: CGFloat) {
+    physicsBody?.applyForce(CGVector(dx: x * shipSpeed, dy: 0))
+  }
+  
   func setShipSpeedSlow() {
     shipSpeed = shipSpeedSlow
     physicsBody?.linearDamping = shipDampingSlow

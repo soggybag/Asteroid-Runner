@@ -29,6 +29,7 @@
 		D84E3759205DAB3000512E12 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3758205DAB3000512E12 /* Screen.swift */; };
 		D84E375B205DCC6E00512E12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E375A205DCC6E00512E12 /* Colors.swift */; };
 		D8AFDFF9205F313C00BC11D8 /* GameEndingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */; };
+		D8AFDFFB205F7F8B00BC11D8 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */; };
 		D8B1F2F9205EC27800418F40 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B1F2F8205EC27800418F40 /* SpriteKit.framework */; };
 		D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */; };
 		D8DB9C19205CD2DB006455F9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C18205CD2DB006455F9 /* GameScene.swift */; };
@@ -61,6 +62,7 @@
 		D84E3758205DAB3000512E12 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		D84E375A205DCC6E00512E12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEndingState.swift; sourceTree = "<group>"; };
+		D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D8B1F2F8205EC27800418F40 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		D8DB9C0F205CD2DB006455F9 /* Asteroid Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Asteroid Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				D82D19E2205E34DF00807C85 /* Fonts.swift */,
 				D84E3758205DAB3000512E12 /* Screen.swift */,
 				D84E3756205DAB0000512E12 /* PublicExtension.swift */,
+				D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 				D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */,
 				D84E3745205D0A3E00512E12 /* PowerUp.swift in Sources */,
 				D84E3755205D941800512E12 /* Menu.swift in Sources */,
+				D8AFDFFB205F7F8B00BC11D8 /* MotionManager.swift in Sources */,
 				D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */,
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
