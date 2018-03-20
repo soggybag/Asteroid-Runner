@@ -15,6 +15,17 @@ class Screen {
   var centerY: CGFloat = 0
   var size = CGSize()
   var center = CGPoint()
+  var hudScoreHeight: CGFloat = 40
+  var hudHeight: CGFloat {
+    get {
+      return height + hudScoreHeight
+    }
+  }
+  var hudYHidden: CGFloat {
+    get {
+      return height - hudScoreHeight
+    }
+  }
   
   static let sharedInstance = Screen()
   
@@ -28,5 +39,9 @@ class Screen {
     self.centerY = size.height * 0.5
     
     self.center = CGPoint(x: self.centerX, y: self.centerY)
+    
+    if deviceType == "iPhone X" {
+      hudScoreHeight = 80
+    }
   }
 }

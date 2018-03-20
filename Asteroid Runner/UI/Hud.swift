@@ -35,7 +35,7 @@ class Hud: SKSpriteNode {
   init() {
     let color = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2)
     let w = Screen.sharedInstance.width
-    let h = Screen.sharedInstance.height + 40
+    let h = Screen.sharedInstance.hudHeight
     let size = CGSize(width: w, height: h)
     super.init(texture: nil, color: color, size: size)
     
@@ -67,7 +67,7 @@ class Hud: SKSpriteNode {
   
   func setupActions() {
     hideAction = SKAction.moveTo(y: 0, duration: 0.2)
-    showAction = SKAction.moveTo(y: size.height - 70, duration: 0.2)
+    showAction = SKAction.moveTo(y: Screen.sharedInstance.hudYHidden, duration: 0.2)
   }
   
   func setupButtons() {

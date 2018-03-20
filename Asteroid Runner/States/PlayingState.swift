@@ -51,6 +51,8 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
     // print("Begin Contact", contact.bodyA.node?.name, contact.bodyB.node?.name)
     
     switch collision {
+    
+      // * Missile Hits Asteroid *
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
       // print("Missile Hits Asteroid")
       // print(contact.collisionImpulse)
@@ -62,6 +64,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
         hit(asteroid: contact.bodyA.node as! Asteroid)
       }
       
+      // * Asteroid Hits Ship *
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
       // print("Asteroid Hits Ship")
       guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
@@ -79,6 +82,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
       // Enter Game Ending State
       scene.gameState.enter(GameEndingState.self)
       
+      // * Asteroid Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid:
       // print("Asteroid hit Edge")
       if contact.bodyA.categoryBitMask == PhysicsCategory.Asteroid {
@@ -87,6 +91,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
         contact.bodyB.node?.removeFromParent()
       }
       
+      // * Missile Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.Missile:
       // print("Missile hit Edge")
       if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
@@ -95,6 +100,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
         contact.bodyB.node?.removeFromParent()
       }
       
+      // * Powerup Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
       // print("Powerup hit edge")
       if contact.bodyA.categoryBitMask == PhysicsCategory.PowerUp {
@@ -103,6 +109,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
         contact.bodyB.node?.removeFromParent()
       }
       
+      // * Ship Hits Powerup *
     case PhysicsCategory.Ship | PhysicsCategory.PowerUp:
       // print("Ship hit Powerup")
       scene.score += 10
@@ -124,8 +131,12 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
   }
   
   func hit(asteroid: Asteroid) {
-    if asteroid.hitAsteroid() {
+    if let debris = asteroid.hitAsteroid() {
+      asteroid.removeFromParent()
       // TODO: make some smaller asteroids here...
+      for rock in debris {
+        scene.addChild(rock)
+      }
     }
   }
 }

@@ -17,6 +17,29 @@ enum AsteroidSize: CGFloat {
   case large    = 20
   case huge     = 25
   case massive  = 30
+  
+  func nextSize() -> AsteroidSize? {
+    switch self {
+    case .massive:
+      return .large
+      
+    case .huge:
+      return .average
+      
+    case .large:
+      return .small
+      
+    case .average:
+      return .tiny
+      
+    case .small:
+      return .tiny
+      
+    default:
+      return nil
+      
+    }
+  }
 }
 
 enum AsteroidSpeed: CGFloat {
@@ -39,6 +62,7 @@ enum AsteroidDensity: CGFloat {
 class Asteroid: SKSpriteNode {
   
   var hits: CGFloat = 0
+  var asteroidSize = AsteroidSize.average
   
   init(asteroidSize: AsteroidSize, speed: AsteroidSpeed, density: AsteroidDensity) {
     let radius = asteroidSize.rawValue
@@ -47,23 +71,40 @@ class Asteroid: SKSpriteNode {
     // Set name 
     name = "Asteroid"
     // Set hits
-    hits = asteroidSize.rawValue
+    hits = asteroidSize.rawValue / 5
+    self.asteroidSize = asteroidSize
+    
     // Set the random color
     color = randomColor()
     // Configure physics for types
     configurePhysics(radius: radius, density: density, speed: speed)
   }
   
+  static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize) -> [Asteroid] {
+    var a = [Asteroid]()
+    for i in 0 ... 2 {
+      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average, density: .average)
+      a.append(asteroid)
+      asteroid.position.x = point.x + CGFloat.random(min: -20, max: 20)
+      asteroid.position.y = point.y + CGFloat.random(min: -20, max: 20)
+    }
+    return a
+  }
+  
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func hitAsteroid() -> Bool {
+  func hitAsteroid() -> [Asteroid]? {
     hits -= 1
     if hits < 0 {
-      return true
+      if let s = asteroidSize.nextSize() {
+        return Asteroid.makeAsteroidDebrisAt(point: position, asteroidSize: s)
+      } else {
+        return []
+      }
     }
-    return false
+    return nil
   }
   
   func configurePhysics(radius: CGFloat, density: AsteroidDensity, speed: AsteroidSpeed) {
