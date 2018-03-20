@@ -16,6 +16,7 @@ struct Colors {
   static let fuschia  = UIColor(red: 1, green: 0, blue: 1, alpha: 1)
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 1)
   static let cyan     = UIColor.cyan
+  static let orange   = UIColor.orange
   
   static let buttonColorNormal   = UIColor(red: 0, green: 100 / 255, blue: 0, alpha: 1)
   static let buttonColorActive   = UIColor(red: 0, green: 150 / 255, blue: 0, alpha: 1)

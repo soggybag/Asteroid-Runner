@@ -98,3 +98,12 @@ public extension CGFloat {
     return CGFloat.random * (max - min) + min
   }
 }
+
+public extension CGVector {
+  /**
+   * Adds two CGVector values and returns the result as a new CGVector.
+   */
+  static public func + (left: CGVector, right: CGVector) -> CGVector {
+    return CGVector(dx: left.dx + right.dx, dy: left.dy + right.dy)
+  }
+}

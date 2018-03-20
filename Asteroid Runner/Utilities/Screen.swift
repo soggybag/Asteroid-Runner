@@ -16,6 +16,7 @@ class Screen {
   var size = CGSize()
   var center = CGPoint()
   var hudScoreHeight: CGFloat = 40
+  var deviceType = ""
   var hudHeight: CGFloat {
     get {
       return height + hudScoreHeight
@@ -28,6 +29,10 @@ class Screen {
   }
   
   static let sharedInstance = Screen()
+  
+  init() {
+    detectDevice()
+  }
   
   func setSize(size: CGSize) {
     self.size = size
@@ -42,6 +47,23 @@ class Screen {
     
     if deviceType == "iPhone X" {
       hudScoreHeight = 80
+    }
+  }
+  
+  func detectDevice() {
+    if UIDevice().userInterfaceIdiom == .phone {
+      switch UIScreen.main.nativeBounds.height {
+      case 1136:
+        deviceType = "iPhone 5 or 5S or 5C"
+      case 1334:
+        deviceType = "iPhone 6/6S/7/8"
+      case 1920, 2208:
+        deviceType = "iPhone 6+/6S+/7+/8+"
+      case 2436:
+        deviceType = "iPhone X"
+      default:
+        deviceType = "unknown"
+      }
     }
   }
 }

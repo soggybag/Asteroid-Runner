@@ -15,8 +15,6 @@ class GameViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    detectDevice()
-    
     if let view = self.view as! SKView? {
       // Load the SKScene from 'GameScene.sks'
       let scene = GameScene(size: view.bounds.size)
@@ -56,23 +54,6 @@ class GameViewController: UIViewController {
   override var prefersStatusBarHidden: Bool {
     return true
   }
-  
-  func detectDevice() {
-    if UIDevice().userInterfaceIdiom == .phone {
-      switch UIScreen.main.nativeBounds.height {
-      case 1136:
-        deviceType = "iPhone 5 or 5S or 5C"
-      case 1334:
-        deviceType = "iPhone 6/6S/7/8"
-      case 1920, 2208:
-        deviceType = "iPhone 6+/6S+/7+/8+"
-      case 2436:
-        deviceType = "iPhone X"
-      default:
-        deviceType = "unknown"
-      }
-    }
-  }
+
 }
 
-var deviceType = ""

@@ -28,9 +28,16 @@ class Hud: SKSpriteNode {
     print("Button 3 Activated from Game Scene")
   }
   
+  var autoFireButtonAction = {
+    print("Auto fire button")
+  }
+  
+  var autoFire = false
+  
   var button1 = Button()
   var button2 = Button()
   var button3 = Button()
+  var autoFireButton = Button()
   
   init() {
     let color = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2)
@@ -74,7 +81,7 @@ class Hud: SKSpriteNode {
     addChild(button2)
     button2.select()
     button2.title = "Speed = Power"
-    button2.position.x = size.width / 2
+    button2.position.x = Screen.sharedInstance.centerX
     button2.position.y = size.height / 2
     button2.buttonAction = {
       self.button2Action()
@@ -85,7 +92,7 @@ class Hud: SKSpriteNode {
     
     addChild(button1)
     button1.title = "Speed > Power"
-    button1.position.x = size.width / 2
+    button1.position.x = Screen.sharedInstance.centerX
     button1.position.y = button2.position.y + 100
     button1.buttonAction = {
       self.button1Action()
@@ -96,13 +103,24 @@ class Hud: SKSpriteNode {
     
     addChild(button3)
     button3.title = "Speed < Power"
-    button3.position.x = size.width / 2
+    button3.position.x = Screen.sharedInstance.centerX
     button3.position.y = button2.position.y - 100
     button3.buttonAction = {
       self.button3Action()
       self.button1.deselect()
       self.button2.deselect()
       self.button3.select()
+    }
+    
+    addChild(autoFireButton)
+    autoFireButton.title = "Autofire Off"
+    autoFireButton.position.x = Screen.sharedInstance.centerX
+    autoFireButton.position.y = button3.position.y - 120
+    autoFireButton.buttonAction = {
+      self.autoFire = !self.autoFire
+      self.autoFireButton.title = self.autoFire ? "Auto Fire ON" : "Auto Fire OFF"
+      self.autoFireButton.toggle()
+      self.autoFireButtonAction()
     }
   }
   

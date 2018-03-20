@@ -8,6 +8,12 @@
 
 import SpriteKit
 
+enum MissileType: CGFloat {
+  case weak     = 1
+  case average  = 2
+  case strong   = 3
+}
+
 class Missile: SKSpriteNode {
   
   static let powerLevelLow: CGFloat = 0.00125
@@ -15,6 +21,8 @@ class Missile: SKSpriteNode {
   static let powerLevelHi: CGFloat  = 0.005
   
   static var power: CGFloat = 0.00125
+  
+  static var missileType: MissileType = .average
   
   init() {
     let size = CGSize(width: 2, height: 4)
@@ -45,14 +53,17 @@ class Missile: SKSpriteNode {
   
   static func setPowerLow() {
     Missile.power = Missile.powerLevelLow
+    Missile.missileType = .weak
   }
   
   static func setPowerMed() {
     Missile.power = Missile.powerLevelMed
+    Missile.missileType = .average
   }
   
   static func setPowerHi() {
     Missile.power = Missile.powerLevelHi
+    Missile.missileType = .strong
   }
   
 }

@@ -7,6 +7,9 @@
 //
 
 // TODO: Move makeAsteroids to PlayingState
+// TODO: Intro Scene with text:
+// NASA predicts an asteroid may hit the earth. We need to train pilots now!
+
 
 import SpriteKit
 import GameplayKit
@@ -15,6 +18,8 @@ import CoreMotion
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
   var shipSpeed: CGFloat = 5
+  var autoFireOn = true
+  var timeSinceLastMissile: TimeInterval = 0
   
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
@@ -157,6 +162,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       self.ship.setShipSpeedSlow()
       Missile.setPowerHi()
     }
+    
+    hud.autoFireButtonAction = {
+      
+    }
   }
   
   //
@@ -191,6 +200,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       
     case 1:
       let powerup = PowerUp()
+      addChild(powerup)
+      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
+      powerup.position.y = size.height
+      
+    case 2:
+      let powerup = PowerUpShield()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height

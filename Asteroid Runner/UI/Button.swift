@@ -82,4 +82,8 @@ class Button: SKSpriteNode {
   func deselect() {
     fillNode.isHidden = true
   }
+  
+  func toggle() {
+    fillNode.isHidden = !fillNode.isHidden
+  }
 }

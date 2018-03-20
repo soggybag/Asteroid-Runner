@@ -19,10 +19,16 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
     self.scene = scene
   }
   
+  
+  // Did Enter State
+  
   override func didEnter(from previousState: GKState?) {
     print("Enter Playing State")
     scene.physicsWorld.contactDelegate = self
   }
+  
+  
+  // Is Valid State next state
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
     if stateClass == GameEndingState.self {
@@ -31,17 +37,34 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
     return false
   }
   
+  
+  // Will Exit to State
+  
   override func willExit(to nextState: GKState) {
     // print("Playing state will exit")
     scene.physicsWorld.contactDelegate = nil
   }
   
   
-  // This method is called by the state machine when this is the current state.
+  // --------------------------------------
+  
+  // Update
+  
+  // --------------------------------------
+  
   override func update(deltaTime seconds: TimeInterval) {
     if let accelerationData = MotionManager.sharedInstance.accelerometer {
       let x = CGFloat(accelerationData.acceleration.x)
       scene.ship.moveForce(x: x * 100)
+    }
+    
+    if scene.autoFireOn {
+      scene.timeSinceLastMissile += seconds
+      
+      if scene.timeSinceLastMissile > 0.30 {
+        scene.timeSinceLastMissile = 0
+        scene.shootMissile()
+      }
     }
   }
   
@@ -57,11 +80,15 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
       // print("Missile Hits Asteroid")
       // print(contact.collisionImpulse)
       if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
-        contact.bodyA.node?.removeFromParent()
-        hit(asteroid: contact.bodyB.node as! Asteroid)
+        let missile = contact.bodyA.node as! Missile
+        let asteroid = contact.bodyB.node as! Asteroid
+        missile.removeFromParent()
+        hit(asteroid: asteroid, missileType: Missile.missileType)
       } else {
-        contact.bodyB.node?.removeFromParent()
-        hit(asteroid: contact.bodyA.node as! Asteroid)
+        let missile = contact.bodyB.node as! Missile
+        let asteroid = contact.bodyA.node as! Asteroid
+        missile.removeFromParent()
+        hit(asteroid: asteroid, missileType: Missile.missileType)
       }
       
       // * Asteroid Hits Ship *
@@ -130,8 +157,9 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
     }
   }
   
-  func hit(asteroid: Asteroid) {
-    if let debris = asteroid.hitAsteroid() {
+  func hit(asteroid: Asteroid, missileType: MissileType) {
+    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
+      scene.score += Int(asteroid.asteroidSize.rawValue)
       asteroid.removeFromParent()
       // TODO: make some smaller asteroids here...
       for rock in debris {

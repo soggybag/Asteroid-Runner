@@ -21,10 +21,10 @@ enum AsteroidSize: CGFloat {
   func nextSize() -> AsteroidSize? {
     switch self {
     case .massive:
-      return .large
+      return .average
       
     case .huge:
-      return .average
+      return .small
       
     case .large:
       return .small
@@ -40,6 +40,7 @@ enum AsteroidSize: CGFloat {
       
     }
   }
+  
 }
 
 enum AsteroidSpeed: CGFloat {
@@ -80,10 +81,11 @@ class Asteroid: SKSpriteNode {
     configurePhysics(radius: radius, density: density, speed: speed)
   }
   
-  static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize) -> [Asteroid] {
+  static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize, velocity: CGVector) -> [Asteroid] {
     var a = [Asteroid]()
     for i in 0 ... 2 {
       let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average, density: .average)
+      asteroid.physicsBody!.velocity = asteroid.physicsBody!.velocity + velocity
       a.append(asteroid)
       asteroid.position.x = point.x + CGFloat.random(min: -20, max: 20)
       asteroid.position.y = point.y + CGFloat.random(min: -20, max: 20)
@@ -95,11 +97,12 @@ class Asteroid: SKSpriteNode {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func hitAsteroid() -> [Asteroid]? {
-    hits -= 1
+  func hitAsteroid(value: CGFloat) -> [Asteroid]? {
+    hits -= value
     if hits < 0 {
       if let s = asteroidSize.nextSize() {
-        return Asteroid.makeAsteroidDebrisAt(point: position, asteroidSize: s)
+        let v = physicsBody!.velocity
+        return Asteroid.makeAsteroidDebrisAt(point: position, asteroidSize: s, velocity: v)
       } else {
         return []
       }
