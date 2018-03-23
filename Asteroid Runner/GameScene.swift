@@ -115,6 +115,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Inner edge - keeps ship within the bounds of the screen
     guard let view = view else { return }
+    
     physicsBody = SKPhysicsBody(edgeLoopFrom: view.frame)
     
     physicsBody?.categoryBitMask = PhysicsCategory.Edge
@@ -124,11 +125,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Outer edge - Objects that hit this boundary are removed
     let outerHitBox = SKNode()
     addChild(outerHitBox)
+    
     let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -121)
     outerHitBox.physicsBody = SKPhysicsBody(edgeLoopFrom: outerHitBoxRect)
     outerHitBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterEdge
     outerHitBox.physicsBody?.collisionBitMask = PhysicsCategory.None
-    outerHitBox.physicsBody?.contactTestBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile
+    outerHitBox.physicsBody?.contactTestBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile | PhysicsCategory.PowerUp
   }
   
   func setupship() {
@@ -210,7 +212,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
+    case 3:
+      let powerup = PowerUpMissile()
+      addChild(powerup)
+      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
+      powerup.position.y = size.height
+      
+    case 4:
+      let powerup = PowerUpRapid()
+      addChild(powerup)
+      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
+      powerup.position.y = size.height
+      
     default:
+      print("...")
       let sz = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive][Int.random(n: 6)]
       let sp = [AsteroidSpeed.slow, .average, .fast, .veryFast][Int.random(n: 4)]
       
@@ -219,11 +234,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
+  var missileMode = 0
+  
+  let missilePoints = [
+    [CGPoint(x: 0, y: 20)],
+    [CGPoint(x: -10, y: 20), CGPoint(x: 10, y: 20)],
+    [CGPoint(x: -20, y: 20), CGPoint(x: 0, y: 20), CGPoint(x: 20, y: 20)]
+  ]
+  
   func shootMissile() {
-    let missile = Missile()
-    addChild(missile)
-    missile.position = ship.position
-    missile.position.y = 80
+    for point in missilePoints[missileMode] {
+      let missile = Missile()
+      addChild(missile)
+      missile.position = ship.position + point
+    }
+  }
+  
+  func missilePowerUp(n: Int) {
+    missileMode = n
+    run(.sequence([.wait(forDuration: 6), .run({
+      self.missileMode = 0
+    })]))
+  }
+  
+  var missileFireTime: TimeInterval = 0.3
+  
+  func missileRapid() {
+    missileFireTime = 0.15
+    run(.sequence([.wait(forDuration: 6), .run({
+      self.missileFireTime = 0.3
+    })]))
   }
   
   //
@@ -247,22 +287,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ----------
   
   func clearScreen() {
-    enumerateChildNodes(withName: "Asteroid") { (asteroid, stop) in
-      asteroid.removeFromParent()
-    }
-    enumerateChildNodes(withName: "Powerup") { (powerup, stop) in
-      powerup.removeFromParent()
-    }
-    enumerateChildNodes(withName: "Powerup Bomb") { (bomb, stop) in
-      bomb.removeFromParent()
-    }
-    enumerateChildNodes(withName: "Missile") { (missile, stop) in
-      missile.removeFromParent()
+    let names = [Asteroid.NAME, PowerUp.PU_NAME_BOMB, PowerUp.PU_NAME_MISSILE_2, PowerUp.PU_NAME_MISSILE_3, PowerUp.PU_NAME_MISSILE_RAPID, PowerUp.PU_NAME_POINTS, PowerUp.PU_NAME_SHIELD, Missile.NAME]
+    for name in names {
+      enumerateChildNodes(withName: name, using: { (node, stop) in
+        node.removeFromParent()
+      })
     }
   }
   
   func destroyAllAsteroids() {
-    self.enumerateChildNodes(withName: "Asteroid") { (asteroid, stop) in
+    self.enumerateChildNodes(withName: Asteroid.NAME) { (asteroid, stop) in
       asteroid.removeFromParent()
       self.score += 1
     }
@@ -300,6 +334,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     gameState.update(deltaTime: deltaTime)
   }
   
+  
+  // -------------------------------------
+  // Handle a hit on an Asteroid
+  func hit(asteroid: Asteroid, missileType: MissileType) {
+    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
+      let points = Int(asteroid.asteroidSize.rawValue)
+      score += points
+      show(points: points, at: asteroid.position)
+      
+      asteroid.removeFromParent()
+      // TODO: make some smaller asteroids here...
+      for rock in debris {
+        addChild(rock)
+      }
+    }
+  }
+  
+  func show(points: Int, at location: CGPoint) {
+    let label = PopupLabelNode(message: "\(points)", location: location)
+    addChild(label)
+  }
+  
+  
 }
 
 
@@ -310,8 +367,8 @@ extension GameScene {
       return
     }
     
-    tap.addTarget(self, action: #selector(GameScene.handleTap))
-    view.addGestureRecognizer(tap)
+//    tap.addTarget(self, action: #selector(GameScene.handleTap))
+//    view.addGestureRecognizer(tap)
     
     swipeDown.addTarget(self, action: #selector(GameScene.handleSwipe))
     swipeDown.direction = .down

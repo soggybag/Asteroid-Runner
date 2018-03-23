@@ -107,3 +107,21 @@ public extension CGVector {
     return CGVector(dx: left.dx + right.dx, dy: left.dy + right.dy)
   }
 }
+
+public extension CGPoint {
+  /**
+   * Adds two CGPoint values and returns the result as a new CGPoint.
+   */
+  static public func + (left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left.x + right.x, y: left.y + right.y)
+  }
+}
+
+extension UIColor {
+  
+  // Extension on colors to make RGB easier to read
+  convenience init(r: CGFloat, g: CGFloat, b: CGFloat) {
+    self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
+  }
+}
+

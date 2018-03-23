@@ -6,7 +6,6 @@
 //  Copyright © 2018 Make School. All rights reserved.
 //
 
-
 import SpriteKit
 
 enum AsteroidSize: CGFloat {
@@ -65,12 +64,14 @@ class Asteroid: SKSpriteNode {
   var hits: CGFloat = 0
   var asteroidSize = AsteroidSize.average
   
+  static let NAME = "asteroid"
+  
   init(asteroidSize: AsteroidSize, speed: AsteroidSpeed, density: AsteroidDensity) {
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
     super.init(texture: nil, color: .white, size: size)
     // Set name 
-    name = "Asteroid"
+    name = Asteroid.NAME
     // Set hits
     hits = asteroidSize.rawValue / 5
     self.asteroidSize = asteroidSize
@@ -169,7 +170,7 @@ class Asteroid: SKSpriteNode {
     position = CGPoint(x: x, y: y)
     physicsBody.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
     physicsBody.mass = physicsBody.mass * density.rawValue
-    print("Asteroid Mass: \(physicsBody.mass)")
+    // print("Asteroid Mass: \(physicsBody.mass)")
   }
   
   func setupPhysics() {

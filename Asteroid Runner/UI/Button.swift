@@ -46,6 +46,10 @@ class Button: SKSpriteNode {
   }
   
   func setupShape() {
+    
+    
+    
+    
     //// StrokePath Drawing
     let strokePath = UIBezierPath(roundedRect: CGRect(x: -70, y: -20, width: 140, height: 40), cornerRadius: 20)
     

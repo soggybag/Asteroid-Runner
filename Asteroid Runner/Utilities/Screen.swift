@@ -16,7 +16,9 @@ class Screen {
   var size = CGSize()
   var center = CGPoint()
   var hudScoreHeight: CGFloat = 40
+  
   var deviceType = ""
+  
   var hudHeight: CGFloat {
     get {
       return height + hudScoreHeight

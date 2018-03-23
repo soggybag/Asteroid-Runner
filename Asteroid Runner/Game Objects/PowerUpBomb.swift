@@ -11,9 +11,10 @@ import SpriteKit
 class PowerUpBomb: PowerUp {
   override init() {
     super.init()
-    name = "Powerup Bomb"
     
-    color = Colors.fuschia
+    name = PowerUp.PU_NAME_BOMB
+    
+    color = Colors.powerupBomb
     setupPhysics()
   }
   

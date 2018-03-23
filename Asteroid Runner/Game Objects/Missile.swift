@@ -24,11 +24,13 @@ class Missile: SKSpriteNode {
   
   static var missileType: MissileType = .average
   
+  static let NAME = "missile"
+  
   init() {
     let size = CGSize(width: 2, height: 4)
     super.init(texture: nil, color: .yellow, size: size)
     
-    name = "Missile"
+    name = Missile.NAME
     
     setupPhysics()
   }

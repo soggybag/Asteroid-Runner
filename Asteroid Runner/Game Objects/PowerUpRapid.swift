@@ -8,13 +8,14 @@
 
 import SpriteKit
 
-class PowerUpShield: PowerUp {
+class PowerUpRapid: PowerUp {
   override init() {
     super.init()
     
-    name = PowerUp.PU_NAME_SHIELD
+    name = PowerUp.PU_NAME_MISSILE_RAPID
     
-    color = Colors.powerupShield
+    color = Colors.powerupRapid
+    
     setupPhysics()
   }
   

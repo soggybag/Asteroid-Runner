@@ -11,6 +11,7 @@ import SpriteKit
 class Menu: SKSpriteNode {
   
   var label: SKLabelNode!
+  
   var message = "" {
     didSet {
       label.text = message

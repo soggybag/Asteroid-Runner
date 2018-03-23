@@ -23,7 +23,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
   // Did Enter State
   
   override func didEnter(from previousState: GKState?) {
-    print("Enter Playing State")
+    // print("Enter Playing State")
     scene.physicsWorld.contactDelegate = self
   }
   
@@ -71,29 +71,40 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
   func didBegin(_ contact: SKPhysicsContact) {
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
+    let bodyA = contact.bodyA
+    let bodyB = contact.bodyB
+    let nodeA = bodyA.node
+    let nodeB = bodyB.node
+    
     // print("Begin Contact", contact.bodyA.node?.name, contact.bodyB.node?.name)
     
     switch collision {
     
       // * Missile Hits Asteroid *
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
-      // print("Missile Hits Asteroid")
       // print(contact.collisionImpulse)
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
-        let missile = contact.bodyA.node as! Missile
-        let asteroid = contact.bodyB.node as! Asteroid
+      if bodyA.categoryBitMask == PhysicsCategory.Missile {
+        let missile = nodeA as! Missile
+        let asteroid = nodeB as! Asteroid
         missile.removeFromParent()
-        hit(asteroid: asteroid, missileType: Missile.missileType)
+        print("Removing Missile 1: \(missile)")
+        scene.hit(asteroid: asteroid, missileType: Missile.missileType)
       } else {
-        let missile = contact.bodyB.node as! Missile
-        let asteroid = contact.bodyA.node as! Asteroid
+        let missile = nodeB as! Missile
+        let asteroid = nodeA as! Asteroid
         missile.removeFromParent()
-        hit(asteroid: asteroid, missileType: Missile.missileType)
+        print("Removing Missile 2: \(missile)")
+        scene.hit(asteroid: asteroid, missileType: Missile.missileType)
       }
       
       // * Asteroid Hits Ship *
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
       // print("Asteroid Hits Ship")
+      
+      if scene.ship.shieldActive {
+        return 
+      }
+      
       guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
       
       shipExplosion.position = scene.ship.position
@@ -112,59 +123,57 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
       // * Asteroid Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid:
       // print("Asteroid hit Edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Asteroid {
-        contact.bodyA.node?.removeFromParent()
+      if bodyA.categoryBitMask == PhysicsCategory.Asteroid {
+        nodeA?.removeFromParent()
       } else {
-        contact.bodyB.node?.removeFromParent()
+        nodeB?.removeFromParent()
       }
       
       // * Missile Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.Missile:
       // print("Missile hit Edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.Missile {
-        contact.bodyA.node?.removeFromParent()
+      if bodyA.categoryBitMask == PhysicsCategory.Missile {
+        nodeA?.removeFromParent()
       } else {
-        contact.bodyB.node?.removeFromParent()
+        nodeB?.removeFromParent()
       }
       
       // * Powerup Hits Outer Edge *
     case PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
       // print("Powerup hit edge")
-      if contact.bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        contact.bodyA.node?.removeFromParent()
+      if bodyA.categoryBitMask == PhysicsCategory.PowerUp {
+        nodeA?.removeFromParent()
       } else {
-        contact.bodyB.node?.removeFromParent()
+        nodeB?.removeFromParent()
       }
       
       // * Ship Hits Powerup *
     case PhysicsCategory.Ship | PhysicsCategory.PowerUp:
       // print("Ship hit Powerup")
-      scene.score += 10
-      if contact.bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        contact.bodyA.node?.removeFromParent()
+      let points = 100
+      scene.score += points
+      
+      if bodyA.categoryBitMask == PhysicsCategory.PowerUp {
+        scene.show(points: points, at: nodeA!.position)
+        nodeA?.removeFromParent()
       } else {
-        contact.bodyB.node?.removeFromParent()
+        scene.show(points: points, at: nodeB!.position)
+        nodeB?.removeFromParent()
       }
       
-      if contact.bodyA.node?.name == "Powerup Bomb" || contact.bodyB.node?.name == "Powerup Bomb" {
-        // destroy all rocks
-        // print("destroy all asteroids")
+      if nodeA?.name == PowerUp.PU_NAME_BOMB || nodeB?.name == PowerUp.PU_NAME_BOMB {
         scene.destroyAllAsteroids()
+      } else if nodeA?.name == PowerUp.PU_NAME_SHIELD || nodeB?.name == PowerUp.PU_NAME_SHIELD {
+        scene.ship.activateShield()
+      } else if nodeA?.name == PowerUp.PU_NAME_MISSILE_2 || nodeB?.name == PowerUp.PU_NAME_MISSILE_2 {
+        scene.missilePowerUp(n: Int.random(n: 3))
+      } else if nodeA?.name == PowerUp.PU_NAME_MISSILE_RAPID || nodeB?.name == PowerUp.PU_NAME_MISSILE_RAPID {
+        scene.missileRapid()
       }
       
     default:
       return
     }
   }
-  
-  func hit(asteroid: Asteroid, missileType: MissileType) {
-    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
-      scene.score += Int(asteroid.asteroidSize.rawValue)
-      asteroid.removeFromParent()
-      // TODO: make some smaller asteroids here...
-      for rock in debris {
-        scene.addChild(rock)
-      }
-    }
-  }
+
 }

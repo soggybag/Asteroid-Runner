@@ -9,11 +9,19 @@
 import SpriteKit
 
 class PowerUp: SKSpriteNode {
+  
+  static let PU_NAME_POINTS = "points"
+  static let PU_NAME_BOMB = "bomb"
+  static let PU_NAME_SHIELD = "shield"
+  static let PU_NAME_MISSILE_2 = "PU_NAME_MISSILE_2"
+  static let PU_NAME_MISSILE_3 = "PU_NAME_MISSILE_3"
+  static let PU_NAME_MISSILE_RAPID = "PU_NAME_MISSILE_RAPID"
+  
   init() {
     
     super.init(texture: nil, color: .cyan, size: CGSize(width: 20, height: 20))
     
-    name = "Powerup"
+    name = PowerUp.PU_NAME_POINTS
     
     setupPhysics()
   }
