@@ -10,6 +10,7 @@
 
 import Foundation
 import CoreGraphics
+import SpriteKit
 
 // MARK: Int Extension
 
@@ -118,10 +119,13 @@ public extension CGPoint {
 }
 
 extension UIColor {
-  
   // Extension on colors to make RGB easier to read
   convenience init(r: CGFloat, g: CGFloat, b: CGFloat) {
     self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
+  }
+  
+  convenience init(r: CGFloat, g: CGFloat, b: CGFloat, alpha: CGFloat) {
+    self.init(red: r/255, green: g/255, blue: b/255, alpha: alpha)
   }
 }
 

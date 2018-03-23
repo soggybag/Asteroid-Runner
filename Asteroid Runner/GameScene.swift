@@ -70,9 +70,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // setupStarfield()
     setupship()
     setupHud()
-    makeAsteroids()
+    // makeAsteroids()
     
-    gameState.enter(ReadyState.self)
+    gameState.enter(IntroState.self)
   }
   
   // -----------
@@ -98,8 +98,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let gameOverState = GameOverState(scene: self)
     let countDownState = CountDownState(scene: self)
     let gameEndingState = GameEndingState(scene: self)
+    let introState = IntroState(scene: self)
     
-    gameState = GKStateMachine(states: [readyState, playingState, gameOverState, countDownState, gameEndingState])
+    gameState = GKStateMachine(states: [introState, readyState, playingState, gameOverState, countDownState, gameEndingState])
   }
   
   func setupCamera() {

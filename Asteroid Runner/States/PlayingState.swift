@@ -25,6 +25,7 @@ class PlayingState: GKState, SKPhysicsContactDelegate {
   override func didEnter(from previousState: GKState?) {
     // print("Enter Playing State")
     scene.physicsWorld.contactDelegate = self
+    scene.makeAsteroids()
   }
   
   

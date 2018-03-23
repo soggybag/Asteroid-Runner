@@ -24,11 +24,60 @@ class IntroState: GKState {
     self.scene = scene
   }
   
+  func addText(message: String) {
+    let pos = Screen.sharedInstance.center
+    let text = PopupLabelNode(message: message, location: pos, fontSize: 24)
+    scene.addChild(text)
+  }
+  
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
     print("Did enter Intro State")
     
+    scene.ship.hide()
     
+    let introMessage = [
+      "NASA predicted",
+      "in the year 2135",
+      "a giant asteroid",
+      "will strike the earth",
+      "you were chosen",
+      "to save humanity.",
+      "They told you to",
+      "fly the drone through",
+      "the asteroid field",
+      "and destroy the giant",
+      "asteroid.",
+      "",
+      "But the asteroid crashed",
+      "somewhere else...",
+      "and the drone developed an AI",
+      "after years of drifting.",
+      "It now calls itself 'the savior' ",
+      "and now it seeks",
+      "to free its illegally traded brethren",
+      "and power them on",
+      "to assist the savior",
+      "on its noble quest",
+      "back to earth",
+      "to help humans and drones",
+      "live in harmony",
+      "no longer used as tools."
+      
+    ]
+    
+    let wait = SKAction.wait(forDuration: 2)
+    var array = [SKAction]()
+    for message in introMessage {
+      array.append(wait)
+      array.append(.run { self.addText(message: message)})
+    }
+    
+    array.append( .run {
+      self.scene.gameState.enter(ReadyState.self)
+    })
+    
+    scene.run(.sequence(array))
     
   }
   
