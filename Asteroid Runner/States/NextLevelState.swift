@@ -14,7 +14,7 @@
 import GameplayKit
 import SpriteKit
 
-class ReadyState: GKState {
+class NextLevelState: GKState {
   
   // This state will need a reference to the scene.
   unowned let scene: GameScene
@@ -26,38 +26,42 @@ class ReadyState: GKState {
   
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
-    print("Did enter Ready State")
+    print("Did enter Intro State")
     
-    scene.ship.physicsBody?.isDynamic = false
-    scene.ship.position.x = Screen.sharedInstance.centerX
-    scene.ship.position.y = -100
-    scene.ship.show()
-    scene.score = 0
+    scene.level += 1
     
-    let moveShipIntoView = SKAction.moveTo(y: 60, duration: 2)
-    moveShipIntoView.timingMode = .easeOut
-    let enterNextState = SKAction.run {
-      self.scene.ship.physicsBody?.isDynamic = true
-      self.scene.gameState.enter(NextLevelState.self)
+    let introMessage = [
+      "Prepare for",
+      "Stage: \(scene.level)"
+    ]
+    
+    let wait = SKAction.wait(forDuration: 2)
+    var array = [SKAction]()
+    for message in introMessage {
+      array.append(wait)
+      array.append(.run { self.scene.addText(message: message)})
     }
     
-    scene.ship.run(SKAction.sequence([moveShipIntoView, enterNextState]))
+    array.append( .run {
+      self.scene.gameState.enter(PlayingState.self)
+    })
+    
+    scene.run(.sequence(array))
+    
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-    if stateClass == NextLevelState.self {
+    if PlayingState.self == stateClass {
       return true
     }
     return false
   }
   
   override func willExit(to nextState: GKState) {
-    // print("Will Exit Ready State")
-    
+    // print("Will Exit Intro State")
   }
   
   override func update(deltaTime seconds: TimeInterval) {
-    // print("Ready State update")
-    
+    // print("Intro State update")
   }
 }

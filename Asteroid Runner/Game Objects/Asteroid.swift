@@ -10,15 +10,19 @@ import SpriteKit
 
 enum AsteroidSize: CGFloat {
   // set the radius
-  case tiny     = 5
-  case small    = 10
-  case average  = 15
-  case large    = 20
-  case huge     = 25
-  case massive  = 30
+  case tiny      = 5
+  case small     = 10
+  case average   = 15
+  case large     = 20
+  case huge      = 25
+  case massive   = 30
+  case bosstroid = 60
   
   func nextSize() -> AsteroidSize? {
     switch self {
+    case .bosstroid:
+      return .massive
+      
     case .massive:
       return .average
       
@@ -40,6 +44,11 @@ enum AsteroidSize: CGFloat {
     }
   }
   
+  static func random() -> AsteroidSize {
+    let allSizes = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive, .bosstroid]
+    return allSizes[Int.random(n: allSizes.count)]
+  }
+  
 }
 
 enum AsteroidSpeed: CGFloat {
@@ -48,6 +57,20 @@ enum AsteroidSpeed: CGFloat {
   case average  = 1.0
   case fast     = 2.0
   case veryFast = 4.0
+  
+  static func random() -> AsteroidSpeed {
+    let allSpeeds = [AsteroidSpeed.slow, .average, .fast, .veryFast]
+    return allSpeeds[Int.random(n: allSpeeds.count)]
+  }
+}
+
+enum AsteroidDirection {
+  case top, left, right
+  
+  static func random() -> AsteroidDirection {
+    let allDirections = [AsteroidDirection.left, .top, .right]
+    return allDirections[Int.random(n: allDirections.count)]
+  }
 }
 
 enum AsteroidDensity: CGFloat {
@@ -66,7 +89,7 @@ class Asteroid: SKSpriteNode {
   
   static let NAME = "asteroid"
   
-  init(asteroidSize: AsteroidSize, speed: AsteroidSpeed, density: AsteroidDensity) {
+  init(asteroidSize: AsteroidSize, speed: AsteroidSpeed) {
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
     super.init(texture: nil, color: .white, size: size)
@@ -79,13 +102,13 @@ class Asteroid: SKSpriteNode {
     // Set the random color
     color = randomColor()
     // Configure physics for types
-    configurePhysics(radius: radius, density: density, speed: speed)
+    configurePhysics(radius: radius, speed: speed)
   }
   
   static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize, velocity: CGVector) -> [Asteroid] {
     var a = [Asteroid]()
     for i in 0 ... 2 {
-      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average, density: .average)
+      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average)
       asteroid.physicsBody!.velocity = asteroid.physicsBody!.velocity + velocity
       a.append(asteroid)
       asteroid.position.x = point.x + CGFloat.random(min: -20, max: 20)
@@ -111,7 +134,7 @@ class Asteroid: SKSpriteNode {
     return nil
   }
   
-  func configurePhysics(radius: CGFloat, density: AsteroidDensity, speed: AsteroidSpeed) {
+  func configurePhysics(radius: CGFloat, speed: AsteroidSpeed) {
     // Make a physics body
     physicsBody = SKPhysicsBody(circleOfRadius: radius)
     
@@ -169,8 +192,7 @@ class Asteroid: SKSpriteNode {
     
     position = CGPoint(x: x, y: y)
     physicsBody.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
-    physicsBody.mass = physicsBody.mass * density.rawValue
-    // print("Asteroid Mass: \(physicsBody.mass)")
+    physicsBody.mass = physicsBody.mass * 1
   }
   
   func setupPhysics() {

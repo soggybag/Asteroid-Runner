@@ -24,7 +24,7 @@ class GameOverState: GKState {
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
     // print("Game Over is valid next state")
-    if stateClass == ReadyState.self {
+    if stateClass == NextLevelState.self {
       // print("\(stateClass) is valid next state")
       return true
     }

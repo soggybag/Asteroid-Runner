@@ -9,6 +9,7 @@
 import SpriteKit
 
 class PopupLabelNode: SKLabelNode {
+  
   init(message: String, location: CGPoint, fontSize: CGFloat = 16, time: TimeInterval = 3) {
     super.init()
     

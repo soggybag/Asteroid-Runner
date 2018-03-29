@@ -36,6 +36,8 @@
 		D8AFE0032061F11C00BC11D8 /* PopupLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */; };
 		D8AFE0052062039900BC11D8 /* PowerUpMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */; };
 		D8AFE00720620E3800BC11D8 /* PowerUpRapid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */; };
+		D8AFE0092066B5CB00BC11D8 /* NextLevelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE0082066B5CB00BC11D8 /* NextLevelState.swift */; };
+		D8AFE00B2066ED9100BC11D8 /* GameSceneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE00A2066ED9100BC11D8 /* GameSceneContact.swift */; };
 		D8B1F2F9205EC27800418F40 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B1F2F8205EC27800418F40 /* SpriteKit.framework */; };
 		D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */; };
 		D8DB9C19205CD2DB006455F9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DB9C18205CD2DB006455F9 /* GameScene.swift */; };
@@ -75,6 +77,8 @@
 		D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupLabelNode.swift; sourceTree = "<group>"; };
 		D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpMissile.swift; sourceTree = "<group>"; };
 		D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpRapid.swift; sourceTree = "<group>"; };
+		D8AFE0082066B5CB00BC11D8 /* NextLevelState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextLevelState.swift; sourceTree = "<group>"; };
+		D8AFE00A2066ED9100BC11D8 /* GameSceneContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSceneContact.swift; sourceTree = "<group>"; };
 		D8B1F2F8205EC27800418F40 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		D8DB9C0F205CD2DB006455F9 /* Asteroid Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Asteroid Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -107,6 +111,7 @@
 				D84E374D205D874000512E12 /* PlayingState.swift */,
 				D84E374A205D873F00512E12 /* ReadyState.swift */,
 				D8AFE0002061F0A800BC11D8 /* IntroState.swift */,
+				D8AFE0082066B5CB00BC11D8 /* NextLevelState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 			children = (
 				D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */,
 				D8DB9C18205CD2DB006455F9 /* GameScene.swift */,
+				D8AFE00A2066ED9100BC11D8 /* GameSceneContact.swift */,
 				D84E375D205DD15A00512E12 /* UI */,
 				D84E375C205DD13500512E12 /* States */,
 				D84E375E205DD17600512E12 /* Game Objects */,
@@ -285,11 +291,13 @@
 				D84E3750205D874000512E12 /* CountDownState.swift in Sources */,
 				D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */,
 				D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */,
+				D8AFE00B2066ED9100BC11D8 /* GameSceneContact.swift in Sources */,
 				D8AFE0052062039900BC11D8 /* PowerUpMissile.swift in Sources */,
 				D84E3745205D0A3E00512E12 /* PowerUp.swift in Sources */,
 				D84E3755205D941800512E12 /* Menu.swift in Sources */,
 				D8AFDFFB205F7F8B00BC11D8 /* MotionManager.swift in Sources */,
 				D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */,
+				D8AFE0092066B5CB00BC11D8 /* NextLevelState.swift in Sources */,
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,

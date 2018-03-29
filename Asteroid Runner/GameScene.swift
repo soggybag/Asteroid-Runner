@@ -17,13 +17,16 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
+  let MAKE_ASTEROIDS = "MAKE_ASTEROIDS" // Key for Make Asteroids Actions 
+  
+  var level = 0
   var shipSpeed: CGFloat = 5
   var autoFireOn = true
   var timeSinceLastMissile: TimeInterval = 0
   
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
-  var asteroidDensity = AsteroidDensity.average
+  var asteroidDirection = AsteroidDirection.top
   
   var gameState: GKStateMachine!
   
@@ -72,7 +75,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupHud()
     // makeAsteroids()
     
-    gameState.enter(IntroState.self)
+    gameState.enter(ReadyState.self)
+    physicsWorld.contactDelegate = self
+    
+    showVersion()
   }
   
   // -----------
@@ -88,7 +94,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       self.menu.hide()
       self.ship.show()
       self.changeIndex = 100
-      self.gameState.enter(ReadyState.self)
+      self.level = 0
+      self.gameState.enter(NextLevelState.self)
     }
   }
   
@@ -99,8 +106,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let countDownState = CountDownState(scene: self)
     let gameEndingState = GameEndingState(scene: self)
     let introState = IntroState(scene: self)
+    let nextLevel = NextLevelState(scene: self)
     
-    gameState = GKStateMachine(states: [introState, readyState, playingState, gameOverState, countDownState, gameEndingState])
+    gameState = GKStateMachine(states: [
+      introState, readyState, playingState,
+      gameOverState, countDownState, gameEndingState, nextLevel
+    ])
   }
   
   func setupCamera() {
@@ -171,17 +182,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  //
+  func addText(message: String) {
+    let pos = Screen.sharedInstance.center
+    let text = PopupLabelNode(message: message, location: pos, fontSize: 24)
+    self.addChild(text)
+  }
+  
+  
+  
+  // ------------------------------------------------------------
+  // Make Asteroids
+  // ------------------------------------------------------------
   
   func makeAsteroids() {
+    // Set some random params for asteroids
+    asteroidSize = AsteroidSize.random()
+    asteroidSpeed = AsteroidSpeed.random()
+    asteroidDirection = AsteroidDirection.random()
+    
+    // TODO: Time between asteroids
+    
     let wait = SKAction.wait(forDuration: 1)
     let makeAsteroid = SKAction.run {
       self.makeAsteroid()
     }
     let seq = SKAction.sequence([wait, makeAsteroid])
-    run(SKAction.repeatForever(seq))
+    run(SKAction.repeatForever(seq), withKey: MAKE_ASTEROIDS)
   }
   
+  // ------------------------------------------------------------
+  // Stop Making Asteroids
+  // ------------------------------------------------------------
+  
+  func stopAsteroids() {
+    removeAction(forKey: MAKE_ASTEROIDS)
+  }
+  
+  
+  // ------------------------------------------------------------
+  // Make an Asteroid
+  // ------------------------------------------------------------
   
   func makeAsteroid() {
     changeIndex -= 0
@@ -189,7 +229,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       return
     }
     
-    score += 1
     let r = Int.random(min: 0, max: 24)
     
     // print("Asteroid Type: \(r)")
@@ -227,10 +266,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       
     default:
       print("...")
-      let sz = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive][Int.random(n: 6)]
-      let sp = [AsteroidSpeed.slow, .average, .fast, .veryFast][Int.random(n: 4)]
+      // let sz = AsteroidSize.random()
+      let sz = asteroidSize
+      let sp = asteroidSpeed
       
-      let asteroid = Asteroid(asteroidSize: sz, speed: sp, density: asteroidDensity)
+      let asteroid = Asteroid(asteroidSize: sz, speed: sp)
       addChild(asteroid)
     }
   }
@@ -333,6 +373,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let deltaTime = currentTime - lastUpdateTime
     lastUpdateTime = currentTime
     gameState.update(deltaTime: deltaTime)
+    handleUpdate(seconds: deltaTime)
+  }
+  
+  
+  func handleUpdate(seconds: TimeInterval) {
+    if let accelerationData = MotionManager.sharedInstance.accelerometer {
+      let x = CGFloat(accelerationData.acceleration.x)
+      ship.moveForce(x: x * 100)
+    }
+    
+    if autoFireOn {
+      timeSinceLastMissile += seconds
+      
+      if timeSinceLastMissile > 0.30 {
+        timeSinceLastMissile = 0
+        if !ship.isHidden {
+          shootMissile()
+        }
+      }
+    }
   }
   
   
@@ -414,5 +474,22 @@ extension GameScene {
     default:
       return
     }
+  }
+}
+
+
+extension GameScene {
+  func showVersion() {
+    //First get the nsObject by defining as an optional anyObject
+    let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    
+    let versionLabel = SKLabelNode()
+    addChild(versionLabel)
+    versionLabel.verticalAlignmentMode = .bottom
+    versionLabel.horizontalAlignmentMode = .left
+    versionLabel.fontName = Fonts.fontName
+    versionLabel.fontSize = 12
+    versionLabel.position = CGPoint(x: 5, y: 5)
+    versionLabel.text = version
   }
 }

@@ -24,12 +24,6 @@ class IntroState: GKState {
     self.scene = scene
   }
   
-  func addText(message: String) {
-    let pos = Screen.sharedInstance.center
-    let text = PopupLabelNode(message: message, location: pos, fontSize: 24)
-    scene.addChild(text)
-  }
-  
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
     print("Did enter Intro State")
@@ -70,7 +64,7 @@ class IntroState: GKState {
     var array = [SKAction]()
     for message in introMessage {
       array.append(wait)
-      array.append(.run { self.addText(message: message)})
+      array.append(.run { self.scene.addText(message: message)})
     }
     
     array.append( .run {
@@ -82,6 +76,7 @@ class IntroState: GKState {
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
+    // This can exit to...
     if stateClass == ReadyState.self {
       return true
     }
@@ -89,10 +84,12 @@ class IntroState: GKState {
   }
   
   override func willExit(to nextState: GKState) {
-    // print("Will Exit Intro State")
+    print("Will Exit Intro State")
+    
   }
   
   override func update(deltaTime seconds: TimeInterval) {
     // print("Intro State update")
+    
   }
 }
