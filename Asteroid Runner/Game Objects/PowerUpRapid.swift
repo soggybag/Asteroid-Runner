@@ -12,7 +12,7 @@ class PowerUpRapid: PowerUp {
   override init() {
     super.init()
     
-    name = PowerUp.PU_NAME_MISSILE_RAPID
+    name = PowerUp.PU_MISSILE_RAPID
     
     color = Colors.powerupRapid
     

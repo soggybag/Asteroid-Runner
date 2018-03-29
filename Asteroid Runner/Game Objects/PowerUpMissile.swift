@@ -12,7 +12,7 @@ class PowerUpMissile: PowerUp {
   override init() {
     super.init()
     
-    name = PowerUp.PU_NAME_MISSILE_2
+    name = PowerUp.PU_MISSILE_2
     
     color = Colors.powerupMissile
     

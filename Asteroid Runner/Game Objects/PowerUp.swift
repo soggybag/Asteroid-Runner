@@ -10,18 +10,20 @@ import SpriteKit
 
 class PowerUp: SKSpriteNode {
   
-  static let PU_NAME_POINTS = "points"
-  static let PU_NAME_BOMB = "bomb"
-  static let PU_NAME_SHIELD = "shield"
-  static let PU_NAME_MISSILE_2 = "PU_NAME_MISSILE_2"
-  static let PU_NAME_MISSILE_3 = "PU_NAME_MISSILE_3"
-  static let PU_NAME_MISSILE_RAPID = "PU_NAME_MISSILE_RAPID"
+  static let PU_POINTS = "points"
+  static let PU_BOMB = "bomb"
+  static let PU_SHIELD = "shield"
+  static let PU_MISSILE_2 = "PU_NAME_MISSILE_2"
+  static let PU_MISSILE_3 = "PU_NAME_MISSILE_3"
+  static let PU_MISSILE_RAPID = "PU_NAME_MISSILE_RAPID"
+  
+  static let powerup_duration: TimeInterval = 10
   
   init() {
     
     super.init(texture: nil, color: .cyan, size: CGSize(width: 20, height: 20))
     
-    name = PowerUp.PU_NAME_POINTS
+    name = PowerUp.PU_POINTS
     
     setupPhysics()
   }

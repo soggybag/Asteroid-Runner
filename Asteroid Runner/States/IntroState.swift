@@ -26,7 +26,7 @@ class IntroState: GKState {
   
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
-    print("Did enter Intro State")
+    // print("Did enter Intro State")
     
     scene.ship.hide()
     
@@ -84,7 +84,7 @@ class IntroState: GKState {
   }
   
   override func willExit(to nextState: GKState) {
-    print("Will Exit Intro State")
+    // print("Will Exit Intro State")
     
   }
   

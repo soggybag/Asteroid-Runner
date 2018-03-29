@@ -29,13 +29,13 @@ extension GameScene {
         let missile = nodeA as! Missile
         let asteroid = nodeB as! Asteroid
         missile.removeFromParent()
-        print("Removing Missile 1: \(missile)")
+        // print("Removing Missile 1: \(missile)")
         hit(asteroid: asteroid, missileType: Missile.missileType)
       } else {
         let missile = nodeB as! Missile
         let asteroid = nodeA as! Asteroid
         missile.removeFromParent()
-        print("Removing Missile 2: \(missile)")
+        // print("Removing Missile 2: \(missile)")
         hit(asteroid: asteroid, missileType: Missile.missileType)
       }
       
@@ -103,13 +103,13 @@ extension GameScene {
         nodeB?.removeFromParent()
       }
       
-      if nodeA?.name == PowerUp.PU_NAME_BOMB || nodeB?.name == PowerUp.PU_NAME_BOMB {
+      if nodeA?.name == PowerUp.PU_BOMB || nodeB?.name == PowerUp.PU_BOMB {
         destroyAllAsteroids()
-      } else if nodeA?.name == PowerUp.PU_NAME_SHIELD || nodeB?.name == PowerUp.PU_NAME_SHIELD {
+      } else if nodeA?.name == PowerUp.PU_SHIELD || nodeB?.name == PowerUp.PU_SHIELD {
         ship.activateShield()
-      } else if nodeA?.name == PowerUp.PU_NAME_MISSILE_2 || nodeB?.name == PowerUp.PU_NAME_MISSILE_2 {
+      } else if nodeA?.name == PowerUp.PU_MISSILE_2 || nodeB?.name == PowerUp.PU_MISSILE_2 {
         missilePowerUp(n: Int.random(n: 3))
-      } else if nodeA?.name == PowerUp.PU_NAME_MISSILE_RAPID || nodeB?.name == PowerUp.PU_NAME_MISSILE_RAPID {
+      } else if nodeA?.name == PowerUp.PU_MISSILE_RAPID || nodeB?.name == PowerUp.PU_MISSILE_RAPID {
         missileRapid()
       }
       

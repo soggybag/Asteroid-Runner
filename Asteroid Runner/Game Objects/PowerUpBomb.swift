@@ -12,7 +12,7 @@ class PowerUpBomb: PowerUp {
   override init() {
     super.init()
     
-    name = PowerUp.PU_NAME_BOMB
+    name = PowerUp.PU_BOMB
     
     color = Colors.powerupBomb
     setupPhysics()

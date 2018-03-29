@@ -26,4 +26,12 @@ struct Colors {
   static let buttonColorSelected = UIColor(red: 0, green: 150 / 255, blue: 0, alpha: 1)
   
   static let buttonLabelColor = UIColor(red: 0, green: 255 / 255, blue: 0, alpha: 1)
+  
+  static func randomAsteroidColor() -> UIColor {
+    let r = CGFloat.random(min: 100, max: 140)
+    let g = CGFloat.random(min: 70, max: 110)
+    let b = CGFloat.random(min: 20, max: 40)
+    
+    return UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: 1)
+  }
 }

@@ -26,7 +26,7 @@ class NextLevelState: GKState {
   
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
-    print("Did enter Intro State")
+    // print("Did enter Intro State")
     
     scene.level += 1
     

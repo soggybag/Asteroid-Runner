@@ -17,7 +17,7 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
-  let MAKE_ASTEROIDS = "MAKE_ASTEROIDS" // Key for Make Asteroids Actions 
+  let MAKE_ASTEROIDS = "MAKE_ASTEROIDS" // Key for Make Asteroids Actions
   
   var level = 0
   var shipSpeed: CGFloat = 5
@@ -234,6 +234,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // print("Asteroid Type: \(r)")
     
     switch r {
+      
     case 0:
       let powerup = PowerUpBomb()
       addChild(powerup)
@@ -265,7 +266,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       powerup.position.y = size.height
       
     default:
-      print("...")
+      // print("...")
       // let sz = AsteroidSize.random()
       let sz = asteroidSize
       let sp = asteroidSpeed
@@ -293,7 +294,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   func missilePowerUp(n: Int) {
     missileMode = n
-    run(.sequence([.wait(forDuration: 6), .run({
+    run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
       self.missileMode = 0
     })]))
   }
@@ -301,8 +302,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var missileFireTime: TimeInterval = 0.3
   
   func missileRapid() {
+    // print("!!! Rapid FIRE !!!")
     missileFireTime = 0.15
-    run(.sequence([.wait(forDuration: 6), .run({
+    run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
       self.missileFireTime = 0.3
     })]))
   }
@@ -328,7 +330,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ----------
   
   func clearScreen() {
-    let names = [Asteroid.NAME, PowerUp.PU_NAME_BOMB, PowerUp.PU_NAME_MISSILE_2, PowerUp.PU_NAME_MISSILE_3, PowerUp.PU_NAME_MISSILE_RAPID, PowerUp.PU_NAME_POINTS, PowerUp.PU_NAME_SHIELD, Missile.NAME]
+    let names = [Asteroid.NAME, PowerUp.PU_BOMB, PowerUp.PU_MISSILE_2, PowerUp.PU_MISSILE_3, PowerUp.PU_MISSILE_RAPID, PowerUp.PU_POINTS, PowerUp.PU_SHIELD, Missile.NAME]
     for name in names {
       enumerateChildNodes(withName: name, using: { (node, stop) in
         node.removeFromParent()
@@ -386,7 +388,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     if autoFireOn {
       timeSinceLastMissile += seconds
       
-      if timeSinceLastMissile > 0.30 {
+      if timeSinceLastMissile > missileFireTime {
         timeSinceLastMissile = 0
         if !ship.isHidden {
           shootMissile()
@@ -456,19 +458,19 @@ extension GameScene {
   @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
     switch gesture.direction {
     case .right:
-      print("Swipe Right")
+      // print("Swipe Right")
       ship.move(x: shipSpeed)
       
     case .left:
-      print("Swipe Left")
+      // print("Swipe Left")
       ship.move(x: -shipSpeed)
       
     case .down:
-      print("Swipe Down")
+      // print("Swipe Down")
       hudVisible = false
       
     case .up:
-      print("Swipe Up")
+      // print("Swipe Up")
       hudVisible = true
       
     default:

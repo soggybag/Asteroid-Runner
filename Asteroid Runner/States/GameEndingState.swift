@@ -18,7 +18,7 @@ class GameEndingState: GKState {
   }
   
   override func didEnter(from previousState: GKState?) {
-    print("Enter Game Ending State")
+    // print("Enter Game Ending State")
     // Wait then go to Game over
     scene.run(SKAction.sequence([
       SKAction.wait(forDuration: 3),

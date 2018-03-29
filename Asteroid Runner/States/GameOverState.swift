@@ -28,7 +28,7 @@ class GameOverState: GKState {
       // print("\(stateClass) is valid next state")
       return true
     }
-    print("\(stateClass) is NOT valid next state")
+    // print("\(stateClass) is NOT valid next state")
     return false
   }
   

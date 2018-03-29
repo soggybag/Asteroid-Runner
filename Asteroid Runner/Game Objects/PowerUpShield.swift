@@ -12,7 +12,7 @@ class PowerUpShield: PowerUp {
   override init() {
     super.init()
     
-    name = PowerUp.PU_NAME_SHIELD
+    name = PowerUp.PU_SHIELD
     
     color = Colors.powerupShield
     setupPhysics()
