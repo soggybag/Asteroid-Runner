@@ -37,17 +37,23 @@ class Asteroid: SKSpriteNode {
   // Init with size and speed
   
   init(asteroidSize: AsteroidSize, speed: AsteroidSpeed) {
+    
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
+    
     super.init(texture: nil, color: .white, size: size)
+    
     // Set name 
     name = Asteroid.NAME
+    
     // Set hits
     hits = asteroidSize.rawValue / 5
+    
     self.asteroidSize = asteroidSize
     
     // Set the random color
     color = Colors.randomAsteroidColor()
+    
     // Configure physics for types
     configurePhysics(radius: radius, speed: speed)
   }
@@ -67,7 +73,7 @@ class Asteroid: SKSpriteNode {
   
   static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize, velocity: CGVector) -> [Asteroid] {
     var a = [Asteroid]()
-    for i in 0 ... 2 {
+    for _ in 0 ... 2 {
       let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average)
       asteroid.physicsBody!.velocity = asteroid.physicsBody!.velocity + velocity
       a.append(asteroid)
@@ -145,7 +151,11 @@ class Asteroid: SKSpriteNode {
       
     case 2: // Down from Top
       x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      y = Screen.sharedInstance.height + 60
+      
+      let minY = Screen.sharedInstance.height + 60
+      let maxY = Screen.sharedInstance.height + 120
+      y = CGFloat.random(min: minY, max: minY)
+      
       dx = CGFloat.random(min: -10, max: 10)
       dy = CGFloat.random(min: 40, max: 100) * -1
       
@@ -160,66 +170,6 @@ class Asteroid: SKSpriteNode {
     position = CGPoint(x: x, y: y)
     physicsBody.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
     physicsBody.mass = physicsBody.mass * 1
-  }
-  
-  // Setup base physics properties and body -
-  
-//  func setupPhysics() {
-//
-//    physicsBody = SKPhysicsBody(circleOfRadius: size.width / 2)
-//
-//    physicsBody?.categoryBitMask = PhysicsCategory.Asteroid
-//    physicsBody?.collisionBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile
-//    physicsBody?.contactTestBitMask = PhysicsCategory.Ship | PhysicsCategory.Missile | PhysicsCategory.Edge
-//
-//    let r = CGFloat.random(min: -5, max: 5) * 0.25
-//    physicsBody?.angularVelocity = r
-//
-//    physicsBody?.linearDamping = 0
-//    physicsBody?.angularDamping = 0
-//  }
-  
-  
-  
-  func configure() {
-    let r = Int.random(min: 0, max: 12)
-    
-    let centerY = Screen.sharedInstance.centerY
-    
-    var x: CGFloat
-    var y: CGFloat
-    var dx: CGFloat
-    var dy: CGFloat
-    
-    switch r {
-    case 0: // Starts on Left
-      x = -20
-      y = CGFloat.random(min: centerY, max: centerY * 2)
-      dx = CGFloat.random(min: 15, max: 50)
-      dy = CGFloat.random(min: 25, max: 80) * -1
-      
-    case 1: // Starts on the Right
-      x = Screen.sharedInstance.width + 20
-      y = CGFloat.random(min: centerY, max: centerY * 2)
-      dx = CGFloat.random(min: 15, max: 50) * -1
-      dy = CGFloat.random(min: 25, max: 80) * -1
-      
-    case 2: // Down from Top
-      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      y = Screen.sharedInstance.height + 20
-      dx = CGFloat.random(min: -10, max: 10)
-      dy = CGFloat.random(min: 40, max: 100) * -1
-      
-    default: // Normal
-      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      y = Screen.sharedInstance.height + 20
-      dx = 0
-      dy = -20
-      
-    }
-    
-    position = CGPoint(x: x, y: y)
-    physicsBody?.velocity = CGVector(dx: dx, dy: dy)
   }
   
 }

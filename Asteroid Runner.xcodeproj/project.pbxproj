@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82D19E2205E34DF00807C85 /* Fonts.swift */; };
+		D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */; };
+		D82F3DE8206DD115002BEFC1 /* MissileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE7206DD115002BEFC1 /* MissileMode.swift */; };
 		D84E3731205CD3B500512E12 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3730205CD3B500512E12 /* Ship.swift */; };
 		D84E3733205CD55200512E12 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3732205CD55200512E12 /* Asteroid.swift */; };
 		D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3734205CDAF400512E12 /* PhysicsCategory.swift */; };
@@ -53,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		D82D19E2205E34DF00807C85 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissilePower.swift; sourceTree = "<group>"; };
+		D82F3DE7206DD115002BEFC1 /* MissileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileMode.swift; sourceTree = "<group>"; };
 		D84E3730205CD3B500512E12 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		D84E3732205CD55200512E12 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
 		D84E3734205CDAF400512E12 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
@@ -110,6 +114,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D82F3DE3206D7682002BEFC1 /* Missile */ = {
+			isa = PBXGroup;
+			children = (
+				D84E3736205CDC1300512E12 /* Missile.swift */,
+				D82F3DE7206DD115002BEFC1 /* MissileMode.swift */,
+				D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */,
+			);
+			path = Missile;
+			sourceTree = "<group>";
+		};
+		D82F3DE6206D76FC002BEFC1 /* PowerUp */ = {
+			isa = PBXGroup;
+			children = (
+				D84E3744205D0A3E00512E12 /* PowerUp.swift */,
+				D84E3746205D6A4000512E12 /* PowerUpBomb.swift */,
+				D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */,
+				D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */,
+				D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */,
+				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
+			);
+			path = PowerUp;
+			sourceTree = "<group>";
+		};
 		D84E375C205DD13500512E12 /* States */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,13 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				D8E0A4DE206D6A8700393F37 /* Asteroid */,
-				D84E3736205CDC1300512E12 /* Missile.swift */,
-				D84E3744205D0A3E00512E12 /* PowerUp.swift */,
-				D84E3746205D6A4000512E12 /* PowerUpBomb.swift */,
-				D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */,
-				D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */,
-				D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */,
-				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
+				D82F3DE3206D7682002BEFC1 /* Missile */,
+				D82F3DE6206D76FC002BEFC1 /* PowerUp */,
 				D84E3730205CD3B500512E12 /* Ship.swift */,
 				D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */,
 			);
@@ -310,6 +332,7 @@
 				D84E3751205D874000512E12 /* PlayingState.swift in Sources */,
 				D84E3750205D874000512E12 /* CountDownState.swift in Sources */,
 				D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */,
+				D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */,
 				D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */,
 				D8E0A4E4206D6B0F00393F37 /* AsteroidDirection.swift in Sources */,
 				D8AFE00B2066ED9100BC11D8 /* GameSceneContact.swift in Sources */,
@@ -332,6 +355,7 @@
 				D8AFDFFD2060AA0300BC11D8 /* PowerUpShield.swift in Sources */,
 				D84E3747205D6A4000512E12 /* PowerUpBomb.swift in Sources */,
 				D84E3743205CFF2100512E12 /* Button.swift in Sources */,
+				D82F3DE8206DD115002BEFC1 /* MissileMode.swift in Sources */,
 				D84E374F205D874000512E12 /* GameOverState.swift in Sources */,
 				D8AFDFF9205F313C00BC11D8 /* GameEndingState.swift in Sources */,
 				D8AFE00720620E3800BC11D8 /* PowerUpRapid.swift in Sources */,

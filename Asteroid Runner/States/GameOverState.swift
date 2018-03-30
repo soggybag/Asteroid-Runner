@@ -18,7 +18,7 @@ class GameOverState: GKState {
   }
   
   override func didEnter(from previousState: GKState?) {
-    print("Enter Game Over State")
+    // print("Enter Game Over State")
     scene.menu.show()
   }
   

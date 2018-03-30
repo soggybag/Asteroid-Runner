@@ -8,13 +8,12 @@
 
 import SpriteKit
 
-enum MissileType: CGFloat {
-  case weak     = 1
-  case average  = 2
-  case strong   = 3
-}
 
 class Missile: SKSpriteNode {
+  
+  // --------------------------------
+  // MARK: Static Properties
+  // --------------------------------
   
   static let powerLevelLow: CGFloat = 0.00125
   static let powerLevelMed: CGFloat = 0.0025
@@ -22,9 +21,34 @@ class Missile: SKSpriteNode {
   
   static var power: CGFloat = 0.00125
   
-  static var missileType: MissileType = .average
+  static var missilePower: MissilePower = .average
   
   static let NAME = "missile"
+  
+  
+  // --------------------------------
+  // MARK: Static Methods
+  // --------------------------------
+  
+  static func setPowerLow() {
+    Missile.power = Missile.powerLevelLow
+    Missile.missilePower = .weak
+  }
+  
+  static func setPowerMed() {
+    Missile.power = Missile.powerLevelMed
+    Missile.missilePower = .average
+  }
+  
+  static func setPowerHi() {
+    Missile.power = Missile.powerLevelHi
+    Missile.missilePower = .strong
+  }
+  
+  
+  // --------------------------------
+  // MARK: Initializers
+  // --------------------------------
   
   init() {
     let size = CGSize(width: 2, height: 4)
@@ -39,6 +63,11 @@ class Missile: SKSpriteNode {
     fatalError("init(coder:) has not been implemented")
   }
   
+  
+  // --------------------------------
+  // MARK: Public Methods
+  // --------------------------------
+  
   func setupPhysics() {
     physicsBody = SKPhysicsBody(circleOfRadius: 2)
     
@@ -51,21 +80,6 @@ class Missile: SKSpriteNode {
     let missileVelocity = CGVector(dx: 0, dy: 100)
     physicsBody!.velocity = missileVelocity
     physicsBody!.linearDamping = 0
-  }
-  
-  static func setPowerLow() {
-    Missile.power = Missile.powerLevelLow
-    Missile.missileType = .weak
-  }
-  
-  static func setPowerMed() {
-    Missile.power = Missile.powerLevelMed
-    Missile.missileType = .average
-  }
-  
-  static func setPowerHi() {
-    Missile.power = Missile.powerLevelHi
-    Missile.missileType = .strong
   }
   
 }

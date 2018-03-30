@@ -17,11 +17,23 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
+  // MARK: Public properties
+  
   let MAKE_ASTEROIDS = "MAKE_ASTEROIDS" // Key for Make Asteroids Actions
   
-  var level = 0
+  var missileMode = MissileMode.normal
+  
+//  let missilePoints = [
+//    [CGPoint(x: 0, y: 20)],
+//    [CGPoint(x: -10, y: 20), CGPoint(x: 10, y: 20)],
+//    [CGPoint(x: -20, y: 20), CGPoint(x: 0, y: 20), CGPoint(x: 20, y: 20)]
+//  ]
+  
+  var missileFireTime: TimeInterval = 0.3
   var shipSpeed: CGFloat = 5
   var autoFireOn = true
+  
+  var level = 0
   var timeSinceLastMissile: TimeInterval = 0
   
   var asteroidSize = AsteroidSize.average
@@ -31,10 +43,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var gameState: GKStateMachine!
   
   let ship = Ship()
-  var menu: Menu!
   
+  var menu: Menu!
   var hud: Hud!
   var starfield: Starfield!
+  
   let swipeRight  = UISwipeGestureRecognizer()
   let swipeLeft   = UISwipeGestureRecognizer()
   let swipeDown   = UISwipeGestureRecognizer()
@@ -43,7 +56,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   var changeIndex: Int = 100
   
-  // ----------
+  
+  // Computed properties
   
   var score: Int = 0 {
     didSet {
@@ -57,7 +71,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  // ---------
+  
+  // MARK: View Lifecycle
   
   override func didMove(to view: SKView) {
     Screen.sharedInstance.setSize(size: size)
@@ -81,7 +96,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     showVersion()
   }
   
-  // -----------
+  // ---------------------------------
+  // MARK: Public Methods
+  // ---------------------------------
+  
+  // Setup Menu
   
   func setupMenu() {
     menu = Menu()
@@ -99,6 +118,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
+  // Setup State Machine
+  
   func setupStateMachine() {
     let readyState = ReadyState(scene: self)
     let playingState = PlayingState(scene: self)
@@ -114,12 +135,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     ])
   }
   
+  
+  // Setup Camera
+  
   func setupCamera() {
     let cam = SKCameraNode()
     camera = cam
     cam.position = Screen.sharedInstance.center
     addChild(cam)
   }
+  
+  
+  // Setup Physics World
   
   func setupPhysicsWorld() {
     // Gravity
@@ -138,12 +165,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let outerHitBox = SKNode()
     addChild(outerHitBox)
     
-    let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -121)
+    let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -161)
+    
+    print(outerHitBoxRect)
+    
+    outerHitBox.position.y += 80
     outerHitBox.physicsBody = SKPhysicsBody(edgeLoopFrom: outerHitBoxRect)
     outerHitBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterEdge
     outerHitBox.physicsBody?.collisionBitMask = PhysicsCategory.None
     outerHitBox.physicsBody?.contactTestBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile | PhysicsCategory.PowerUp
   }
+  
+  
+  // Setup Ship
   
   func setupship() {
     addChild(ship)
@@ -152,11 +186,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     ship.setShipSpeedMed()
   }
   
+  
+  // Setup Starfield
+  
   func setupStarfield() {
     starfield = Starfield(size: size)
     addChild(starfield)
     starfield.zPosition = -1
   }
+  
+  
+  // Setup HUD
   
   func setupHud() {
     hud = Hud()
@@ -182,6 +222,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
+  
+  // Add text message to screen at point
+  
   func addText(message: String) {
     let pos = Screen.sharedInstance.center
     let text = PopupLabelNode(message: message, location: pos, fontSize: 24)
@@ -194,15 +237,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Make Asteroids
   // ------------------------------------------------------------
   
-  func makeAsteroids() {
+  
+  // Start making asteroids
+  
+  func makeAsteroids(interval: TimeInterval = 1) {
     // Set some random params for asteroids
-    asteroidSize = AsteroidSize.random()
+    asteroidSize = .bosstroid // AsteroidSize.random() // *************
     asteroidSpeed = AsteroidSpeed.random()
     asteroidDirection = AsteroidDirection.random()
     
     // TODO: Time between asteroids
     
-    let wait = SKAction.wait(forDuration: 1)
+    let wait = SKAction.wait(forDuration: interval)
     let makeAsteroid = SKAction.run {
       self.makeAsteroid()
     }
@@ -222,6 +268,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
   // Make an Asteroid
   // ------------------------------------------------------------
+  
+  // Make an asteroid or power up
   
   func makeAsteroid() {
     changeIndex -= 0
@@ -276,30 +324,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  var missileMode = 0
   
-  let missilePoints = [
-    [CGPoint(x: 0, y: 20)],
-    [CGPoint(x: -10, y: 20), CGPoint(x: 10, y: 20)],
-    [CGPoint(x: -20, y: 20), CGPoint(x: 0, y: 20), CGPoint(x: 20, y: 20)]
-  ]
+  // ---------------------------------
+  // Missiles
+  // ---------------------------------
+  
+  // Shoot missile
   
   func shootMissile() {
-    for point in missilePoints[missileMode] {
+    let points = missileMode.getPoints()
+    
+    for point in points {
       let missile = Missile()
       addChild(missile)
       missile.position = ship.position + point
     }
   }
   
-  func missilePowerUp(n: Int) {
-    missileMode = n
+  // Set the mode for missiles 
+  
+  func missilePowerUp(mode: MissileMode) {
+    missileMode = mode
     run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
-      self.missileMode = 0
+      self.missileMode = .normal
     })]))
   }
+
   
-  var missileFireTime: TimeInterval = 0.3
   
   func missileRapid() {
     // print("!!! Rapid FIRE !!!")
@@ -400,7 +451,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   // -------------------------------------
   // Handle a hit on an Asteroid
-  func hit(asteroid: Asteroid, missileType: MissileType) {
+  func hit(asteroid: Asteroid, missileType: MissilePower) {
     if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
       let points = Int(asteroid.asteroidSize.rawValue)
       score += points
