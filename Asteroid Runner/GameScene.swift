@@ -90,10 +90,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupHud()
     // makeAsteroids()
     
-    gameState.enter(ReadyState.self)
     physicsWorld.contactDelegate = self
     
     showVersion()
+    
+    gameState.enter(IntroState.self)
   }
   
   // ---------------------------------
@@ -247,7 +248,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   func makeAsteroids(interval: TimeInterval = 1) {
     // Set some random params for asteroids
-    asteroidSize = .bosstroid // AsteroidSize.random() // *************
+    asteroidSize = AsteroidSize.random() // *************
     asteroidSpeed = AsteroidSpeed.random()
     asteroidDirection = AsteroidDirection.random()
     

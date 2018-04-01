@@ -43,10 +43,6 @@ extension GameScene {
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
       // print("Asteroid Hits Ship")
       
-      if ship.shieldActive {
-        return
-      }
-      
       guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
       
       shipExplosion.position = ship.position
@@ -106,7 +102,7 @@ extension GameScene {
       if nodeA?.name == PowerUp.PU_BOMB || nodeB?.name == PowerUp.PU_BOMB {
         destroyAllAsteroids()
       } else if nodeA?.name == PowerUp.PU_SHIELD || nodeB?.name == PowerUp.PU_SHIELD {
-        ship.activateShield()
+        shield.activate()
       } else if nodeA?.name == PowerUp.PU_MISSILE_2 || nodeB?.name == PowerUp.PU_MISSILE_2 {
         missilePowerUp(mode: MissileMode.randomPowerup())
       } else if nodeA?.name == PowerUp.PU_MISSILE_RAPID || nodeB?.name == PowerUp.PU_MISSILE_RAPID {
