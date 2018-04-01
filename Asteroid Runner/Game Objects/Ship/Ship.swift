@@ -22,8 +22,16 @@ class Ship: SKSpriteNode {
   
   var shieldSprite = SKShapeNode()
   var shieldActive = false
+  var shield: ShipShield?
   
   var mm: CGFloat = 0
+  
+  override var position: CGPoint {
+    didSet {
+      super.position = self.position
+      // shield?.position = self.position
+    }
+  }
   
   init() {
     let size = CGSize(width: 20, height: 40)
@@ -39,6 +47,8 @@ class Ship: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  
   
   func setupShield() {
     let rect = CGRect(x: -size.width, y: -size.width, width: size.width * 2, height: size.width * 2)

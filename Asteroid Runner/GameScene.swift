@@ -167,7 +167,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -161)
     
-    print(outerHitBoxRect)
+    // print(outerHitBoxRect)
     
     outerHitBox.position.y += 80
     outerHitBox.physicsBody = SKPhysicsBody(edgeLoopFrom: outerHitBoxRect)
@@ -179,11 +179,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   // Setup Ship
   
+  let shield = ShipShield()
+  
   func setupship() {
     addChild(ship)
     ship.position.x = Screen.sharedInstance.centerX
     ship.position.y = 60
     ship.setShipSpeedMed()
+    
+    addChild(shield)
+    ship.shield = shield
   }
   
   
@@ -427,6 +432,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     lastUpdateTime = currentTime
     gameState.update(deltaTime: deltaTime)
     handleUpdate(seconds: deltaTime)
+    
+    shield.position = ship.position
+    
   }
   
   

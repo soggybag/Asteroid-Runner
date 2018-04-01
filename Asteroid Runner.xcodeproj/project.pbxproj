@@ -30,6 +30,7 @@
 		D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3756205DAB0000512E12 /* PublicExtension.swift */; };
 		D84E3759205DAB3000512E12 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3758205DAB3000512E12 /* Screen.swift */; };
 		D84E375B205DCC6E00512E12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E375A205DCC6E00512E12 /* Colors.swift */; };
+		D8955B8820706360000102F5 /* ShipShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8955B8720706360000102F5 /* ShipShield.swift */; };
 		D8AFDFF9205F313C00BC11D8 /* GameEndingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */; };
 		D8AFDFFB205F7F8B00BC11D8 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */; };
 		D8AFDFFD2060AA0300BC11D8 /* PowerUpShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */; };
@@ -77,6 +78,7 @@
 		D84E3756205DAB0000512E12 /* PublicExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicExtension.swift; sourceTree = "<group>"; };
 		D84E3758205DAB3000512E12 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		D84E375A205DCC6E00512E12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		D8955B8720706360000102F5 /* ShipShield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipShield.swift; sourceTree = "<group>"; };
 		D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEndingState.swift; sourceTree = "<group>"; };
 		D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpShield.swift; sourceTree = "<group>"; };
@@ -168,7 +170,7 @@
 				D8E0A4DE206D6A8700393F37 /* Asteroid */,
 				D82F3DE3206D7682002BEFC1 /* Missile */,
 				D82F3DE6206D76FC002BEFC1 /* PowerUp */,
-				D84E3730205CD3B500512E12 /* Ship.swift */,
+				D8955B862070633D000102F5 /* Ship */,
 				D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */,
 			);
 			path = "Game Objects";
@@ -195,6 +197,15 @@
 				D84E373A205CFBEB00512E12 /* Starfield.sks */,
 			);
 			path = Particles;
+			sourceTree = "<group>";
+		};
+		D8955B862070633D000102F5 /* Ship */ = {
+			isa = PBXGroup;
+			children = (
+				D84E3730205CD3B500512E12 /* Ship.swift */,
+				D8955B8720706360000102F5 /* ShipShield.swift */,
+			);
+			path = Ship;
 			sourceTree = "<group>";
 		};
 		D8B1F2F7205EC27700418F40 /* Frameworks */ = {
@@ -330,6 +341,7 @@
 			files = (
 				D8DB9C19205CD2DB006455F9 /* GameScene.swift in Sources */,
 				D84E3751205D874000512E12 /* PlayingState.swift in Sources */,
+				D8955B8820706360000102F5 /* ShipShield.swift in Sources */,
 				D84E3750205D874000512E12 /* CountDownState.swift in Sources */,
 				D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */,
 				D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */,

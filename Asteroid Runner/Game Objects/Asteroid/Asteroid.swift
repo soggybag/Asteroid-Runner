@@ -8,11 +8,11 @@
 
 import SpriteKit
 
-// ----------------------------------
-
+// ==================================
+//
 // Asteroid Class
-
-// ----------------------------------
+// 
+// ==================================
 
 class Asteroid: SKSpriteNode {
   
@@ -114,7 +114,7 @@ class Asteroid: SKSpriteNode {
     
     // Set physics categories
     physicsBody.categoryBitMask = PhysicsCategory.Asteroid
-    physicsBody.collisionBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile
+    physicsBody.collisionBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile | PhysicsCategory.Shield
     physicsBody.contactTestBitMask = PhysicsCategory.Ship | PhysicsCategory.Missile | PhysicsCategory.Edge
     
     // Remove damping
