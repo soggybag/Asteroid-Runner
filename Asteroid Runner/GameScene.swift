@@ -131,7 +131,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
+  
+  // --------------------------------
   // Setup State Machine
+  // --------------------------------
   
   func setupStateMachine() {
     let readyState = ReadyState(scene: self)
@@ -149,7 +152,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // --------------------------------
   // Setup Camera
+  // --------------------------------
   
   func setupCamera() {
     let cam = SKCameraNode()
@@ -159,7 +164,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // --------------------------------
   // Setup Physics World
+  // --------------------------------
   
   func setupPhysicsWorld() {
     // Gravity
@@ -190,7 +197,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // ------------------------------------
   // Setup Ship
+  // ------------------------------------
   
   let shield = ShipShield()
   
@@ -205,7 +214,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // ----------------------------------
   // Setup Starfield
+  // ----------------------------------
   
   func setupStarfield() {
     starfield = Starfield(size: size)
@@ -214,7 +225,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // ---------------------------------
   // Setup HUD
+  // ---------------------------------
   
   func setupHud() {
     hud = Hud()
@@ -241,7 +254,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // ------------------------------------
   // Add text message to screen at point
+  // ------------------------------------
   
   func addText(message: String) {
     let pos = Screen.sharedInstance.center
@@ -252,11 +267,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   
   // ------------------------------------------------------------
-  // Make Asteroids
-  // ------------------------------------------------------------
-  
-  
   // Start making asteroids
+  // ------------------------------------------------------------
   
   func makeAsteroids(interval: TimeInterval = 1) {
     // Set some random params for asteroids
@@ -274,6 +286,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     run(SKAction.repeatForever(seq), withKey: MAKE_ASTEROIDS)
   }
   
+  
   // ------------------------------------------------------------
   // Stop Making Asteroids
   // ------------------------------------------------------------
@@ -284,10 +297,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   
   // ------------------------------------------------------------
-  // Make an Asteroid
-  // ------------------------------------------------------------
-  
   // Make an asteroid or power up
+  // ------------------------------------------------------------
   
   func makeAsteroid() {
     changeIndex -= 0
@@ -344,10 +355,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   
   // ---------------------------------
-  // Missiles
-  // ---------------------------------
-  
   // Shoot missile
+  // ---------------------------------
   
   func shootMissile() {
     let points = missileMode.getPoints()
@@ -359,7 +368,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  // Set the mode for missiles 
+  
+  // ---------------------------------
+  // Set the mode for missiles
+  // ---------------------------------
   
   func missilePowerUp(mode: MissileMode) {
     missileMode = mode
@@ -369,6 +381,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 
   
+  // ---------------------------------
+  // Start rapid fire mode
+  // ---------------------------------
   
   func missileRapid() {
     // print("!!! Rapid FIRE !!!")
@@ -378,7 +393,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     })]))
   }
   
-  //
+  
+  // ----------------------------------
+  // Touch Events
+  // ----------------------------------
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     // shootMissile()
