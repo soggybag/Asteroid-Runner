@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupCamera()
     setupGestures()
     setupPhysicsWorld()
-    // setupStarfield()
+    setupStarfield()
     setupship()
     setupHud()
     // makeAsteroids()
