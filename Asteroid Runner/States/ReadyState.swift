@@ -26,7 +26,7 @@ class ReadyState: GKState {
   
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
-    // print("Did enter Ready State")
+    print("Did enter Ready State")
     
     scene.ship.physicsBody?.isDynamic = false
     scene.ship.position.x = Screen.sharedInstance.centerX

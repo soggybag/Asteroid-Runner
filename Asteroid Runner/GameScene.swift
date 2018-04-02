@@ -57,7 +57,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var changeIndex: Int = 100
   
   
+  // -----------------------------------
   // Computed properties
+  // -----------------------------------
   
   var score: Int = 0 {
     didSet {
@@ -72,7 +74,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
   
   
+  // --------------------------------------
   // MARK: View Lifecycle
+  // --------------------------------------
   
   override func didMove(to view: SKView) {
     Screen.sharedInstance.setSize(size: size)
@@ -97,11 +101,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     gameState.enter(IntroState.self)
   }
   
+  
   // ---------------------------------
+  //
   // MARK: Public Methods
+  //
   // ---------------------------------
   
+  
+  // ---------------------------------
   // Setup Menu
+  // ---------------------------------
   
   func setupMenu() {
     menu = Menu()
@@ -109,13 +119,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     menu.zPosition = 9999
     menu.position = Screen.sharedInstance.center
     menu.hide()
+    
+    // Tap the Play again button on the game over menu
     menu.tapToPlay = {
       self.clearScreen()
       self.menu.hide()
       self.ship.show()
       self.changeIndex = 100
       self.level = 0
-      self.gameState.enter(NextLevelState.self)
+      self.gameState.enter(ReadyState.self)
     }
   }
   
@@ -384,7 +396,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
   }
   
-  // ----------
+  
+  // ---------------------------------
+  // Clear all objects on screen
+  // ---------------------------------
   
   func clearScreen() {
     let names = [Asteroid.NAME, PowerUp.PU_BOMB, PowerUp.PU_MISSILE_2, PowerUp.PU_MISSILE_3, PowerUp.PU_MISSILE_RAPID, PowerUp.PU_POINTS, PowerUp.PU_SHIELD, Missile.NAME]
@@ -395,6 +410,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
+  
+  // ---------------------------------
+  // Destroy all asteroids on screen
+  // ---------------------------------
+  
   func destroyAllAsteroids() {
     self.enumerateChildNodes(withName: Asteroid.NAME) { (asteroid, stop) in
       asteroid.removeFromParent()
@@ -403,9 +423,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     shakeScreen()
   }
   
+  
+  // -------------------------------
+  // Shake Screen
+  // -------------------------------
+  
+  // TODO: Fine tune hitAllAsteroids against time and count for screen shake
+  //       May need to balance with damage valeu below in hitAllAsteroids. 
+  
   func shakeScreen() {
-    let wait = 0.03
-    let count = 19
+    let wait = 0.06
+    let count = 10
     let offset: CGFloat = 8
     
     let waitAction = SKAction.wait(forDuration: wait)
@@ -416,6 +444,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       let dx = cx + CGFloat.random(min: -offset, max: offset)
       let dy = cy + CGFloat.random(min: -offset, max: offset)
       camera.position = CGPoint(x: dx, y: dy)
+      self.hitAllAsteroids()
     }
     let seq = SKAction.sequence([waitAction, wiggle])
     let rep = SKAction.repeat(seq, count: count)
@@ -426,7 +455,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     run(seq2)
   }
   
-  //
+  
+  // -------------------------------------
+  // Handle a hit on an Asteroid
+  // -------------------------------------
+  
+  func hit(asteroid: Asteroid, missileType: MissilePower) {
+    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
+      let points = Int(asteroid.asteroidSize.rawValue)
+      
+      if gameState.currentState is PlayingState {
+        score += points
+        show(points: points, at: asteroid.position)
+      }
+      
+      asteroid.removeFromParent()
+      
+      // TODO: make some smaller asteroids here...
+      for rock in debris {
+        addChild(rock)
+      }
+    }
+  }
+  
+  
+  // ---------------------------------
+  // Hit all asteroids
+  // ---------------------------------
+  
+  func hitAllAsteroids() {
+    enumerateChildNodes(withName: Asteroid.NAME) { (node, stop) in
+      if let asteroid = node as? Asteroid {
+        self.hit(asteroid: asteroid, missileType: .weak) // TODO: Adjust this with shake screen above.
+      }
+    }
+  }
+  
+  
+  // ----------------------------------------
+  // Show text message on screen
+  // ----------------------------------------
+  
+  func show(points: Int, at location: CGPoint) {
+    let label = PopupLabelNode(message: "\(points)", location: location)
+    addChild(label)
+  }
+  
+  
+  // ---------------------------------------
+  // Update
+  // ---------------------------------------
+  
   var lastUpdateTime: TimeInterval = 0
   override func update(_ currentTime: TimeInterval) {
     let deltaTime = currentTime - lastUpdateTime
@@ -438,6 +517,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
   }
   
+  
+  // ---------------------------------
+  // Handle updates
+  // ---------------------------------
   
   func handleUpdate(seconds: TimeInterval) {
     if let accelerationData = MotionManager.sharedInstance.accelerometer {
@@ -457,27 +540,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  
-  // -------------------------------------
-  // Handle a hit on an Asteroid
-  func hit(asteroid: Asteroid, missileType: MissilePower) {
-    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
-      let points = Int(asteroid.asteroidSize.rawValue)
-      score += points
-      show(points: points, at: asteroid.position)
-      
-      asteroid.removeFromParent()
-      // TODO: make some smaller asteroids here...
-      for rock in debris {
-        addChild(rock)
-      }
-    }
-  }
-  
-  func show(points: Int, at location: CGPoint) {
-    let label = PopupLabelNode(message: "\(points)", location: location)
-    addChild(label)
-  }
   
   
 }

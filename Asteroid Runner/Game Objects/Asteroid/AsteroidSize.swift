@@ -25,7 +25,7 @@ enum AsteroidSize: CGFloat {
   func nextSize() -> AsteroidSize? {
     switch self {
     case .bosstroid:
-      return .massive
+      return .large
       
     case .massive:
       return .average

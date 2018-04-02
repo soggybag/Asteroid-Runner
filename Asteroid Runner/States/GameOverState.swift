@@ -17,14 +17,24 @@ class GameOverState: GKState {
     self.scene = scene
   }
   
+  
+  // -----------------------------------
+  // Did enter Game Over State
+  // -----------------------------------
+  
   override func didEnter(from previousState: GKState?) {
     // print("Enter Game Over State")
     scene.menu.show()
   }
   
+  
+  // -----------------------------------
+  // Is Valid Next State
+  // -----------------------------------
+  
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
     // print("Game Over is valid next state")
-    if stateClass == NextLevelState.self {
+    if stateClass == ReadyState.self {
       // print("\(stateClass) is valid next state")
       return true
     }
@@ -32,9 +42,19 @@ class GameOverState: GKState {
     return false
   }
   
+  
+  // -----------------------------------
+  // Will Exit to State
+  // -----------------------------------
+  
   override func willExit(to nextState: GKState) {
     
   }
+  
+  
+  // -----------------------------------
+  // Update State
+  // -----------------------------------
   
   override func update(deltaTime seconds: TimeInterval) {
     // print("Game over State update")
