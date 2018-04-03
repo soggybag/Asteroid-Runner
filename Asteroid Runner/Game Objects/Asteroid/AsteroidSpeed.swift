@@ -23,4 +23,13 @@ enum AsteroidSpeed: CGFloat {
     let allSpeeds = [AsteroidSpeed.slow, .average, .fast, .veryFast]
     return allSpeeds[Int.random(n: allSpeeds.count)]
   }
+  
+  func toString() -> String {
+    switch self {
+    case .slow: return "Slow"
+    case .average: return "Average"
+    case .fast: return "Fast"
+    case .veryFast: return "Very Fast"
+    }
+  }
 }

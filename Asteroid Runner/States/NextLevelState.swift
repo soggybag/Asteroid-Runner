@@ -28,11 +28,18 @@ class NextLevelState: GKState {
   override func didEnter(from previousState: GKState?) {
     // print("Did enter Intro State")
     
+    let size = scene.asteroidSize.toString()
+    let speed = scene.asteroidSpeed.toString()
+    let direction = scene.asteroidDirection.toString()
+    
     scene.level += 1
     
     let introMessage = [
       "Prepare for",
-      "Stage: \(scene.level)"
+      "Stage: \(scene.level)",
+      "Size: \(size)",
+      "Speed: \(speed)",
+      "Direction: \(direction)"
     ]
     
     let wait = SKAction.wait(forDuration: 2)

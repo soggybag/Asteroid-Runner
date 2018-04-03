@@ -48,6 +48,18 @@ enum AsteroidSize: CGFloat {
     }
   }
   
+  func toString() -> String {
+    switch self {
+    case .tiny: return "Tiny"
+    case .small: return "Small"
+    case .average: return "Average"
+    case .large: return "Large"
+    case .huge: return "Huge"
+    case .massive: return "Massive"
+    case .bosstroid: return "Boostroid"
+    }
+  }
+  
   static func random() -> AsteroidSize {
     let allSizes = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive, .bosstroid]
     return allSizes[Int.random(n: allSizes.count)]

@@ -23,12 +23,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   var missileMode = MissileMode.normal
   
-//  let missilePoints = [
-//    [CGPoint(x: 0, y: 20)],
-//    [CGPoint(x: -10, y: 20), CGPoint(x: 10, y: 20)],
-//    [CGPoint(x: -20, y: 20), CGPoint(x: 0, y: 20), CGPoint(x: 20, y: 20)]
-//  ]
-  
   var missileFireTime: TimeInterval = 0.3
   var shipSpeed: CGFloat = 5
   var autoFireOn = true
@@ -54,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   let swipeUp     = UISwipeGestureRecognizer()
   let tap = UITapGestureRecognizer()
   
-  var changeIndex: Int = 100
+  // var changeIndex: Int = 100
   
   
   // -----------------------------------
@@ -125,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       self.clearScreen()
       self.menu.hide()
       self.ship.show()
-      self.changeIndex = 100
+//      self.changeIndex = 100
       self.level = 0
       self.gameState.enter(ReadyState.self)
     }
@@ -301,50 +295,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
   
   func makeAsteroid() {
-    changeIndex -= 0
-    if changeIndex < 0 {
-      return
-    }
-    
+    // Get a random int to select object type to generate
     let r = Int.random(min: 0, max: 24)
     
-    // print("Asteroid Type: \(r)")
-    
+    // Generate a random object
     switch r {
       
     case 0:
+      // smart Bomb
       let powerup = PowerUpBomb()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     case 1:
+      // Points
       let powerup = PowerUp()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     case 2:
+      // Shield
       let powerup = PowerUpShield()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     case 3:
+      // Missile multifire
       let powerup = PowerUpMissile()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     case 4:
+      // Missile rapid fire
       let powerup = PowerUpRapid()
       addChild(powerup)
       powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
       powerup.position.y = size.height
       
     default:
-      // print("...")
-      // let sz = AsteroidSize.random()
+      // Create an Asteroid
       let sz = asteroidSize
       let sp = asteroidSpeed
       

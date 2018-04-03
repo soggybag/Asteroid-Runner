@@ -19,4 +19,12 @@ enum AsteroidDirection {
     let allDirections = [AsteroidDirection.left, .top, .right]
     return allDirections[Int.random(n: allDirections.count)]
   }
+  
+  func toString() -> String {
+    switch self {
+    case .top: return "Top"
+    case .left: return "Left"
+    case .right: return "Right"
+    }
+  }
 }

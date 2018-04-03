@@ -18,4 +18,12 @@ enum AsteroidDensity: CGFloat {
     let densities = [AsteroidDensity.light, .average, .dense]
     return densities[Int.random(n: densities.count)]
   }
+  
+  func toString() -> String {
+    switch self {
+    case .light: return "Light"
+    case .average: return "Avergae"
+    case .dense: return "Dense"
+    }
+  }
 }

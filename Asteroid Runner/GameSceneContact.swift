@@ -46,6 +46,9 @@ extension GameScene {
     // *** Asteroid Hits Ship ***
     // --------------------------
       
+      // FIXME: Sometimes asteroid hits ship and game does not end
+      // Ship hides but physics body stays. 
+      
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
       if gameState.currentState is GameOverState || gameState.currentState is GameEndingState  {
         return
@@ -67,7 +70,7 @@ extension GameScene {
       ship.hide()
       // Show a message on the menu
       menu.message = "Your score is: \(score)"
-      score = 0
+      // score = 0
       // Enter Game Ending State
       gameState.enter(GameEndingState.self)
       
