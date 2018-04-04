@@ -76,7 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     Screen.sharedInstance.setSize(size: size)
     
     name = "Scene"
-    backgroundColor = UIColor(white: 0, alpha: 1)
+    backgroundColor = Colors.backgroundBlack
     
     setupMenu()
     setupStateMachine()

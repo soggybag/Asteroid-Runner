@@ -23,8 +23,8 @@ struct Colors {
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   
-  static let shieldStrokeColor = UIColor.white
-  static let shieldFillColor = UIColor(white: 1, alpha: 0.5)
+  static let shieldStrokeColor = UIColor(r: 0, g: 255, b: 255)
+  static let shieldFillColor = UIColor(r: 0, g: 255, b: 255, alpha: 0.2)
   
   static let buttonColorNormal   = UIColor(red: 0, green: 100 / 255, blue: 0, alpha: 1)
   static let buttonColorActive   = UIColor(red: 0, green: 150 / 255, blue: 0, alpha: 1)

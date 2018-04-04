@@ -51,7 +51,7 @@ class Ship: SKSpriteNode {
   // MARK: Initializers
   
   init() {
-    let size = CGSize(width: Ship.shipSize.width, height: Ship.shipSize.height)
+    let size = CGSize(width: Ship.shipSize.width + 6, height: Ship.shipSize.height + 6)
     super.init(texture: nil, color: Colors.shipBlue, size: size)
     
     name = "Ship"

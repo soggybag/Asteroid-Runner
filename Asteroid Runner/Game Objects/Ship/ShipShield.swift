@@ -33,6 +33,7 @@ class ShipShield: SKSpriteNode {
     setupPhysics()
     setupShapes()
     deactivate()
+    // activate()
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -47,6 +48,7 @@ class ShipShield: SKSpriteNode {
     shieldBody?.categoryBitMask = PhysicsCategory.Shield
     shieldBody?.contactTestBitMask = PhysicsCategory.None
     shieldBody?.collisionBitMask = PhysicsCategory.Asteroid
+    print(shieldRadius)
   }
   
   
@@ -55,8 +57,8 @@ class ShipShield: SKSpriteNode {
     
     shieldShape.path = UIBezierPath(ovalIn: self.frame).cgPath
     shieldShape.lineWidth = 1
-    shieldShape.strokeColor = UIColor(r: 255, g: 200, b: 0, alpha: 1.0)
-    shieldShape.fillColor = UIColor(r: 255, g: 200, b: 0, alpha: 0.5)
+    shieldShape.strokeColor = Colors.shieldStrokeColor
+    shieldShape.fillColor = Colors.shieldFillColor
   }
   
   
