@@ -56,7 +56,7 @@ enum AsteroidSize: CGFloat {
     case .large: return "Large"
     case .huge: return "Huge"
     case .massive: return "Massive"
-    case .bosstroid: return "Boostroid"
+    case .bosstroid: return "Bosstroid"
     }
   }
   

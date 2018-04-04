@@ -258,6 +258,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     self.addChild(text)
   }
   
+  // ------------------------------------------------------------
+  // Define asteroid params for next wave
+  // ------------------------------------------------------------
+  
+  
+  func defineAsteroidsForWave() {
+    // Set some random params for asteroids
+    asteroidSize = AsteroidSize.random() // *************
+    asteroidSpeed = AsteroidSpeed.random()
+    asteroidDirection = AsteroidDirection.random()
+  }
   
   
   // ------------------------------------------------------------
@@ -265,10 +276,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
   
   func makeAsteroids(interval: TimeInterval = 1) {
-    // Set some random params for asteroids
-    asteroidSize = AsteroidSize.random() // *************
-    asteroidSpeed = AsteroidSpeed.random()
-    asteroidDirection = AsteroidDirection.random()
     
     // TODO: Time between asteroids
     

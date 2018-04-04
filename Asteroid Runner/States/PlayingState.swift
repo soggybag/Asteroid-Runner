@@ -46,10 +46,10 @@ class PlayingState: GKState {
     // Stop making asteroids
     scene.stopAsteroids()
     // Wait then start next wave
-    // TODO: Maybe counting Asteroids as they leave the screen is better than waiting? 
+    // TODO: Maybe counting Asteroids as they leave the screen is better than waiting?
     scene.run(SKAction.sequence([.wait(forDuration: 10), .run {
       self.startNextLevel()
-    }]))
+    }]), withKey: "wave action")
   }
   
   

@@ -8,11 +8,23 @@
 
 import SpriteKit
 
+
+// ---------------------------
+
+// Shield Sprite
+
+// ---------------------------
+
 class ShipShield: SKSpriteNode {
   
-  let shieldRadius: CGFloat = 20
+  // MARK: Public properties
+  
+  let shieldRadius: CGFloat = (Ship.shipSize.width / 2) + 6
   let shieldShape = SKShapeNode()
   var shieldBody: SKPhysicsBody?
+  
+  
+  // MARK: Initializers
   
   init() {
     let size = CGSize(width: shieldRadius * 2, height: shieldRadius * 2)
@@ -20,13 +32,14 @@ class ShipShield: SKSpriteNode {
     
     setupPhysics()
     setupShapes()
-    
     deactivate()
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  // MARK: Setup methods
   
   func setupPhysics() {
     shieldBody = SKPhysicsBody(circleOfRadius: shieldRadius)
@@ -36,6 +49,7 @@ class ShipShield: SKSpriteNode {
     shieldBody?.collisionBitMask = PhysicsCategory.Asteroid
   }
   
+  
   func setupShapes() {
     addChild(shieldShape)
     
@@ -44,6 +58,13 @@ class ShipShield: SKSpriteNode {
     shieldShape.strokeColor = UIColor(r: 255, g: 200, b: 0, alpha: 1.0)
     shieldShape.fillColor = UIColor(r: 255, g: 200, b: 0, alpha: 0.5)
   }
+  
+  
+  // MARK: Public Methods
+  
+  // ---------------------------------
+  // Activate
+  // ---------------------------------
   
   func activate() {
     isHidden = false
@@ -68,6 +89,11 @@ class ShipShield: SKSpriteNode {
     let longSeq = SKAction.sequence([rep, longWait, repEnd, deactivateShield])
     run(longSeq)
   }
+  
+  
+  // --------------------------------
+  // Deactivate
+  // --------------------------------
   
   func deactivate() {
     isHidden = true

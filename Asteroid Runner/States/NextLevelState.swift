@@ -28,6 +28,8 @@ class NextLevelState: GKState {
   override func didEnter(from previousState: GKState?) {
     // print("Did enter Intro State")
     
+    scene.defineAsteroidsForWave()
+    
     let size = scene.asteroidSize.toString()
     let speed = scene.asteroidSpeed.toString()
     let direction = scene.asteroidDirection.toString()

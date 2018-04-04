@@ -47,30 +47,13 @@ extension GameScene {
     // --------------------------
       
       // FIXME: Sometimes asteroid hits ship and game does not end
-      // Ship hides but physics body stays. 
+      // Ship hides but physics body stays.
       
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
       if gameState.currentState is GameOverState || gameState.currentState is GameEndingState  {
         return
       }
       print("Asteroid Hits Ship")
-      
-      // Make an Explosion
-      if let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") {
-        shipExplosion.position = ship.position
-        addChild(shipExplosion)
-        
-        let wait = SKAction.wait(forDuration: 2)
-        let remove = SKAction.removeFromParent()
-        shipExplosion.run(SKAction.sequence([wait, remove]))
-      }
-      
-      // Hide the ship.
-      // TODO: make this a ship method
-      ship.hide()
-      // Show a message on the menu
-      menu.message = "Your score is: \(score)"
-      // score = 0
       // Enter Game Ending State
       gameState.enter(GameEndingState.self)
       

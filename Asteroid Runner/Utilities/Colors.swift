@@ -9,6 +9,10 @@
 import SpriteKit
 
 struct Colors {
+  static let clear = UIColor.clear
+  
+  static let backgroundBlack = UIColor(r: 0, g: 3, b: 33)
+  
   static let powerupBomb   = UIColor(red: 1, green: 0, blue: 1, alpha: 1)
   static let powerupPoints = UIColor.cyan
   static let powerupShield = UIColor.orange
@@ -16,7 +20,8 @@ struct Colors {
   static let powerupRapid = UIColor(red: 0.25, green: 1, blue: 0, alpha: 1)
   
   static let missile = UIColor.yellow
-  static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 1)
+  
+  static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   
   static let shieldStrokeColor = UIColor.white
   static let shieldFillColor = UIColor(white: 1, alpha: 0.5)
