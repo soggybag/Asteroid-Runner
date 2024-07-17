@@ -8,8 +8,8 @@
 
 import SpriteKit
 
-enum MissileMode {
-  case normal, double, triple
+enum MissileMode: Int {
+  case normal = 0, double, triple
   
   static let missilePoints = [
     [CGPoint(x: 0, y: 20)],
@@ -19,7 +19,7 @@ enum MissileMode {
   ]
   
   func getPoints() -> [CGPoint] {
-    return MissileMode.missilePoints[self.hashValue]
+    return MissileMode.missilePoints[self.rawValue]
   }
   
   static func random() -> MissileMode {

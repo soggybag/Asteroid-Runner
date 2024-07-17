@@ -8,7 +8,8 @@
 
 // TODO: Move makeAsteroids to PlayingState
 // TODO: Intro Scene with text:
-// NASA predicts an asteroid may hit the earth. We need to train pilots now!
+// NASA predicts an asteroid may hit the earth. 
+// We need to train pilots now!
 
 
 import SpriteKit
