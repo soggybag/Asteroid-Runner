@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82D19E2205E34DF00807C85 /* Fonts.swift */; };
+		A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000001 /* HighScore.swift */; };
 		D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */; };
 		D82F3DE8206DD115002BEFC1 /* MissileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE7206DD115002BEFC1 /* MissileMode.swift */; };
 		D84E3731205CD3B500512E12 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3730205CD3B500512E12 /* Ship.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		D82D19E2205E34DF00807C85 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000001 /* HighScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScore.swift; sourceTree = "<group>"; };
 		D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissilePower.swift; sourceTree = "<group>"; };
 		D82F3DE7206DD115002BEFC1 /* MissileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileMode.swift; sourceTree = "<group>"; };
 		D84E3730205CD3B500512E12 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				D84E3734205CDAF400512E12 /* PhysicsCategory.swift */,
 				D84E375A205DCC6E00512E12 /* Colors.swift */,
 				D82D19E2205E34DF00807C85 /* Fonts.swift */,
+				A1B2C3D4E5F6000000000001 /* HighScore.swift */,
 				D84E3758205DAB3000512E12 /* Screen.swift */,
 				D84E3756205DAB0000512E12 /* PublicExtension.swift */,
 				D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */,
@@ -360,6 +363,7 @@
 				D84E3757205DAB0000512E12 /* PublicExtension.swift in Sources */,
 				D8AFE0092066B5CB00BC11D8 /* NextLevelState.swift in Sources */,
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
+				A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,
 				D84E375B205DCC6E00512E12 /* Colors.swift in Sources */,

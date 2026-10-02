@@ -18,31 +18,22 @@ class GameEndingState: GKState {
   }
   
   override func didEnter(from previousState: GKState?) {
-    print("Enter Game Ending State")
-    // Make an Explosion
-    if let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") {
-      shipExplosion.position = scene.ship.position
-      scene.addChild(shipExplosion)
-      
-      let wait = SKAction.wait(forDuration: 2)
-      let remove = SKAction.removeFromParent()
-      shipExplosion.run(SKAction.sequence([wait, remove]))
-    }
-    
+    // The explosion is made by the scene when the ship is hit
     // Hide the ship.
-    // TODO: make this a ship method
     scene.ship.hide()
+    scene.shield.deactivate()
     // Show a message on the menu
     scene.menu.message = "Your score is: \(scene.score)"
-    // score = 0
-    // remove next wave action
-    scene.removeAction(forKey: "wave action")
-    // Wait then go to Game over
+    let isNewBest = HighScore.submit(scene.score)
+    scene.menu.show(best: HighScore.best, isNew: isNewBest)
+    // Stop the waves
+    scene.stopAsteroids()
+    // Wait then go to Game over. Replaces any pending wave action.
     scene.run(SKAction.sequence([
       SKAction.wait(forDuration: 3),
       SKAction.run({
         self.scene.gameState.enter(GameOverState.self)
-      })]))
+      })]), withKey: GameScene.FLOW)
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {

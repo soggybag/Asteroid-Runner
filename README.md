@@ -2,11 +2,19 @@
 
 Built with SpriteKit. 
 
-Fly through asteroids, try not to get hit. 
+Fly through asteroids, try not to get hit. You have three lives; after a hit
+the ship blinks and can't be hit again for a moment. Survive a stage for a
+bonus. Stages get harder as you go: bigger, faster asteroids, more often.
 
-Tap to fire. Swipe left or right to move. Future versions will use motion, tilt
-left/right, to move. At the moment I'm having Code Signing issues and can't 
-haven't been able to get this running on my phone. 
+Requires Xcode 15+ and iOS 17+.
+
+## Controls
+
+- Drag anywhere to steer, or tilt the phone.
+- The ship fires automatically. Turn Auto Fire off in the config panel to
+  tap to fire instead.
+- Tap during the intro to skip it.
+- The game pauses when the app goes to the background. Tap to resume.
 
 ## Configure your ship
 
@@ -15,7 +23,7 @@ ship configuration schemes.
 
 - Speed > Power - Moves faster shots are weaker
 - Speed = Power - Speed and weapon are average
-- Speed > Power - Speed is a slow weapon is more powerful
+- Speed < Power - Moves slower, weapon is more powerful
 
 In the future this screen will represent power allocation inthe ship for more 
 complex and detail configuration. 
@@ -56,7 +64,7 @@ Add new Powerups:
  
  Add game play features 
  
- 1. Lives - Classic three lives
+ 1. ~~Lives - Classic three lives~~ Done
  2. Shield - deflects an asteroid, wears down over time, or with each hit
  3. Armor - protects from one hit, no life lost
  4. Asteroids break when hit - Depending on size a number of hits will break an asteroid into two or more smaller asteroids
@@ -65,5 +73,5 @@ Add new Powerups:
 
 Art and effects
 
-1. Starfield background
+1. ~~Starfield background~~ Done
 2. Shots produce small exposition
