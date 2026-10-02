@@ -11,85 +11,94 @@ import SpriteKit
 // ==================================
 //
 // Asteroid Class
-// 
+//
 // ==================================
 
 class Asteroid: SKSpriteNode {
-  
+
   // --------------------------------
   // MARK: Static Properties
   // --------------------------------
-  
+
   static let NAME = "asteroid"
-  
+
   // --------------------------------
   // MARK: Class properties
   // --------------------------------
-  
+
   var hits: CGFloat = 0
   var asteroidSize = AsteroidSize.average
-  
-  
+
+
   // --------------------------------
   // MARK: Initializers
   // --------------------------------
-  
-  // Init with size and speed
-  
-  init(asteroidSize: AsteroidSize, speed: AsteroidSpeed) {
-    
+
+  // Init with size. Call launch(from:speed:) to place it off screen and
+  // send it on its way, or set position and velocity directly for debris.
+
+  init(asteroidSize: AsteroidSize) {
+
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
-    
+
     super.init(texture: nil, color: .white, size: size)
-    
-    // Set name 
+
+    // Set name
     name = Asteroid.NAME
-    
+
     // Set hits
     hits = asteroidSize.rawValue / 5
-    
+
     self.asteroidSize = asteroidSize
-    
+
     // Set the random color
     color = Colors.randomAsteroidColor()
-    
-    // Configure physics for types
-    configurePhysics(radius: radius, speed: speed)
+
+    configurePhysics(radius: radius)
   }
-  
+
+  // Init with size, entering the screen from a direction
+
+  convenience init(asteroidSize: AsteroidSize, speed: AsteroidSpeed, direction: AsteroidDirection) {
+    self.init(asteroidSize: asteroidSize)
+    launch(from: direction, speed: speed)
+  }
+
   // Required init with coder
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  
+
+
   // --------------------------------
   // MARK: Static methods
   // --------------------------------
-  
+
   // Factory method makes asteroid debris from an asteroid of size and velocity
-  
+
   static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize, velocity: CGVector) -> [Asteroid] {
     var a = [Asteroid]()
     for _ in 0 ... 2 {
-      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: .average)
-      asteroid.physicsBody!.velocity = asteroid.physicsBody!.velocity + velocity
+      let asteroid = Asteroid(asteroidSize: asteroidSize)
+      // Fly apart from the impact while keeping the parent's momentum
+      let scatter = CGVector(dx: CGFloat.random(in: -40 ... 40), dy: CGFloat.random(in: -20 ... 40))
+      asteroid.physicsBody!.velocity = velocity + scatter
+      asteroid.position.x = point.x + CGFloat.random(in: -20 ... 20)
+      asteroid.position.y = point.y + CGFloat.random(in: -20 ... 20)
       a.append(asteroid)
-      asteroid.position.x = point.x + CGFloat.random(min: -20, max: 20)
-      asteroid.position.y = point.y + CGFloat.random(min: -20, max: 20)
     }
     return a
   }
-  
-  
+
+
   // --------------------------------
   // MARK: Public methods
   // --------------------------------
-  
+
   // Hit asteroid with value/damage
-  
+
   func hitAsteroid(value: CGFloat) -> [Asteroid]? {
     hits -= value
     if hits < 0 {
@@ -102,74 +111,72 @@ class Asteroid: SKSpriteNode {
     }
     return nil
   }
-  
-  
-  // Configure asteroid with radius and speed - used when creating debris???
-  
-  func configurePhysics(radius: CGFloat, speed: AsteroidSpeed) {
+
+
+  // Configure the physics body
+
+  func configurePhysics(radius: CGFloat) {
     // Make a physics body
     physicsBody = SKPhysicsBody(circleOfRadius: radius)
-    
+
     guard let physicsBody = physicsBody else { return }
-    
+
     // Set physics categories
     physicsBody.categoryBitMask = PhysicsCategory.Asteroid
     physicsBody.collisionBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile | PhysicsCategory.Shield
     physicsBody.contactTestBitMask = PhysicsCategory.Ship | PhysicsCategory.Missile | PhysicsCategory.Edge
-    
+
     // Remove damping
     physicsBody.linearDamping = 0
     physicsBody.angularDamping = 0
-    
+
     // Apply some spin
-    let rotation = CGFloat.random(min: -5, max: 5) * 0.25
-    physicsBody.angularVelocity = rotation
-    
-    // Get a random number to determine starting position
-    let n = Int.random(min: 0, max: 12)
-    // Get the center of the screen
-    let centerY = Screen.sharedInstance.centerY
+    physicsBody.angularVelocity = CGFloat.random(in: -1.25 ... 1.25)
+  }
+
+
+  // Place the asteroid off screen and set its velocity. Waves from the
+  // sides still send some asteroids from the top so the middle of the
+  // screen doesn't go quiet.
+
+  func launch(from direction: AsteroidDirection, speed: AsteroidSpeed) {
+    let screen = Screen.sharedInstance
+    let centerY = screen.centerY
+
+    var direction = direction
+    if direction != .top && Int.random(in: 0 ..< 3) == 0 {
+      direction = .top
+    }
+
     // Use these to set the initial position and velocity of asteroid
     var x: CGFloat
     var y: CGFloat
     var dx: CGFloat
     var dy: CGFloat
-    
+
     // Set direction and speed
-    switch n {
-    case 0: // Starts on Left
+    switch direction {
+    case .left: // Starts on Left
       x = -60
-      y = CGFloat.random(min: centerY, max: centerY * 2)
-      dx = CGFloat.random(min: 15, max: 50)
-      dy = CGFloat.random(min: 25, max: 80) * -1
-      
-    case 1: // Starts on the Right
-      x = Screen.sharedInstance.width + 60
-      y = CGFloat.random(min: centerY, max: centerY * 2)
-      dx = CGFloat.random(min: 15, max: 50) * -1
-      dy = CGFloat.random(min: 25, max: 80) * -1
-      
-    case 2: // Down from Top
-      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      
-      let minY = Screen.sharedInstance.height + 60
-      let maxY = Screen.sharedInstance.height + 120
-      y = CGFloat.random(min: minY, max: minY)
-      
-      dx = CGFloat.random(min: -10, max: 10)
-      dy = CGFloat.random(min: 40, max: 100) * -1
-      
-    default: // Normal
-      x = CGFloat.random(min: 20, max: Screen.sharedInstance.width - 20)
-      y = Screen.sharedInstance.height + 20
-      dx = 0
-      dy = -20
-      
+      y = CGFloat.random(in: centerY ... centerY * 2)
+      dx = CGFloat.random(in: 15 ... 50)
+      dy = CGFloat.random(in: 25 ... 80) * -1
+
+    case .right: // Starts on the Right
+      x = screen.width + 60
+      y = CGFloat.random(in: centerY ... centerY * 2)
+      dx = CGFloat.random(in: 15 ... 50) * -1
+      dy = CGFloat.random(in: 25 ... 80) * -1
+
+    case .top: // Down from Top
+      x = CGFloat.random(in: 20 ... screen.width - 20)
+      y = CGFloat.random(in: screen.height + 60 ... screen.height + 120)
+      dx = CGFloat.random(in: -10 ... 10)
+      dy = CGFloat.random(in: 40 ... 100) * -1
     }
-    
+
     position = CGPoint(x: x, y: y)
-    physicsBody.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
-    physicsBody.mass = physicsBody.mass * 1
+    physicsBody?.velocity = CGVector(dx: dx * speed.rawValue, dy: dy * speed.rawValue)
   }
-  
+
 }

@@ -21,6 +21,8 @@ struct Colors {
   
   static let missile = UIColor.yellow
   
+  static let highScore = UIColor(r: 255, g: 210, b: 0)
+  
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   
   static let shieldStrokeColor = UIColor(r: 0, g: 255, b: 255)
@@ -33,9 +35,9 @@ struct Colors {
   static let buttonLabelColor = UIColor(red: 0, green: 255 / 255, blue: 0, alpha: 1)
   
   static func randomAsteroidColor() -> UIColor {
-    let r = CGFloat.random(min: 100, max: 140)
-    let g = CGFloat.random(min: 70, max: 110)
-    let b = CGFloat.random(min: 20, max: 40)
+    let r = CGFloat.random(in: 100 ... 140)
+    let g = CGFloat.random(in: 70 ... 110)
+    let b = CGFloat.random(in: 20 ... 40)
     
     return UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: 1)
   }

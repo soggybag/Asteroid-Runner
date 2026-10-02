@@ -11,49 +11,49 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    // Entry for game
-    if let view = self.view as! SKView? {
-      // Load the SKScene from 'GameScene.sks'
-      let scene = GameScene(size: view.bounds.size)
-      // Set the scale mode to scale to fit the window
-      scene.scaleMode = .aspectFill
-      
-      // Present the scene
-      view.presentScene(scene)
-      
-      view.ignoresSiblingOrder = true
-      
-      view.showsFPS = true
-      view.showsNodeCount = true
-      view.showsPhysics = true
-    }
-    
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    // Entry for game. Wait for layout so the scene gets the real screen
+    // size and safe area rather than the storyboard's placeholder size.
+    guard let view = self.view as? SKView, view.scene == nil else { return }
+
+    let scene = GameScene(size: view.bounds.size)
+    scene.safeArea = view.safeAreaInsets
+    // Scene matches the view exactly
+    scene.scaleMode = .resizeFill
+
+    // Present the scene
+    view.presentScene(scene)
+
+    view.ignoresSiblingOrder = true
+
+    #if DEBUG
+    view.showsFPS = true
+    view.showsNodeCount = true
+    #endif
   }
-  
+
   override var shouldAutorotate: Bool {
     return true
   }
-  
+
   override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     return .portrait
-//    if UIDevice.current.userInterfaceIdiom == .phone {
-//      return .allButUpsideDown
-//    } else {
-//      return .all
-//    }
   }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Release any cached data, images, etc that aren't in use.
-  }
-  
+
   override var prefersStatusBarHidden: Bool {
     return true
   }
 
-}
+  override var prefersHomeIndicatorAutoHidden: Bool {
+    return true
+  }
 
+  // Keep edge swipes from pulling down Control Center or Notification
+  // Center mid-game. The user swipes twice to get them.
+  override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+    return [.top, .bottom]
+  }
+
+}

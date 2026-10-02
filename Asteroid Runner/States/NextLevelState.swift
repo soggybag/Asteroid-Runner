@@ -28,13 +28,13 @@ class NextLevelState: GKState {
   override func didEnter(from previousState: GKState?) {
     // print("Did enter Intro State")
     
+    scene.level += 1
+    
     scene.defineAsteroidsForWave()
     
     let size = scene.asteroidSize.toString()
     let speed = scene.asteroidSpeed.toString()
     let direction = scene.asteroidDirection.toString()
-    
-    scene.level += 1
     
     let introMessage = [
       "Prepare for",
@@ -44,7 +44,7 @@ class NextLevelState: GKState {
       "Direction: \(direction)"
     ]
     
-    let wait = SKAction.wait(forDuration: 2)
+    let wait = SKAction.wait(forDuration: 1.5)
     var array = [SKAction]()
     for message in introMessage {
       array.append(wait)
@@ -55,12 +55,13 @@ class NextLevelState: GKState {
       self.scene.gameState.enter(PlayingState.self)
     })
     
-    scene.run(.sequence(array))
+    scene.run(.sequence(array), withKey: GameScene.FLOW)
     
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-    if PlayingState.self == stateClass {
+    // Asteroids from the last wave can still hit the ship here
+    if stateClass == PlayingState.self || stateClass == GameEndingState.self {
       return true
     }
     return false

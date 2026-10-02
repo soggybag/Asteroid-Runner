@@ -11,118 +11,74 @@ import SpriteKit
 extension GameScene {
   func didBegin(_ contact: SKPhysicsContact) {
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-    
-    let bodyA = contact.bodyA
-    let bodyB = contact.bodyB
-    let nodeA = bodyA.node
-    let nodeB = bodyB.node
-    
-    // print("Begin Contact", contact.bodyA.node?.name, contact.bodyB.node?.name)
-    
+
+    // Sort the bodies so the lower category is always first
+    let (first, second) = contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask
+      ? (contact.bodyA, contact.bodyB)
+      : (contact.bodyB, contact.bodyA)
+
+    // A node can be removed by an earlier contact in the same frame
+    guard let firstNode = first.node, let secondNode = second.node else { return }
+
     switch collision {
-    
+
     // -----------------------------
     // *** Missile Hits Asteroid ***
     // -----------------------------
-      
+
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
-      // print(contact.collisionImpulse)
-      if bodyA.categoryBitMask == PhysicsCategory.Missile {
-        let missile = nodeA as! Missile
-        let asteroid = nodeB as! Asteroid
-        missile.removeFromParent()
-        // print("Removing Missile 1: \(missile)")
-        hit(asteroid: asteroid, missileType: Missile.missilePower)
-      } else {
-        let missile = nodeB as! Missile
-        let asteroid = nodeA as! Asteroid
-        missile.removeFromParent()
-        // print("Removing Missile 2: \(missile)")
-        hit(asteroid: asteroid, missileType: Missile.missilePower)
-      }
-      
-    
+      guard let asteroid = firstNode as? Asteroid, secondNode.parent != nil else { return }
+      secondNode.removeFromParent()
+      hit(asteroid: asteroid, missileType: Missile.missilePower)
+
+
     // --------------------------
     // *** Asteroid Hits Ship ***
     // --------------------------
-      
-      // FIXME: Sometimes asteroid hits ship and game does not end
-      // Ship hides but physics body stays.
-      
+
     case PhysicsCategory.Asteroid | PhysicsCategory.Ship:
-      if gameState.currentState is GameOverState || gameState.currentState is GameEndingState  {
-        return
-      }
-      print("Asteroid Hits Ship")
-      // Enter Game Ending State
-      gameState.enter(GameEndingState.self)
-      
-      
-    // --------------------------------
-    // *** Asteroid Hits Outer Edge ***
-    // --------------------------------
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid:
-      // print("Asteroid hit Edge")
-      if bodyA.categoryBitMask == PhysicsCategory.Asteroid {
-        nodeA?.removeFromParent()
-      } else {
-        nodeB?.removeFromParent()
-      }
-      
-      
-    // -------------------------------
-    // *** Missile Hits Outer Edge ***
-    // -------------------------------
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.Missile:
-      // print("Missile hit Edge")
-      if bodyA.categoryBitMask == PhysicsCategory.Missile {
-        nodeA?.removeFromParent()
-      } else {
-        nodeB?.removeFromParent()
-      }
-      
-    // -------------------------------
-    // *** Powerup Hits Outer Edge ***
-    // -------------------------------
-      
-    case PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
-      // print("Powerup hit edge")
-      if bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        nodeA?.removeFromParent()
-      } else {
-        nodeB?.removeFromParent()
-      }
-      
+      shipHit()
+
+
+    // ---------------------------------------------------
+    // *** Asteroid, Missile or Powerup Hits Outer Edge ***
+    // ---------------------------------------------------
+
+    case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid,
+         PhysicsCategory.OuterEdge | PhysicsCategory.Missile,
+         PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
+      let other = first.categoryBitMask == PhysicsCategory.OuterEdge ? secondNode : firstNode
+      other.removeFromParent()
+
+
     // -------------------------
     // *** Ship Hits Powerup ***
     // -------------------------
-      
+
     case PhysicsCategory.Ship | PhysicsCategory.PowerUp:
-      // print("Ship hit Powerup")
+      let powerup = secondNode
+      guard !ship.isHidden, powerup.parent != nil else { return }
+
       let points = 100
       score += points
-      
-      if bodyA.categoryBitMask == PhysicsCategory.PowerUp {
-        show(points: points, at: nodeA!.position)
-        nodeA?.removeFromParent()
-      } else {
-        show(points: points, at: nodeB!.position)
-        nodeB?.removeFromParent()
-      }
-      
-      if nodeA?.name == PowerUp.PU_BOMB || nodeB?.name == PowerUp.PU_BOMB {
-        // destroyAllAsteroids()
-        shakeScreen()
-      } else if nodeA?.name == PowerUp.PU_SHIELD || nodeB?.name == PowerUp.PU_SHIELD {
+      show(points: points, at: powerup.position)
+      powerup.removeFromParent()
+      lightImpact.impactOccurred()
+
+      switch powerup.name {
+      case PowerUp.PU_BOMB:
+        impact.impactOccurred()
+        shakeScreen(hitAsteroids: true)
+      case PowerUp.PU_SHIELD:
         shield.activate()
-      } else if nodeA?.name == PowerUp.PU_MISSILE_2 || nodeB?.name == PowerUp.PU_MISSILE_2 {
+      case PowerUp.PU_MISSILE_2:
         missilePowerUp(mode: MissileMode.randomPowerup())
-      } else if nodeA?.name == PowerUp.PU_MISSILE_RAPID || nodeB?.name == PowerUp.PU_MISSILE_RAPID {
+      case PowerUp.PU_MISSILE_RAPID:
         missileRapid()
+      default:
+        break
       }
-      
+
     default:
       return
     }

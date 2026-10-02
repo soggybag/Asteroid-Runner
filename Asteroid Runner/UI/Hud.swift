@@ -8,58 +8,63 @@
 
 // TODO: Add a scanline fill to background
 
+// The HUD is a panel the size of the screen plus a strip. Normally only the
+// strip, showing score and lives, peeks in at the top of the screen. When
+// the config panel is shown the whole thing slides down over the screen.
+
 import SpriteKit
 
 class Hud: SKSpriteNode {
-  
+
   let scoreLabel = SKLabelNode()
+  let livesNode = SKNode()
   var showAction: SKAction!
   var hideAction: SKAction!
-  
+
   var button1Action = {
     print("Button 1 Activated from Game Scene")
   }
-  
+
   var button2Action = {
     print("Button 2 Activated from Game Scene")
   }
-  
+
   var button3Action = {
     print("Button 3 Activated from Game Scene")
   }
-  
-  var autoFireButtonAction = {
-    print("Auto fire button")
+
+  var autoFireButtonAction: (Bool) -> Void = { autoFire in
+    print("Auto fire button: \(autoFire)")
   }
-  
-  var autoFire = false
-  
+
+  var autoFire = true
+
   var button1 = Button()
   var button2 = Button()
   var button3 = Button()
   var autoFireButton = Button()
-  
+
   init() {
     let color = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2)
     let w = Screen.sharedInstance.width
     let h = Screen.sharedInstance.hudHeight
     let size = CGSize(width: w, height: h)
     super.init(texture: nil, color: color, size: size)
-    
+
     anchorPoint = CGPoint(x: 0, y: 0)
     zPosition = 999
-    
+    position.y = Screen.sharedInstance.hudYHidden
+
     setupLabel()
+    setupLives()
     setupActions()
     setupButtons()
-    
-    showHud(show: true)
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   func setupLabel() {
     addChild(scoreLabel)
     scoreLabel.fontSize = 24
@@ -67,16 +72,21 @@ class Hud: SKSpriteNode {
     scoreLabel.position.y = 5
     scoreLabel.horizontalAlignmentMode = .right
     scoreLabel.verticalAlignmentMode = .bottom
-    scoreLabel.text = "000000"
+    scoreLabel.text = "0"
     scoreLabel.fontColor = Colors.buttonLabelColor
     scoreLabel.fontName = Fonts.fontName
   }
-  
-  func setupActions() {
-    hideAction = SKAction.moveTo(y: 0, duration: 0.2)
-    showAction = SKAction.moveTo(y: Screen.sharedInstance.hudYHidden, duration: 0.2)
+
+  func setupLives() {
+    addChild(livesNode)
+    livesNode.position = CGPoint(x: 18, y: 18)
   }
-  
+
+  func setupActions() {
+    showAction = SKAction.moveTo(y: 0, duration: 0.2)
+    hideAction = SKAction.moveTo(y: Screen.sharedInstance.hudYHidden, duration: 0.2)
+  }
+
   func setupButtons() {
     addChild(button2)
     button2.select()
@@ -89,7 +99,7 @@ class Hud: SKSpriteNode {
       self.button2.select()
       self.button3.deselect()
     }
-    
+
     addChild(button1)
     button1.title = "Speed > Power"
     button1.position.x = Screen.sharedInstance.centerX
@@ -100,7 +110,7 @@ class Hud: SKSpriteNode {
       self.button2.deselect()
       self.button3.deselect()
     }
-    
+
     addChild(button3)
     button3.title = "Speed < Power"
     button3.position.x = Screen.sharedInstance.centerX
@@ -111,20 +121,23 @@ class Hud: SKSpriteNode {
       self.button2.deselect()
       self.button3.select()
     }
-    
+
     addChild(autoFireButton)
-    autoFireButton.title = "Autofire Off"
+    autoFireButton.title = "Auto Fire ON"
+    autoFireButton.select()
     autoFireButton.position.x = Screen.sharedInstance.centerX
     autoFireButton.position.y = button3.position.y - 120
     autoFireButton.buttonAction = {
       self.autoFire = !self.autoFire
-      self.autoFireButton.title = self.autoFire ? "Auto Fire ON" : "Auto Fire OFF"
+      self.autoFireButton.title = self.autoFire ? "Auto Fire ON" : "Tap to Fire"
       self.autoFireButton.toggle()
-      self.autoFireButtonAction()
+      self.autoFireButtonAction(self.autoFire)
     }
   }
-  
-  func showHud(show: Bool) {
+
+  // Slide the config panel down over the screen, or back up out of the way
+
+  func showConfig(show: Bool) {
     removeAllActions()
     if show {
       run(showAction)
@@ -132,8 +145,21 @@ class Hud: SKSpriteNode {
       run(hideAction)
     }
   }
-  
+
   func update(score: Int) {
     scoreLabel.text = "\(score)"
+  }
+
+  // Draw one small ship for each remaining life
+
+  func update(lives: Int) {
+    livesNode.removeAllChildren()
+    let texture = SKTexture(imageNamed: "Satellite_4_1.png")
+    for i in 0 ..< max(lives, 0) {
+      let icon = SKSpriteNode(texture: texture)
+      icon.size = CGSize(width: 22, height: 22)
+      icon.position.x = CGFloat(i) * 26
+      livesNode.addChild(icon)
+    }
   }
 }

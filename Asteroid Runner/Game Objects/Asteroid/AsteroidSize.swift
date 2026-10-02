@@ -62,7 +62,18 @@ enum AsteroidSize: CGFloat {
   
   static func random() -> AsteroidSize {
     let allSizes = [AsteroidSize.tiny, .small, .average, .large, .huge, .massive, .bosstroid]
-    return allSizes[Int.random(n: allSizes.count)]
+    return allSizes.randomElement()!
+  }
+  
+  // Larger asteroids become possible as the stages go by.
+  // Bosstroids only show up from stage 6.
+  static func random(forLevel level: Int) -> AsteroidSize {
+    let sizes: [AsteroidSize] = [.tiny, .small, .average, .large, .huge, .massive]
+    let largest = min(sizes.count, 2 + level)
+    if level >= 6 && Int.random(in: 0 ..< 4) == 0 {
+      return .bosstroid
+    }
+    return sizes[0 ..< largest].randomElement()!
   }
   
 }

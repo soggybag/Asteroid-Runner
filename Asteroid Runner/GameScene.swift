@@ -7,9 +7,6 @@
 //
 
 // TODO: Move makeAsteroids to PlayingState
-// TODO: Intro Scene with text:
-// NASA predicts an asteroid may hit the earth. 
-// We need to train pilots now!
 
 
 import SpriteKit
@@ -17,68 +14,96 @@ import GameplayKit
 import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-  
+
   // MARK: Public properties
-  
+
   let MAKE_ASTEROIDS = "MAKE_ASTEROIDS" // Key for Make Asteroids Actions
-  
+
+  // Key for the timed sequences that move the state machine along. Every
+  // state runs its sequence with this key so a new one always replaces the
+  // last, and ending the game can cancel whatever is pending.
+  static let FLOW = "FLOW"
+
+  let MISSILE_MODE_TIMER = "MISSILE_MODE_TIMER"
+  let RAPID_FIRE_TIMER = "RAPID_FIRE_TIMER"
+
+  let startingLives = 3
+  let normalFireTime: TimeInterval = 0.3
+  let rapidFireTime: TimeInterval = 0.15
+
   var missileMode = MissileMode.normal
-  
+
   var missileFireTime: TimeInterval = 0.3
   var shipSpeed: CGFloat = 5
   var autoFireOn = true
-  
+
   var level = 0
   var timeSinceLastMissile: TimeInterval = 0
-  
+
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
   var asteroidDirection = AsteroidDirection.top
-  
+
   var gameState: GKStateMachine!
-  
+
   let ship = Ship()
-  
+
   var menu: Menu!
   var hud: Hud!
   var starfield: Starfield!
-  
-  let swipeRight  = UISwipeGestureRecognizer()
-  let swipeLeft   = UISwipeGestureRecognizer()
+  let pauseLabel = SKLabelNode()
+
+  // Set by the view controller before the scene is presented
+  var safeArea = UIEdgeInsets.zero
+
   let swipeDown   = UISwipeGestureRecognizer()
   let swipeUp     = UISwipeGestureRecognizer()
-  let tap = UITapGestureRecognizer()
-  
-  // var changeIndex: Int = 100
-  
-  
+
+  let impact = UIImpactFeedbackGenerator(style: .heavy)
+  let lightImpact = UIImpactFeedbackGenerator(style: .light)
+
+  var gamePaused = false
+
+
   // -----------------------------------
   // Computed properties
   // -----------------------------------
-  
+
   var score: Int = 0 {
     didSet {
       hud.update(score: score)
     }
   }
-  
-  var hudVisible = false {
+
+  var lives: Int = 3 {
     didSet {
-      hud.showHud(show: hudVisible)
+      hud.update(lives: lives)
     }
   }
-  
-  
+
+  var configVisible = false {
+    didSet {
+      hud.showConfig(show: configVisible)
+    }
+  }
+
+  // True while the player is flying and can score or be hit
+  var shipInPlay: Bool {
+    let state = gameState.currentState
+    return !ship.isHidden && (state is PlayingState || state is NextLevelState)
+  }
+
+
   // --------------------------------------
   // MARK: View Lifecycle
   // --------------------------------------
-  
+
   override func didMove(to view: SKView) {
-    Screen.sharedInstance.setSize(size: size)
-    
+    Screen.sharedInstance.setSize(size: size, safeArea: safeArea)
+
     name = "Scene"
     backgroundColor = Colors.backgroundBlack
-    
+
     setupMenu()
     setupStateMachine()
     setupCamera()
@@ -87,50 +112,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     setupStarfield()
     setupship()
     setupHud()
-    // makeAsteroids()
-    
+    setupPause()
+
     physicsWorld.contactDelegate = self
-    
+
     showVersion()
-    
+
     gameState.enter(IntroState.self)
   }
-  
-  
+
+
   // ---------------------------------
   //
   // MARK: Public Methods
   //
   // ---------------------------------
-  
-  
+
+
   // ---------------------------------
   // Setup Menu
   // ---------------------------------
-  
+
   func setupMenu() {
     menu = Menu()
     addChild(menu)
     menu.zPosition = 9999
     menu.position = Screen.sharedInstance.center
     menu.hide()
-    
+
     // Tap the Play again button on the game over menu
     menu.tapToPlay = {
-      self.clearScreen()
-      self.menu.hide()
-      self.ship.show()
-//      self.changeIndex = 100
-      self.level = 0
+      self.resetGame()
       self.gameState.enter(ReadyState.self)
     }
   }
-  
-  
+
+
   // --------------------------------
   // Setup State Machine
   // --------------------------------
-  
+
   func setupStateMachine() {
     let readyState = ReadyState(scene: self)
     let playingState = PlayingState(scene: self)
@@ -139,287 +160,362 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let gameEndingState = GameEndingState(scene: self)
     let introState = IntroState(scene: self)
     let nextLevel = NextLevelState(scene: self)
-    
+
     gameState = GKStateMachine(states: [
       introState, readyState, playingState,
       gameOverState, countDownState, gameEndingState, nextLevel
     ])
   }
-  
-  
+
+
   // --------------------------------
   // Setup Camera
   // --------------------------------
-  
+
   func setupCamera() {
     let cam = SKCameraNode()
     camera = cam
     cam.position = Screen.sharedInstance.center
     addChild(cam)
   }
-  
-  
+
+
   // --------------------------------
   // Setup Physics World
   // --------------------------------
-  
+
   func setupPhysicsWorld() {
     // Gravity
     physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-    
+
     // Inner edge - keeps ship within the bounds of the screen
-    guard let view = view else { return }
-    
-    physicsBody = SKPhysicsBody(edgeLoopFrom: view.frame)
-    
+    let screenRect = CGRect(origin: .zero, size: size)
+    physicsBody = SKPhysicsBody(edgeLoopFrom: screenRect)
+
     physicsBody?.categoryBitMask = PhysicsCategory.Edge
     physicsBody?.collisionBitMask = PhysicsCategory.Ship
     physicsBody?.contactTestBitMask = PhysicsCategory.None
-    
+
     // Outer edge - Objects that hit this boundary are removed
     let outerHitBox = SKNode()
     addChild(outerHitBox)
-    
-    let outerHitBoxRect = view.frame.insetBy(dx: -121, dy: -161)
-    
-    // print(outerHitBoxRect)
-    
+
+    let outerHitBoxRect = screenRect.insetBy(dx: -121, dy: -161)
+
     outerHitBox.position.y += 80
     outerHitBox.physicsBody = SKPhysicsBody(edgeLoopFrom: outerHitBoxRect)
     outerHitBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterEdge
     outerHitBox.physicsBody?.collisionBitMask = PhysicsCategory.None
     outerHitBox.physicsBody?.contactTestBitMask = PhysicsCategory.Asteroid | PhysicsCategory.Missile | PhysicsCategory.PowerUp
   }
-  
-  
+
+
   // ------------------------------------
   // Setup Ship
   // ------------------------------------
-  
+
   let shield = ShipShield()
-  
+
   func setupship() {
     addChild(ship)
     ship.position.x = Screen.sharedInstance.centerX
-    ship.position.y = 60
+    ship.position.y = Screen.sharedInstance.shipY
     ship.setShipSpeedMed()
-    
+
     addChild(shield)
     ship.shield = shield
   }
-  
-  
+
+
   // ----------------------------------
   // Setup Starfield
   // ----------------------------------
-  
+
   func setupStarfield() {
     starfield = Starfield(size: size)
     addChild(starfield)
     starfield.zPosition = -1
   }
-  
-  
+
+
   // ---------------------------------
   // Setup HUD
   // ---------------------------------
-  
+
   func setupHud() {
     hud = Hud()
     addChild(hud)
-    
+
     hud.button1Action = {
       self.ship.setShipSpeedFast()
       Missile.setPowerLow()
     }
-    
+
     hud.button2Action = {
       self.ship.setShipSpeedMed()
       Missile.setPowerMed()
     }
-    
+
     hud.button3Action = {
       self.ship.setShipSpeedSlow()
       Missile.setPowerHi()
     }
-    
-    hud.autoFireButtonAction = {
-      
+
+    hud.autoFireButtonAction = { autoFire in
+      self.autoFireOn = autoFire
+    }
+
+    lives = startingLives
+  }
+
+
+  // ---------------------------------
+  // Setup Pause
+  // ---------------------------------
+
+  func setupPause() {
+    addChild(pauseLabel)
+    pauseLabel.text = "Paused - Tap to Resume"
+    pauseLabel.fontName = Fonts.fontName
+    pauseLabel.fontSize = 24
+    pauseLabel.fontColor = Colors.buttonLabelColor
+    pauseLabel.position = Screen.sharedInstance.center
+    pauseLabel.zPosition = 9999
+    pauseLabel.isHidden = true
+
+    let center = NotificationCenter.default
+    center.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+    center.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+  }
+
+  @objc func appWillResignActive() {
+    pauseGame()
+  }
+
+  @objc func appDidBecomeActive() {
+    // SKView unpauses the scene when the app comes back. Stay paused
+    // until the player taps.
+    if gamePaused {
+      isPaused = true
     }
   }
-  
-  
+
+  func pauseGame() {
+    let state = gameState.currentState
+    guard !gamePaused, state is PlayingState || state is NextLevelState || state is ReadyState else { return }
+    gamePaused = true
+    pauseLabel.isHidden = false
+    isPaused = true
+  }
+
+  func resumeGame() {
+    gamePaused = false
+    pauseLabel.isHidden = true
+    isPaused = false
+    lastUpdateTime = 0
+  }
+
+
+  // ---------------------------------
+  // Reset everything for a new game
+  // ---------------------------------
+
+  func resetGame() {
+    removeAction(forKey: GameScene.FLOW)
+    removeAction(forKey: MISSILE_MODE_TIMER)
+    removeAction(forKey: RAPID_FIRE_TIMER)
+    stopAsteroids()
+    clearScreen()
+    menu.hide()
+    ship.clearInvulnerable()
+    shield.deactivate()
+    missileMode = .normal
+    missileFireTime = normalFireTime
+    level = 0
+    lives = startingLives
+  }
+
+
   // ------------------------------------
   // Add text message to screen at point
   // ------------------------------------
-  
+
   func addText(message: String) {
     let pos = Screen.sharedInstance.center
     let text = PopupLabelNode(message: message, location: pos, fontSize: 24)
     self.addChild(text)
   }
-  
+
   // ------------------------------------------------------------
   // Define asteroid params for next wave
   // ------------------------------------------------------------
-  
-  
+
+
   func defineAsteroidsForWave() {
-    // Set some random params for asteroids
-    asteroidSize = AsteroidSize.random() // *************
-    asteroidSpeed = AsteroidSpeed.random()
+    // Random params for asteroids, harder as the levels go up
+    asteroidSize = AsteroidSize.random(forLevel: level)
+    asteroidSpeed = AsteroidSpeed.random(forLevel: level)
     asteroidDirection = AsteroidDirection.random()
   }
-  
-  
+
+
+  // ------------------------------------------------------------
+  // Time between asteroids, shorter as the levels go up
+  // ------------------------------------------------------------
+
+  var asteroidInterval: TimeInterval {
+    return max(0.35, 1.0 - 0.06 * TimeInterval(level - 1))
+  }
+
+
   // ------------------------------------------------------------
   // Start making asteroids
   // ------------------------------------------------------------
-  
-  func makeAsteroids(interval: TimeInterval = 1) {
-    
-    // TODO: Time between asteroids
-    
-    let wait = SKAction.wait(forDuration: interval)
+
+  func makeAsteroids() {
+    let wait = SKAction.wait(forDuration: asteroidInterval)
     let makeAsteroid = SKAction.run {
       self.makeAsteroid()
     }
     let seq = SKAction.sequence([wait, makeAsteroid])
     run(SKAction.repeatForever(seq), withKey: MAKE_ASTEROIDS)
   }
-  
-  
+
+
   // ------------------------------------------------------------
   // Stop Making Asteroids
   // ------------------------------------------------------------
-  
+
   func stopAsteroids() {
     removeAction(forKey: MAKE_ASTEROIDS)
   }
-  
-  
+
+
+  // ------------------------------------------------------------
+  // Number of asteroids still on screen
+  // ------------------------------------------------------------
+
+  var asteroidCount: Int {
+    return children.filter { $0 is Asteroid }.count
+  }
+
+
   // ------------------------------------------------------------
   // Make an asteroid or power up
   // ------------------------------------------------------------
-  
+
   func makeAsteroid() {
     // Get a random int to select object type to generate
-    let r = Int.random(min: 0, max: 24)
-    
+    let r = Int.random(in: 0 ... 24)
+
     // Generate a random object
+    let powerup: PowerUp
     switch r {
-      
     case 0:
-      // smart Bomb
-      let powerup = PowerUpBomb()
-      addChild(powerup)
-      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
-      powerup.position.y = size.height
-      
+      powerup = PowerUpBomb()     // smart Bomb
     case 1:
-      // Points
-      let powerup = PowerUp()
-      addChild(powerup)
-      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
-      powerup.position.y = size.height
-      
+      powerup = PowerUp()         // Points
     case 2:
-      // Shield
-      let powerup = PowerUpShield()
-      addChild(powerup)
-      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
-      powerup.position.y = size.height
-      
+      powerup = PowerUpShield()   // Shield
     case 3:
-      // Missile multifire
-      let powerup = PowerUpMissile()
-      addChild(powerup)
-      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
-      powerup.position.y = size.height
-      
+      powerup = PowerUpMissile()  // Missile multifire
     case 4:
-      // Missile rapid fire
-      let powerup = PowerUpRapid()
-      addChild(powerup)
-      powerup.position.x = CGFloat.random(min: 0, max: Screen.sharedInstance.width)
-      powerup.position.y = size.height
-      
+      powerup = PowerUpRapid()    // Missile rapid fire
     default:
       // Create an Asteroid
-      let sz = asteroidSize
-      let sp = asteroidSpeed
-      
-      let asteroid = Asteroid(asteroidSize: sz, speed: sp)
+      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection)
       addChild(asteroid)
+      return
     }
+
+    addChild(powerup)
+    powerup.position.x = CGFloat.random(in: 0 ... Screen.sharedInstance.width)
+    powerup.position.y = size.height
   }
-  
-  
+
+
   // ---------------------------------
   // Shoot missile
   // ---------------------------------
-  
+
   func shootMissile() {
     let points = missileMode.getPoints()
-    
+
     for point in points {
       let missile = Missile()
       addChild(missile)
       missile.position = ship.position + point
     }
   }
-  
-  
+
+
   // ---------------------------------
   // Set the mode for missiles
   // ---------------------------------
-  
+
   func missilePowerUp(mode: MissileMode) {
     missileMode = mode
     run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
       self.missileMode = .normal
-    })]))
+    })]), withKey: MISSILE_MODE_TIMER)
   }
 
-  
+
   // ---------------------------------
   // Start rapid fire mode
   // ---------------------------------
-  
+
   func missileRapid() {
-    // print("!!! Rapid FIRE !!!")
-    missileFireTime = 0.15
+    missileFireTime = rapidFireTime
     run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
-      self.missileFireTime = 0.3
-    })]))
+      self.missileFireTime = self.normalFireTime
+    })]), withKey: RAPID_FIRE_TIMER)
   }
-  
-  
+
+
   // ----------------------------------
   // Touch Events
   // ----------------------------------
-  
+
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    // shootMissile()
+    if gamePaused {
+      resumeGame()
+      return
+    }
+
+    if let intro = gameState.currentState as? IntroState {
+      intro.skip()
+      return
+    }
+
+    if !autoFireOn && shipInPlay {
+      shootMissile()
+    }
   }
-  
+
+  // Drag anywhere to steer the ship
+
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
+    guard let touch = touches.first, !gamePaused, !ship.isHidden else { return }
+    let dx = touch.location(in: self).x - touch.previousLocation(in: self).x
+    let halfWidth = ship.size.width / 2
+    let x = ship.position.x + dx
+    ship.position.x = min(max(x, halfWidth), size.width - halfWidth)
   }
-  
+
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
+
   }
-  
+
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
+
   }
-  
-  
+
+
   // ---------------------------------
   // Clear all objects on screen
   // ---------------------------------
-  
+
   func clearScreen() {
     let names = [Asteroid.NAME, PowerUp.PU_BOMB, PowerUp.PU_MISSILE_2, PowerUp.PU_MISSILE_3, PowerUp.PU_MISSILE_RAPID, PowerUp.PU_POINTS, PowerUp.PU_SHIELD, Missile.NAME]
     for name in names {
@@ -428,12 +524,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       })
     }
   }
-  
-  
+
+
   // ---------------------------------
   // Destroy all asteroids on screen
   // ---------------------------------
-  
+
   func destroyAllAsteroids() {
     self.enumerateChildNodes(withName: Asteroid.NAME) { (asteroid, stop) in
       asteroid.removeFromParent()
@@ -441,29 +537,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     shakeScreen()
   }
-  
-  
+
+
   // -------------------------------
   // Shake Screen
   // -------------------------------
-  
+
   // TODO: Fine tune hitAllAsteroids against time and count for screen shake
-  //       May need to balance with damage valeu below in hitAllAsteroids. 
-  
-  func shakeScreen() {
+  //       May need to balance with damage valeu below in hitAllAsteroids.
+
+  func shakeScreen(hitAsteroids: Bool = false, count: Int = 10) {
     let wait = 0.06
-    let count = 10
     let offset: CGFloat = 8
-    
+
     let waitAction = SKAction.wait(forDuration: wait)
     let wiggle = SKAction.run {
       guard let camera = self.camera else { return }
       let cx = Screen.sharedInstance.centerX
       let cy = Screen.sharedInstance.centerY
-      let dx = cx + CGFloat.random(min: -offset, max: offset)
-      let dy = cy + CGFloat.random(min: -offset, max: offset)
+      let dx = cx + CGFloat.random(in: -offset ... offset)
+      let dy = cy + CGFloat.random(in: -offset ... offset)
       camera.position = CGPoint(x: dx, y: dy)
-      self.hitAllAsteroids()
+      if hitAsteroids {
+        self.hitAllAsteroids()
+      }
     }
     let seq = SKAction.sequence([waitAction, wiggle])
     let rep = SKAction.repeat(seq, count: count)
@@ -473,35 +570,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let seq2 = SKAction.sequence([rep, resetPosition])
     run(seq2)
   }
-  
-  
+
+
   // -------------------------------------
   // Handle a hit on an Asteroid
   // -------------------------------------
-  
+
   func hit(asteroid: Asteroid, missileType: MissilePower) {
+    // Already destroyed by another contact this frame
+    guard asteroid.parent != nil else { return }
+
     if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
       let points = Int(asteroid.asteroidSize.rawValue)
-      
-      if gameState.currentState is PlayingState {
+
+      if shipInPlay {
         score += points
         show(points: points, at: asteroid.position)
       }
-      
+
       asteroid.removeFromParent()
-      
-      // TODO: make some smaller asteroids here...
+
       for rock in debris {
         addChild(rock)
       }
     }
   }
-  
-  
+
+
   // ---------------------------------
   // Hit all asteroids
   // ---------------------------------
-  
+
   func hitAllAsteroids() {
     enumerateChildNodes(withName: Asteroid.NAME) { (node, stop) in
       if let asteroid = node as? Asteroid {
@@ -509,47 +608,83 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       }
     }
   }
-  
-  
+
+
+  // ---------------------------------
+  // Ship was hit by an asteroid
+  // ---------------------------------
+
+  func shipHit() {
+    guard shipInPlay, ship.canBeHit else { return }
+
+    lives -= 1
+    explode(at: ship.position)
+    impact.impactOccurred()
+
+    if lives <= 0 {
+      gameState.enter(GameEndingState.self)
+    } else {
+      shakeScreen(count: 5)
+      ship.makeInvulnerable()
+    }
+  }
+
+
+  // ---------------------------------
+  // Make an explosion
+  // ---------------------------------
+
+  func explode(at point: CGPoint) {
+    guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
+    shipExplosion.position = point
+    addChild(shipExplosion)
+
+    let wait = SKAction.wait(forDuration: 2)
+    let remove = SKAction.removeFromParent()
+    shipExplosion.run(SKAction.sequence([wait, remove]))
+  }
+
+
   // ----------------------------------------
   // Show text message on screen
   // ----------------------------------------
-  
+
   func show(points: Int, at location: CGPoint) {
     let label = PopupLabelNode(message: "\(points)", location: location)
     addChild(label)
   }
-  
-  
+
+
   // ---------------------------------------
   // Update
   // ---------------------------------------
-  
+
   var lastUpdateTime: TimeInterval = 0
   override func update(_ currentTime: TimeInterval) {
-    let deltaTime = currentTime - lastUpdateTime
+    // Clamp so a stall or a pause doesn't produce one huge step
+    let deltaTime = lastUpdateTime == 0 ? 0 : min(currentTime - lastUpdateTime, 1 / 20)
     lastUpdateTime = currentTime
     gameState.update(deltaTime: deltaTime)
     handleUpdate(seconds: deltaTime)
-    
+
     shield.position = ship.position
-    
+
   }
-  
-  
+
+
   // ---------------------------------
   // Handle updates
   // ---------------------------------
-  
+
   func handleUpdate(seconds: TimeInterval) {
     if let accelerationData = MotionManager.sharedInstance.accelerometer {
       let x = CGFloat(accelerationData.acceleration.x)
       ship.moveForce(x: x * 100)
     }
-    
+
     if autoFireOn {
       timeSinceLastMissile += seconds
-      
+
       if timeSinceLastMissile > missileFireTime {
         timeSinceLastMissile = 0
         if !ship.isHidden {
@@ -558,9 +693,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       }
     }
   }
-  
-  
-  
+
+
+
 }
 
 
@@ -570,50 +705,29 @@ extension GameScene {
     guard let view = view else {
       return
     }
-    
-//    tap.addTarget(self, action: #selector(GameScene.handleTap))
-//    view.addGestureRecognizer(tap)
-    
+
+    // Steering is by drag (see touchesMoved) or tilt. Vertical swipes open
+    // and close the config panel.
+
     swipeDown.addTarget(self, action: #selector(GameScene.handleSwipe))
     swipeDown.direction = .down
+    swipeDown.cancelsTouchesInView = false
     view.addGestureRecognizer(swipeDown)
-    
+
     swipeUp.addTarget(self, action: #selector(GameScene.handleSwipe))
     swipeUp.direction = .up
+    swipeUp.cancelsTouchesInView = false
     view.addGestureRecognizer(swipeUp)
-    
-    swipeRight.addTarget(self, action: #selector(GameScene.handleSwipe))
-    swipeRight.direction = .right
-    view.addGestureRecognizer(swipeRight)
-    
-    swipeLeft.addTarget(self, action: #selector(GameScene.handleSwipe))
-    swipeLeft.direction = .left
-    view.addGestureRecognizer(swipeLeft)
-    
   }
-  
-  @objc func handleTap(tap: UITapGestureRecognizer) {
-    shootMissile()
-  }
-  
+
   @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
     switch gesture.direction {
-    case .right:
-      // print("Swipe Right")
-      ship.move(x: shipSpeed)
-      
-    case .left:
-      // print("Swipe Left")
-      ship.move(x: -shipSpeed)
-      
     case .down:
-      // print("Swipe Down")
-      hudVisible = false
-      
+      configVisible = true
+
     case .up:
-      // print("Swipe Up")
-      hudVisible = true
-      
+      configVisible = false
+
     default:
       return
     }
@@ -623,16 +737,15 @@ extension GameScene {
 
 extension GameScene {
   func showVersion() {
-    //First get the nsObject by defining as an optional anyObject
-    let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-    
+    let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+
     let versionLabel = SKLabelNode()
     addChild(versionLabel)
     versionLabel.verticalAlignmentMode = .bottom
     versionLabel.horizontalAlignmentMode = .left
     versionLabel.fontName = Fonts.fontName
     versionLabel.fontSize = 12
-    versionLabel.position = CGPoint(x: 5, y: 5)
+    versionLabel.position = CGPoint(x: 5, y: 5 + safeArea.bottom)
     versionLabel.text = version
   }
 }

@@ -70,8 +70,17 @@ class IntroState: GKState {
       self.scene.gameState.enter(ReadyState.self)
     })
     
-    scene.run(.sequence(array))
+    scene.run(.sequence(array), withKey: GameScene.FLOW)
     
+    let hint = PopupLabelNode(message: "Tap to skip", location: CGPoint(x: Screen.sharedInstance.centerX, y: Screen.sharedInstance.shipY), fontSize: 14, time: 4)
+    scene.addChild(hint)
+  }
+  
+  // Jump straight to the game
+  
+  func skip() {
+    scene.removeAction(forKey: GameScene.FLOW)
+    scene.gameState.enter(ReadyState.self)
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {

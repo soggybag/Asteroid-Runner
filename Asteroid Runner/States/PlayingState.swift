@@ -34,7 +34,7 @@ class PlayingState: GKState {
     scene.run(SKAction.sequence([.wait(forDuration: 10),.run({
       // Then stop and wait before starting a new wave
       self.stopAsteroidsAndWaitForScreenToClear()
-    })]))
+    })]), withKey: GameScene.FLOW)
   }
   
   
@@ -45,11 +45,32 @@ class PlayingState: GKState {
   func stopAsteroidsAndWaitForScreenToClear() {
     // Stop making asteroids
     scene.stopAsteroids()
-    // Wait then start next wave
-    // TODO: Maybe counting Asteroids as they leave the screen is better than waiting?
-    scene.run(SKAction.sequence([.wait(forDuration: 10), .run {
+    // Check until the last asteroid is gone, giving up after 10 seconds
+    let maxChecks = 20
+    var checks = 0
+    let check = SKAction.run {
+      checks += 1
+      if self.scene.asteroidCount == 0 || checks >= maxChecks {
+        self.scene.removeAction(forKey: GameScene.FLOW)
+        self.stageClear()
+      }
+    }
+    let wait = SKAction.wait(forDuration: 0.5)
+    scene.run(.repeatForever(.sequence([wait, check])), withKey: GameScene.FLOW)
+  }
+  
+  
+  // ---------------------------------
+  // Survived the wave, award a bonus
+  // ---------------------------------
+  
+  func stageClear() {
+    let bonus = scene.level * 50
+    scene.score += bonus
+    scene.addText(message: "Stage Clear +\(bonus)")
+    scene.run(.sequence([.wait(forDuration: 1.5), .run {
       self.startNextLevel()
-    }]), withKey: "wave action")
+    }]), withKey: GameScene.FLOW)
   }
   
   

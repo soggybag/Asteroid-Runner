@@ -48,7 +48,6 @@ class ShipShield: SKSpriteNode {
     shieldBody?.categoryBitMask = PhysicsCategory.Shield
     shieldBody?.contactTestBitMask = PhysicsCategory.None
     shieldBody?.collisionBitMask = PhysicsCategory.Asteroid
-    print(shieldRadius)
   }
   
   

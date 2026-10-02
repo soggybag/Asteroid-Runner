@@ -21,7 +21,14 @@ enum AsteroidSpeed: CGFloat {
   
   static func random() -> AsteroidSpeed {
     let allSpeeds = [AsteroidSpeed.slow, .average, .fast, .veryFast]
-    return allSpeeds[Int.random(n: allSpeeds.count)]
+    return allSpeeds.randomElement()!
+  }
+  
+  // Faster asteroids become possible as the stages go by.
+  static func random(forLevel level: Int) -> AsteroidSpeed {
+    let allSpeeds = [AsteroidSpeed.slow, .average, .fast, .veryFast]
+    let fastest = min(allSpeeds.count, 1 + (level + 1) / 2)
+    return allSpeeds[0 ..< fastest].randomElement()!
   }
   
   func toString() -> String {

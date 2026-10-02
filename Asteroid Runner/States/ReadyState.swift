@@ -26,15 +26,13 @@ class ReadyState: GKState {
   
   // This method is called when the state machine enters this state
   override func didEnter(from previousState: GKState?) {
-    print("Did enter Ready State")
-    
     scene.ship.physicsBody?.isDynamic = false
     scene.ship.position.x = Screen.sharedInstance.centerX
     scene.ship.position.y = -100
     scene.ship.show()
     scene.score = 0
     
-    let moveShipIntoView = SKAction.moveTo(y: 60, duration: 2)
+    let moveShipIntoView = SKAction.moveTo(y: Screen.sharedInstance.shipY, duration: 2)
     moveShipIntoView.timingMode = .easeOut
     let enterNextState = SKAction.run {
       self.scene.ship.physicsBody?.isDynamic = true

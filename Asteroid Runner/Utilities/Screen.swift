@@ -15,10 +15,16 @@ class Screen {
   var centerY: CGFloat = 0
   var size = CGSize()
   var center = CGPoint()
-  var hudScoreHeight: CGFloat = 40
-  
-  var deviceType = ""
-  
+  var safeArea = UIEdgeInsets.zero
+
+  // Height of the score strip at the top of the screen. Grows to clear
+  // the notch / Dynamic Island on devices that have one.
+  var hudScoreHeight: CGFloat {
+    get {
+      return 40 + safeArea.top
+    }
+  }
+
   var hudHeight: CGFloat {
     get {
       return height + hudScoreHeight
@@ -29,43 +35,26 @@ class Screen {
       return height - hudScoreHeight
     }
   }
-  
-  static let sharedInstance = Screen()
-  
-  init() {
-    detectDevice()
+
+  // Resting height of the ship, clear of the home indicator
+  var shipY: CGFloat {
+    get {
+      return 60 + safeArea.bottom
+    }
   }
-  
-  func setSize(size: CGSize) {
+
+  static let sharedInstance = Screen()
+
+  func setSize(size: CGSize, safeArea: UIEdgeInsets) {
     self.size = size
-    
+    self.safeArea = safeArea
+
     self.width = size.width
     self.height = size.height
-    
+
     self.centerX = size.width * 0.5
     self.centerY = size.height * 0.5
-    
+
     self.center = CGPoint(x: self.centerX, y: self.centerY)
-    
-    if deviceType == "iPhone X" {
-      hudScoreHeight = 80
-    }
-  }
-  
-  func detectDevice() {
-    if UIDevice().userInterfaceIdiom == .phone {
-      switch UIScreen.main.nativeBounds.height {
-      case 1136:
-        deviceType = "iPhone 5 or 5S or 5C"
-      case 1334:
-        deviceType = "iPhone 6/6S/7/8"
-      case 1920, 2208:
-        deviceType = "iPhone 6+/6S+/7+/8+"
-      case 2436:
-        deviceType = "iPhone X"
-      default:
-        deviceType = "unknown"
-      }
-    }
   }
 }
