@@ -30,23 +30,29 @@ complex and detail configuration.
 
 Swipe up to dismiss this menu. 
 
-## Todo
+## Asteroid types
 
-Add new asteroid types: 
- 
-1. Normal
-2. Glassteroid - transparent but shatters when hit
-3. Blacksteroids - dark and hard to see against space background
-4. Gasteroids - Explode when hit
-5. Brasserteroids - Super massive
-6. Commets - Fly fast at an angle
-7. Icestroids - shard when hit
-8. Asteroids - break up when hit enough
-9. Asteroid Turret - Has turret that fires, can be broken to destroy turret
-10. Low mass asteroids -
-11. Elastroids - Bouncey asteroids
-12. Coins - points!
-13. Enemy base - a turret exists on an asteroid that fire at ship
+Stage 1 is plain rocks. Each stage after that introduces a new type, announced
+before the wave ("Watch for: Comets"). Once all have appeared, each wave
+features a random one.
+
+| Stage | Type | Behavior |
+|---|---|---|
+| 2 | Low mass | Every shot knocks it back up the screen |
+| 3 | Glassteroid | Nearly transparent, shatters in one hit |
+| 4 | Blacksteroid | Dark, hard to see against space |
+| 5 | Icestroid | Bursts into sharp ice shards that can hit you |
+| 6 | Comet | Small and fast, streaks in diagonally with a tail |
+| 7 | Gasteroid | Explodes, damaging nearby rocks and the ship if it's close |
+| 8 | Elastroid | Bounces off the screen edges three times |
+| 9 | Brasserteroid | Super massive and tough, missiles don't push it |
+| 10 | Turret | Fires aimed shots at the ship |
+| 11 | Enemy base | Big, slow and armored, fires a three-shot spread |
+
+Rocks break into smaller rocks when hit enough. Special types are worth more
+points. The shield blocks enemy shots. Gold coins are worth 250 points.
+
+## Todo
 
 Add new Powerups: 
  

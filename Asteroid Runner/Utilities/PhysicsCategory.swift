@@ -17,4 +17,5 @@ struct PhysicsCategory {
   static let OuterEdge: UInt32 = 0b10000    // 0010000
   static let PowerUp:   UInt32 = 0b100000   // 0100000
   static let Shield:    UInt32 = 0b1000000  // 1000000
+  static let EnemyShot: UInt32 = 0b10000000 // 10000000
 }

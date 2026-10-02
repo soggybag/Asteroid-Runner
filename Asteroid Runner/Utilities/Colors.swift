@@ -22,6 +22,9 @@ struct Colors {
   static let missile = UIColor.yellow
   
   static let highScore = UIColor(r: 255, g: 210, b: 0)
+  static let coin = UIColor(r: 230, g: 170, b: 0)
+  static let enemyShot = UIColor(r: 255, g: 60, b: 60)
+  static let gasExplosion = UIColor(r: 160, g: 255, b: 80)
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   

@@ -43,6 +43,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
   var asteroidDirection = AsteroidDirection.top
+  var asteroidType = AsteroidType.normal
 
   var gameState: GKStateMachine!
 
@@ -356,6 +357,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     asteroidSize = AsteroidSize.random(forLevel: level)
     asteroidSpeed = AsteroidSpeed.random(forLevel: level)
     asteroidDirection = AsteroidDirection.random()
+    asteroidType = AsteroidType.featured(forLevel: level)
   }
 
 
@@ -421,10 +423,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       powerup = PowerUpMissile()  // Missile multifire
     case 4:
       powerup = PowerUpRapid()    // Missile rapid fire
+    case 5:
+      powerup = PowerUpCoin()     // Coin, extra points
     default:
-      // Create an Asteroid
-      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection)
+      // Create an Asteroid, sometimes of the wave's featured type
+      let type = Double.random(in: 0 ..< 1) < asteroidType.waveShare ? asteroidType : .normal
+      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection, type: type)
       addChild(asteroid)
+      asteroid.trail?.targetNode = self
       return
     }
 
@@ -517,7 +523,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func clearScreen() {
-    let names = [Asteroid.NAME, PowerUp.PU_BOMB, PowerUp.PU_MISSILE_2, PowerUp.PU_MISSILE_3, PowerUp.PU_MISSILE_RAPID, PowerUp.PU_POINTS, PowerUp.PU_SHIELD, Missile.NAME]
+    let names = [Asteroid.NAME, PowerUp.PU_BOMB, PowerUp.PU_MISSILE_2, PowerUp.PU_MISSILE_3, PowerUp.PU_MISSILE_RAPID, PowerUp.PU_POINTS, PowerUp.PU_SHIELD, PowerUp.PU_COIN, Missile.NAME, EnemyShot.NAME]
     for name in names {
       enumerateChildNodes(withName: name, using: { (node, stop) in
         node.removeFromParent()
@@ -576,12 +582,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Handle a hit on an Asteroid
   // -------------------------------------
 
-  func hit(asteroid: Asteroid, missileType: MissilePower) {
+  func hit(asteroid: Asteroid, damage: CGFloat) {
     // Already destroyed by another contact this frame
     guard asteroid.parent != nil else { return }
 
-    if let debris = asteroid.hitAsteroid(value: missileType.rawValue) {
-      let points = Int(asteroid.asteroidSize.rawValue)
+    if let debris = asteroid.hitAsteroid(value: damage) {
+      let points = Int(asteroid.asteroidSize.rawValue) * asteroid.type.pointMultiplier
 
       if shipInPlay {
         score += points
@@ -593,6 +599,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       for rock in debris {
         addChild(rock)
       }
+
+      switch asteroid.type {
+      case .glass:
+        shatter(at: asteroid.position, size: asteroid.size.width)
+      case .gas:
+        gasExplosion(at: asteroid.position, radius: max(70, asteroid.size.width * 1.5))
+      default:
+        break
+      }
+    }
+  }
+
+
+  // -------------------------------------
+  // Glassteroid shards, just for show
+  // -------------------------------------
+
+  func shatter(at point: CGPoint, size: CGFloat) {
+    for _ in 0 ..< 8 {
+      let shard = SKSpriteNode(color: AsteroidType.glass.color(), size: CGSize(width: 4, height: 7))
+      shard.position = point
+      shard.zRotation = CGFloat.random(in: 0 ... .pi)
+      addChild(shard)
+      let angle = CGFloat.random(in: 0 ... .pi * 2)
+      let distance = size + CGFloat.random(in: 10 ... 40)
+      let move = SKAction.moveBy(x: cos(angle) * distance, y: sin(angle) * distance, duration: 0.5)
+      move.timingMode = .easeOut
+      let spin = SKAction.rotate(byAngle: CGFloat.random(in: -6 ... 6), duration: 0.5)
+      shard.run(.sequence([.group([move, spin, .fadeOut(withDuration: 0.5)]), .removeFromParent()]))
+    }
+  }
+
+
+  // -------------------------------------
+  // Gasteroid explosion. Damages every asteroid in range, and the ship.
+  // -------------------------------------
+
+  func gasExplosion(at point: CGPoint, radius: CGFloat) {
+    explode(at: point)
+
+    let ring = SKShapeNode(circleOfRadius: radius)
+    ring.position = point
+    ring.strokeColor = Colors.gasExplosion
+    ring.fillColor = Colors.gasExplosion.withAlphaComponent(0.25)
+    ring.lineWidth = 3
+    ring.setScale(0.2)
+    addChild(ring)
+    ring.run(.sequence([.group([.scale(to: 1, duration: 0.25), .fadeOut(withDuration: 0.4)]), .removeFromParent()]))
+
+    // Collect targets first, an explosion can set off other gasteroids
+    let inRange = children.compactMap { $0 as? Asteroid }.filter {
+      hypot($0.position.x - point.x, $0.position.y - point.y) < radius + $0.size.width / 2
+    }
+    for asteroid in inRange {
+      hit(asteroid: asteroid, damage: 4)
+    }
+
+    if hypot(ship.position.x - point.x, ship.position.y - point.y) < radius {
+      shipHit()
     }
   }
 
@@ -604,7 +669,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func hitAllAsteroids() {
     enumerateChildNodes(withName: Asteroid.NAME) { (node, stop) in
       if let asteroid = node as? Asteroid {
-        self.hit(asteroid: asteroid, missileType: .weak) // TODO: Adjust this with shake screen above.
+        self.hit(asteroid: asteroid, damage: MissilePower.weak.rawValue) // TODO: Adjust this with shake screen above.
       }
     }
   }
@@ -669,6 +734,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     shield.position = ship.position
 
+    let screenRect = CGRect(origin: .zero, size: size)
+    for case let asteroid as Asteroid in children where asteroid.type == .elastic && !asteroid.edgeArmed {
+      asteroid.armBounceIfOnScreen(in: screenRect)
+    }
   }
 
 

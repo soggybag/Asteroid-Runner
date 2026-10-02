@@ -35,6 +35,7 @@
 		D8AFDFF9205F313C00BC11D8 /* GameEndingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */; };
 		D8AFDFFB205F7F8B00BC11D8 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */; };
 		D8AFDFFD2060AA0300BC11D8 /* PowerUpShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */; };
+		A1B2C3D4E5F6000000000008 /* PowerUpCoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000007 /* PowerUpCoin.swift */; };
 		D8AFDFFF2060CCB200BC11D8 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDFFE2060CCB200BC11D8 /* Shapes.swift */; };
 		D8AFE0012061F0A800BC11D8 /* IntroState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE0002061F0A800BC11D8 /* IntroState.swift */; };
 		D8AFE0032061F11C00BC11D8 /* PopupLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */; };
@@ -54,6 +55,8 @@
 		D8E0A4E2206D6AD800393F37 /* AsteroidSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0A4E1206D6AD800393F37 /* AsteroidSize.swift */; };
 		D8E0A4E4206D6B0F00393F37 /* AsteroidDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0A4E3206D6B0F00393F37 /* AsteroidDirection.swift */; };
 		D8E0A4E6206D6B2D00393F37 /* AsteroidDensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0A4E5206D6B2D00393F37 /* AsteroidDensity.swift */; };
+		A1B2C3D4E5F6000000000006 /* EnemyShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000005 /* EnemyShot.swift */; };
+		A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000003 /* AsteroidType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +88,7 @@
 		D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEndingState.swift; sourceTree = "<group>"; };
 		D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpShield.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000007 /* PowerUpCoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpCoin.swift; sourceTree = "<group>"; };
 		D8AFDFFE2060CCB200BC11D8 /* Shapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		D8AFE0002061F0A800BC11D8 /* IntroState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroState.swift; sourceTree = "<group>"; };
 		D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupLabelNode.swift; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 		D8E0A4E1206D6AD800393F37 /* AsteroidSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidSize.swift; sourceTree = "<group>"; };
 		D8E0A4E3206D6B0F00393F37 /* AsteroidDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidDirection.swift; sourceTree = "<group>"; };
 		D8E0A4E5206D6B2D00393F37 /* AsteroidDensity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidDensity.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000005 /* EnemyShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyShot.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000003 /* AsteroidType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsteroidType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +142,7 @@
 				D84E3744205D0A3E00512E12 /* PowerUp.swift */,
 				D84E3746205D6A4000512E12 /* PowerUpBomb.swift */,
 				D8AFDFFC2060AA0300BC11D8 /* PowerUpShield.swift */,
+				A1B2C3D4E5F6000000000007 /* PowerUpCoin.swift */,
 				D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */,
 				D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */,
 				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
@@ -267,6 +274,8 @@
 				D8E0A4E1206D6AD800393F37 /* AsteroidSize.swift */,
 				D8E0A4E3206D6B0F00393F37 /* AsteroidDirection.swift */,
 				D8E0A4E5206D6B2D00393F37 /* AsteroidDensity.swift */,
+				A1B2C3D4E5F6000000000005 /* EnemyShot.swift */,
+				A1B2C3D4E5F6000000000003 /* AsteroidType.swift */,
 			);
 			path = Asteroid;
 			sourceTree = "<group>";
@@ -373,6 +382,7 @@
 				D8DB9C1B205CD2DB006455F9 /* GameViewController.swift in Sources */,
 				D8E0A4E2206D6AD800393F37 /* AsteroidSize.swift in Sources */,
 				D8AFDFFD2060AA0300BC11D8 /* PowerUpShield.swift in Sources */,
+				A1B2C3D4E5F6000000000008 /* PowerUpCoin.swift in Sources */,
 				D84E3747205D6A4000512E12 /* PowerUpBomb.swift in Sources */,
 				D84E3743205CFF2100512E12 /* Button.swift in Sources */,
 				D82F3DE8206DD115002BEFC1 /* MissileMode.swift in Sources */,
@@ -382,6 +392,8 @@
 				D84E3759205DAB3000512E12 /* Screen.swift in Sources */,
 				D84E3739205CF98C00512E12 /* Hud.swift in Sources */,
 				D8E0A4E6206D6B2D00393F37 /* AsteroidDensity.swift in Sources */,
+				A1B2C3D4E5F6000000000006 /* EnemyShot.swift in Sources */,
+				A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */,
 				D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */,
 				D8AFDFFF2060CCB200BC11D8 /* Shapes.swift in Sources */,
 				D84E3733205CD55200512E12 /* Asteroid.swift in Sources */,

@@ -36,13 +36,17 @@ class NextLevelState: GKState {
     let speed = scene.asteroidSpeed.toString()
     let direction = scene.asteroidDirection.toString()
     
-    let introMessage = [
+    var introMessage = [
       "Prepare for",
       "Stage: \(scene.level)",
       "Size: \(size)",
       "Speed: \(speed)",
       "Direction: \(direction)"
     ]
+    
+    if scene.asteroidType != .normal {
+      introMessage.append("Watch for: \(scene.asteroidType.toString())")
+    }
     
     let wait = SKAction.wait(forDuration: 1.5)
     var array = [SKAction]()

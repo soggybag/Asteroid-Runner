@@ -16,6 +16,7 @@ class PowerUp: SKSpriteNode {
   static let PU_MISSILE_2 = "PU_NAME_MISSILE_2"
   static let PU_MISSILE_3 = "PU_NAME_MISSILE_3"
   static let PU_MISSILE_RAPID = "PU_NAME_MISSILE_RAPID"
+  static let PU_COIN = "coin"
   
   static let powerup_duration: TimeInterval = 10
   

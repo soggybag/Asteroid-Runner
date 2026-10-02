@@ -29,7 +29,11 @@ extension GameScene {
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
       guard let asteroid = firstNode as? Asteroid, secondNode.parent != nil else { return }
       secondNode.removeFromParent()
-      hit(asteroid: asteroid, missileType: Missile.missilePower)
+      hit(asteroid: asteroid, damage: Missile.missilePower.rawValue)
+      // Low mass asteroids get knocked back up the screen
+      if asteroid.type == .lowMass, asteroid.parent != nil {
+        asteroid.physicsBody?.velocity.dy += 60
+      }
 
 
     // --------------------------
@@ -40,13 +44,40 @@ extension GameScene {
       shipHit()
 
 
+    // ----------------------------------------
+    // *** Asteroid Bounces Off Screen Edge ***
+    // ----------------------------------------
+
+    case PhysicsCategory.Asteroid | PhysicsCategory.Edge:
+      (firstNode as? Asteroid)?.bounced()
+
+
+    // ----------------------------
+    // *** Enemy Shot Hits Ship ***
+    // ----------------------------
+
+    case PhysicsCategory.Ship | PhysicsCategory.EnemyShot:
+      guard secondNode.parent != nil else { return }
+      secondNode.removeFromParent()
+      shipHit()
+
+
+    // -------------------------------
+    // *** Shield Blocks Enemy Shot ***
+    // -------------------------------
+
+    case PhysicsCategory.Shield | PhysicsCategory.EnemyShot:
+      secondNode.removeFromParent()
+
+
     // ---------------------------------------------------
-    // *** Asteroid, Missile or Powerup Hits Outer Edge ***
+    // *** Anything that flies off past the Outer Edge ***
     // ---------------------------------------------------
 
     case PhysicsCategory.OuterEdge | PhysicsCategory.Asteroid,
          PhysicsCategory.OuterEdge | PhysicsCategory.Missile,
-         PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp:
+         PhysicsCategory.OuterEdge | PhysicsCategory.PowerUp,
+         PhysicsCategory.OuterEdge | PhysicsCategory.EnemyShot:
       let other = first.categoryBitMask == PhysicsCategory.OuterEdge ? secondNode : firstNode
       other.removeFromParent()
 
@@ -59,7 +90,7 @@ extension GameScene {
       let powerup = secondNode
       guard !ship.isHidden, powerup.parent != nil else { return }
 
-      let points = 100
+      let points = powerup.name == PowerUp.PU_COIN ? PowerUpCoin.points : 100
       score += points
       show(points: points, at: powerup.position)
       powerup.removeFromParent()
