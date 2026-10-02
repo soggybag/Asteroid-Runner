@@ -8,6 +8,8 @@ bonus. Stages get harder as you go: bigger, faster asteroids, more often.
 
 Requires Xcode 15+ and iOS 17+.
 
+Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
+
 ## Controls
 
 - Drag anywhere to steer, or tilt the phone.
