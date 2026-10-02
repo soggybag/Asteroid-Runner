@@ -24,11 +24,11 @@ enum MissileMode: Int {
   
   static func random() -> MissileMode {
     let modes = [MissileMode.normal, .double, .triple]
-    return modes[Int.random(n: modes.count)]
+    return modes.randomElement()!
   }
   
   static func randomPowerup() -> MissileMode {
     let modes = [MissileMode.double, .triple]
-    return modes[Int.random(n: modes.count)]
+    return modes.randomElement()!
   }
 }

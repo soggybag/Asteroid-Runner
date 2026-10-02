@@ -17,7 +17,7 @@ enum AsteroidDirection {
   
   static func random() -> AsteroidDirection {
     let allDirections = [AsteroidDirection.left, .top, .right]
-    return allDirections[Int.random(n: allDirections.count)]
+    return allDirections.randomElement()!
   }
   
   func toString() -> String {
