@@ -1,0 +1,129 @@
+{
+  "_about": [
+    "Placeholder station data. Every line marked TODO is waiting for real writing.",
+    "greetings: lines picked by situation when the ship docks. The game uses the first situation that applies, in this order: shipDamaged, lowFuel, carryingWanted, returnVisit, firstVisit. Each situation can list several lines; one is picked at random.",
+    "conversation: optional, for later. A decision tree like Star Control: each node has the keeper's text and the player's options. An option points to the next node, or to null to end the talk. An effect is a hint for later code, such as a discount, a gift or opening the shop.",
+    "shop: what the station sells and how it prices things. Multipliers are against a base price; 1.0 is normal."
+  ],
+  "stations": [
+    {
+      "id": "outpost",
+      "name": "Halden's Rock",
+      "keeper": { "name": "Mara Halden", "title": "Outpost foreman" },
+      "personality": "Gruff, practical, fair. Respects pilots who bring back salvage.",
+      "specialty": "Mining outpost. Pays well for salvage, sells fuel cheap.",
+      "greetings": {
+        "firstVisit": ["TODO: first meeting. Halden sizes up the ship."],
+        "returnVisit": ["TODO: Halden recognises the ship."],
+        "shipDamaged": ["TODO: Halden comments on the damage."],
+        "lowFuel": ["TODO: Halden offers fuel."],
+        "carryingWanted": ["TODO: Halden notices the salvage in the hold."]
+      },
+      "farewell": ["TODO: short send-off."],
+      "shop": {
+        "sells": ["fuel", "shield", "bomb"],
+        "buyMultiplier": 0.9,
+        "sellMultiplier": 1.2
+      },
+      "conversation": {
+        "start": "hello",
+        "nodes": {
+          "hello": {
+            "text": "TODO: Halden opens the conversation.",
+            "options": [
+              { "text": "TODO: ask about the asteroid field ahead", "next": "rumors" },
+              { "text": "TODO: ask to trade", "next": null, "effect": "openShop" },
+              { "text": "TODO: leave", "next": null }
+            ]
+          },
+          "rumors": {
+            "text": "TODO: Halden warns about what's coming in the next waves.",
+            "options": [
+              { "text": "TODO: thank her", "next": "hello" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "depot",
+      "name": "Bastion Seven",
+      "keeper": { "name": "Quartermaster Ives", "title": "Military depot officer" },
+      "personality": "Formal, by the book, suspicious of civilians.",
+      "specialty": "Military depot. Sells weapon modules and rapid fire, at full price.",
+      "greetings": {
+        "firstVisit": ["TODO: Ives demands identification."],
+        "returnVisit": ["TODO: Ives grudgingly waves the ship through."],
+        "shipDamaged": ["TODO: Ives remarks on poor maintenance."],
+        "lowFuel": ["TODO: Ives notes fuel is rationed."],
+        "carryingWanted": ["TODO: Ives wants the bomb for the armory."]
+      },
+      "farewell": ["TODO: crisp dismissal."],
+      "shop": {
+        "sells": ["multiShot", "rapidFire", "bomb"],
+        "buyMultiplier": 1.0,
+        "sellMultiplier": 1.0
+      },
+      "conversation": {
+        "start": "hello",
+        "nodes": {
+          "hello": {
+            "text": "TODO: Ives states the depot's rules.",
+            "options": [
+              { "text": "TODO: offer to help with a problem", "next": "favor" },
+              { "text": "TODO: ask to trade", "next": null, "effect": "openShop" },
+              { "text": "TODO: leave", "next": null }
+            ]
+          },
+          "favor": {
+            "text": "TODO: Ives mentions a task, with a reward.",
+            "options": [
+              { "text": "TODO: accept", "next": null, "effect": "discount" },
+              { "text": "TODO: decline", "next": "hello" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "trader",
+      "name": "The Lucky Drift",
+      "keeper": { "name": "Pell", "title": "Trader, no questions asked" },
+      "personality": "Friendly, chatty and not to be trusted.",
+      "specialty": "Black market. Rare items at bad prices; buys anything.",
+      "greetings": {
+        "firstVisit": ["TODO: Pell greets a new customer a little too warmly."],
+        "returnVisit": ["TODO: Pell greets an old friend."],
+        "shipDamaged": ["TODO: Pell offers a cheap repair of doubtful quality."],
+        "lowFuel": ["TODO: Pell offers fuel at a markup."],
+        "carryingWanted": ["TODO: Pell wants whatever the ship is carrying."]
+      },
+      "farewell": ["TODO: Pell's parting line."],
+      "shop": {
+        "sells": ["fuel", "shield", "bomb", "multiShot", "rapidFire"],
+        "buyMultiplier": 1.4,
+        "sellMultiplier": 0.7
+      },
+      "conversation": {
+        "start": "hello",
+        "nodes": {
+          "hello": {
+            "text": "TODO: Pell's sales pitch.",
+            "options": [
+              { "text": "TODO: haggle", "next": "haggle" },
+              { "text": "TODO: browse the goods", "next": null, "effect": "openShop" },
+              { "text": "TODO: leave", "next": null }
+            ]
+          },
+          "haggle": {
+            "text": "TODO: Pell pretends to be offended, then makes a counteroffer.",
+            "options": [
+              { "text": "TODO: take the deal", "next": null, "effect": "discount" },
+              { "text": "TODO: walk away", "next": null }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

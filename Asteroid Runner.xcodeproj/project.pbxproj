@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000028 /* stations.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000027 /* stations.json */; };
 		A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000024 /* InventoryTests.swift */; };
 		A1B2C3D4E5F6000000000023 /* ItemTray.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000022 /* ItemTray.swift */; };
 		A1B2C3D4E5F6000000000021 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000020 /* Inventory.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000027 /* stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stations.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000024 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000022 /* ItemTray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTray.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000020 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
@@ -154,6 +156,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1B2C3D4E5F6000000000026 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000027 /* stations.json */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		A1B2C3D4E5F6000000000019 /* Asteroid RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +309,7 @@
 				D84E375E205DD17600512E12 /* Game Objects */,
 				D84E3760205DD1B000512E12 /* Particles */,
 				D84E375F205DD18F00512E12 /* Utilities */,
+				A1B2C3D4E5F6000000000026 /* Data */,
 				D8DB9C1A205CD2DB006455F9 /* GameViewController.swift */,
 				D8DB9C1C205CD2DB006455F9 /* Main.storyboard */,
 				D8DB9C1F205CD2DB006455F9 /* Assets.xcassets */,
@@ -409,6 +420,7 @@
 				D84E3753205D898600512E12 /* ShipExplosion.sks in Resources */,
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
 				D8DB9C23205CD2DB006455F9 /* LaunchScreen.storyboard in Resources */,
+				A1B2C3D4E5F6000000000028 /* stations.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
