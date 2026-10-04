@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F600000000002A /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000029 /* GameData.swift */; };
+		A1B2C3D4E5F600000000002C /* intro.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002B /* intro.json */; };
+		A1B2C3D4E5F600000000002E /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002D /* DataTests.swift */; };
 		A1B2C3D4E5F6000000000028 /* stations.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000027 /* stations.json */; };
 		A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000024 /* InventoryTests.swift */; };
 		A1B2C3D4E5F6000000000023 /* ItemTray.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000022 /* ItemTray.swift */; };
@@ -76,6 +79,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000029 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F600000000002B /* intro.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = intro.json; sourceTree = "<group>"; };
+		A1B2C3D4E5F600000000002D /* DataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000027 /* stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stations.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000024 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000022 /* ItemTray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTray.swift; sourceTree = "<group>"; };
@@ -160,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6000000000027 /* stations.json */,
+				A1B2C3D4E5F600000000002B /* intro.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -168,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F600000000001A /* WaveTests.swift */,
+				A1B2C3D4E5F600000000002D /* DataTests.swift */,
 				A1B2C3D4E5F6000000000024 /* InventoryTests.swift */,
 			);
 			path = "Asteroid RunnerTests";
@@ -244,6 +252,7 @@
 				D82D19E2205E34DF00807C85 /* Fonts.swift */,
 				A1B2C3D4E5F6000000000001 /* HighScore.swift */,
 				A1B2C3D4E5F6000000000009 /* Tuning.swift */,
+				A1B2C3D4E5F6000000000029 /* GameData.swift */,
 				D84E3758205DAB3000512E12 /* Screen.swift */,
 				D84E3756205DAB0000512E12 /* PublicExtension.swift */,
 				D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */,
@@ -343,6 +352,7 @@
 				D8DB9C0B205CD2DB006455F9 /* Sources */,
 				D8DB9C0C205CD2DB006455F9 /* Frameworks */,
 				D8DB9C0D205CD2DB006455F9 /* Resources */,
+				A1B2C3D4E5F600000000002F /* Stamp Version */,
 			);
 			buildRules = (
 			);
@@ -421,10 +431,34 @@
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
 				D8DB9C23205CD2DB006455F9 /* LaunchScreen.storyboard in Resources */,
 				A1B2C3D4E5F6000000000028 /* stations.json in Resources */,
+				A1B2C3D4E5F600000000002C /* intro.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A1B2C3D4E5F600000000002F /* Stamp Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Stamp Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/scripts/stamp-version.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A1B2C3D4E5F6000000000015 /* Sources */ = {
@@ -432,6 +466,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B2C3D4E5F600000000001B /* WaveTests.swift in Sources */,
+				A1B2C3D4E5F600000000002E /* DataTests.swift in Sources */,
 				A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -460,6 +495,7 @@
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */,
 				A1B2C3D4E5F600000000000A /* Tuning.swift in Sources */,
+				A1B2C3D4E5F600000000002A /* GameData.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,
 				D84E375B205DCC6E00512E12 /* Colors.swift in Sources */,

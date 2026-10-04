@@ -68,7 +68,16 @@ points. The shield blocks enemy shots. Gold coins are worth 250 points.
 - **Tuning:** gameplay numbers (lives, fire rate, wave length, hazards) live in
   `Asteroid Runner/Utilities/Tuning.swift`. Per-type asteroid stats live in
   `AsteroidType.swift`.
+- **Story and dialog:** the opening story is in `Asteroid Runner/Data/intro.json`
+  and station dialog in `Asteroid Runner/Data/stations.json`. Edit them like any
+  text file; the tests check that they still load.
+- **Version:** the bottom-left corner shows `v2.0 (32) eb38a83`: the version,
+  the build number (commits on the branch) and the commit. A `+` after the
+  commit means the build had uncommitted changes. `scripts/stamp-version.sh`
+  sets these on every build. Change the version itself in the target's
+  General settings.
 - **Playtesting:** log games in [docs/playtest-notes.md](docs/playtest-notes.md).
+  Note the version from the corner with each game.
 
 ## Todo
 

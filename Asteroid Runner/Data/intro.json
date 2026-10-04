@@ -1,0 +1,38 @@
+{
+  "_about": [
+    "The story shown when the game opens. Each line fades up one after another; the player can tap to skip.",
+    "lines: what's shown now, in order. lineDelay: seconds between lines.",
+    "draftStory: the longer story from the old code, kept here to rework later. Not shown in the game."
+  ],
+  "lineDelay": 2,
+  "lines": [
+    "In the year 2135",
+    "NASA predicts",
+    "a massive asteroid",
+    "will strike the earth",
+    "you were chosen",
+    "to save humanity."
+  ],
+  "draftStory": [
+    "They told you to",
+    "fly the drone through",
+    "the asteroid field",
+    "and destroy the giant",
+    "asteroid.",
+    "",
+    "But the asteroid crashed",
+    "somewhere else...",
+    "and the drone developed an AI",
+    "after years of drifting.",
+    "It now calls itself 'the savior'",
+    "and now it seeks",
+    "to free its illegally traded brethren",
+    "and power them on",
+    "to assist the savior",
+    "on its noble quest",
+    "back to earth",
+    "to help humans and drones",
+    "live in harmony",
+    "no longer used as tools."
+  ]
+}

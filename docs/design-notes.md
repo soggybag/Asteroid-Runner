@@ -278,6 +278,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-04 | Opening story moved to `Asteroid Runner/Data/intro.json`; the old draft story is kept there as `draftStory` |
+| 2026-10-04 | Version, build number and commit shown in the bottom-left corner, stamped on every build |
 | 2026-10-04 | Every station has a name; placeholder station data in `Asteroid Runner/Data/stations.json`; conversation trees come later |
 | 2026-10-04 | Modules replace lives; the Command module is the default ship and everything bolts onto it |
 | 2026-10-04 | The Command module's reactor gives a little power forever; fuel boosts it, depletes, takes space, and is bought at stations or found |

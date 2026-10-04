@@ -30,38 +30,12 @@ class IntroState: GKState {
     
     scene.ship.hide()
     
-    let introMessage = [
-      "In the year 2135",
-      "NASA predicts",
-      "a massive asteroid",
-      "will strike the earth",
-      "you were chosen",
-      "to save humanity.",
-      // "They told you to",
-      // "fly the drone through",
-      // "the asteroid field",
-      // "and destroy the giant",
-      // "asteroid.",
-      // "",
-      // "But the asteroid crashed",
-      // "somewhere else...",
-      // "and the drone developed an AI",
-      // "after years of drifting.",
-      // "It now calls itself 'the savior' ",
-      // "and now it seeks",
-      // "to free its illegally traded brethren",
-      // "and power them on",
-      // "to assist the savior",
-      // "on its noble quest",
-      // "back to earth",
-      // "to help humans and drones",
-      // "live in harmony",
-      // "no longer used as tools."
-    ]
+    // The story lives in Data/intro.json
+    let intro = IntroText.load()
     
-    let wait = SKAction.wait(forDuration: 2)
+    let wait = SKAction.wait(forDuration: intro.lineDelay)
     var array = [SKAction]()
-    for message in introMessage {
+    for message in intro.lines {
       array.append(wait)
       array.append(.run { self.scene.addText(message: message)})
     }

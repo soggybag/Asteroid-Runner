@@ -865,9 +865,9 @@ extension GameScene {
 
 
 extension GameScene {
-  func showVersion() {
-    let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+  // Version, build number and commit in the bottom corner, to tell test builds apart
 
+  func showVersion() {
     let versionLabel = SKLabelNode()
     addChild(versionLabel)
     versionLabel.verticalAlignmentMode = .bottom
@@ -875,6 +875,8 @@ extension GameScene {
     versionLabel.fontName = Fonts.fontName
     versionLabel.fontSize = 12
     versionLabel.position = CGPoint(x: 5, y: 5 + safeArea.bottom)
-    versionLabel.text = version
+    versionLabel.fontColor = Colors.buttonLabelColor.withAlphaComponent(0.6)
+    versionLabel.zPosition = 9999
+    versionLabel.text = AppVersion.label
   }
 }
