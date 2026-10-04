@@ -31,7 +31,7 @@ class PlayingState: GKState {
     // Start making asteroids
     scene.makeAsteroids()
     // This wave lasts 10 seconds
-    scene.run(SKAction.sequence([.wait(forDuration: 10),.run({
+    scene.run(SKAction.sequence([.wait(forDuration: Tuning.Stages.waveDuration),.run({
       // Then stop and wait before starting a new wave
       self.stopAsteroidsAndWaitForScreenToClear()
     })]), withKey: GameScene.FLOW)
@@ -46,7 +46,7 @@ class PlayingState: GKState {
     // Stop making asteroids
     scene.stopAsteroids()
     // Check until the last asteroid is gone, giving up after 10 seconds
-    let maxChecks = 20
+    let maxChecks = Int(Tuning.Stages.maxClearWait / Tuning.Stages.clearCheckInterval)
     var checks = 0
     let check = SKAction.run {
       checks += 1
@@ -55,7 +55,7 @@ class PlayingState: GKState {
         self.stageClear()
       }
     }
-    let wait = SKAction.wait(forDuration: 0.5)
+    let wait = SKAction.wait(forDuration: Tuning.Stages.clearCheckInterval)
     scene.run(.repeatForever(.sequence([wait, check])), withKey: GameScene.FLOW)
   }
   
@@ -65,10 +65,10 @@ class PlayingState: GKState {
   // ---------------------------------
   
   func stageClear() {
-    let bonus = scene.level * 50
+    let bonus = scene.level * Tuning.Stages.bonusPerStage
     scene.score += bonus
     scene.addText(message: "Stage Clear +\(bonus)")
-    scene.run(.sequence([.wait(forDuration: 1.5), .run {
+    scene.run(.sequence([.wait(forDuration: Tuning.Stages.stageClearPause), .run {
       self.startNextLevel()
     }]), withKey: GameScene.FLOW)
   }

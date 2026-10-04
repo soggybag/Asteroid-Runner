@@ -27,13 +27,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   let MISSILE_MODE_TIMER = "MISSILE_MODE_TIMER"
   let RAPID_FIRE_TIMER = "RAPID_FIRE_TIMER"
 
-  let startingLives = 3
-  let normalFireTime: TimeInterval = 0.3
-  let rapidFireTime: TimeInterval = 0.15
-
   var missileMode = MissileMode.normal
 
-  var missileFireTime: TimeInterval = 0.3
+  var missileFireTime: TimeInterval = Tuning.Weapons.fireTime
   var shipSpeed: CGFloat = 5
   var autoFireOn = true
 
@@ -76,9 +72,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
 
-  var lives: Int = 3 {
+  var lives: Int = Tuning.Player.startingLives {
     didSet {
       hud.update(lives: lives)
+    }
+  }
+
+  // Items the player is carrying, shown in the HUD tray
+  var inventory = Inventory() {
+    didSet {
+      hud.tray.update(with: inventory)
     }
   }
 
@@ -266,7 +269,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       self.autoFireOn = autoFire
     }
 
-    lives = startingLives
+    hud.tray.slotTapped = { slot in
+      self.useItem(slot: slot)
+    }
+
+    lives = Tuning.Player.startingLives
   }
 
 
@@ -331,9 +338,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     ship.clearInvulnerable()
     shield.deactivate()
     missileMode = .normal
-    missileFireTime = normalFireTime
+    missileFireTime = Tuning.Weapons.fireTime
     level = 0
-    lives = startingLives
+    lives = Tuning.Player.startingLives
+    inventory.removeAll()
   }
 
 
@@ -366,7 +374,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
 
   var asteroidInterval: TimeInterval {
-    return max(0.35, 1.0 - 0.06 * TimeInterval(level - 1))
+    return Tuning.Stages.spawnInterval(level: level)
   }
 
 
@@ -408,7 +416,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func makeAsteroid() {
     // Get a random int to select object type to generate
-    let r = Int.random(in: 0 ... 24)
+    let r = Int.random(in: 0 ..< Tuning.PowerUps.spawnRoll)
 
     // Generate a random object
     let powerup: PowerUp
@@ -472,10 +480,61 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func missileRapid() {
-    missileFireTime = rapidFireTime
+    missileFireTime = Tuning.Weapons.rapidFireTime
     run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
-      self.missileFireTime = self.normalFireTime
+      self.missileFireTime = Tuning.Weapons.fireTime
     })]), withKey: RAPID_FIRE_TIMER)
+  }
+
+
+  // ---------------------------------
+  // Use an item from the tray
+  // ---------------------------------
+
+  func useItem(slot: Int) {
+    // A tap on the tray still resumes or skips like a tap anywhere else
+    if gamePaused {
+      resumeGame()
+      return
+    }
+
+    if let intro = gameState.currentState as? IntroState {
+      intro.skip()
+      return
+    }
+
+    guard shipInPlay else { return }
+
+    switch inventory.tap(slot: slot) {
+    case .use(.bomb):
+      impact.impactOccurred()
+      shakeScreen(hitAsteroids: true)
+    case .use(.multiShot):
+      missilePowerUp(mode: MissileMode.randomPowerup())
+    case .use(.rapidFire):
+      missileRapid()
+    case .shieldOn:
+      shield.activate()
+    case .shieldOff:
+      shield.deactivate()
+    case .use(.shield), .none:
+      return
+    }
+    lightImpact.impactOccurred()
+  }
+
+
+  // ---------------------------------
+  // Drain the shield while it's up
+  // ---------------------------------
+
+  func updateShield(seconds: TimeInterval) {
+    guard inventory.shieldIsOn, !gamePaused else { return }
+    if inventory.drainShield(seconds: seconds) {
+      shield.deactivate()
+    } else {
+      shield.flicker(inventory.shieldCharge < Tuning.Items.shieldWarning)
+    }
   }
 
 
@@ -604,7 +663,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       case .glass:
         shatter(at: asteroid.position, size: asteroid.size.width)
       case .gas:
-        gasExplosion(at: asteroid.position, radius: max(70, asteroid.size.width * 1.5))
+        gasExplosion(at: asteroid.position, radius: max(Tuning.Hazards.gasMinRadius, asteroid.size.width * Tuning.Hazards.gasRadiusScale))
       default:
         break
       }
@@ -653,7 +712,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       hypot($0.position.x - point.x, $0.position.y - point.y) < radius + $0.size.width / 2
     }
     for asteroid in inRange {
-      hit(asteroid: asteroid, damage: 4)
+      hit(asteroid: asteroid, damage: Tuning.Hazards.gasDamage)
     }
 
     if hypot(ship.position.x - point.x, ship.position.y - point.y) < radius {
@@ -733,6 +792,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     handleUpdate(seconds: deltaTime)
 
     shield.position = ship.position
+    updateShield(seconds: deltaTime)
 
     let screenRect = CGRect(origin: .zero, size: size)
     for case let asteroid as Asteroid in children where asteroid.type == .elastic && !asteroid.edgeArmed {
@@ -748,7 +808,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func handleUpdate(seconds: TimeInterval) {
     if let accelerationData = MotionManager.sharedInstance.accelerometer {
       let x = CGFloat(accelerationData.acceleration.x)
-      ship.moveForce(x: x * 100)
+      ship.moveForce(x: x * Tuning.Player.tiltForce)
     }
 
     if autoFireOn {

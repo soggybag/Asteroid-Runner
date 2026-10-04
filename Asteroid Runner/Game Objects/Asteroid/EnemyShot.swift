@@ -10,7 +10,7 @@ import SpriteKit
 class EnemyShot: SKSpriteNode {
 
   static let NAME = "enemyShot"
-  static let speed: CGFloat = 160
+  static let speed = Tuning.Hazards.enemyShotSpeed
 
   init(angle: CGFloat) {
     super.init(texture: nil, color: Colors.enemyShot, size: CGSize(width: 5, height: 5))

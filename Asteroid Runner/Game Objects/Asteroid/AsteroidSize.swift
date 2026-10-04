@@ -70,7 +70,7 @@ enum AsteroidSize: CGFloat {
   static func random(forLevel level: Int) -> AsteroidSize {
     let sizes: [AsteroidSize] = [.tiny, .small, .average, .large, .huge, .massive]
     let largest = min(sizes.count, 2 + level)
-    if level >= 6 && Int.random(in: 0 ..< 4) == 0 {
+    if level >= Tuning.Hazards.bosstroidFromLevel && Double.random(in: 0 ..< 1) < Tuning.Hazards.bosstroidChance {
       return .bosstroid
     }
     return sizes[0 ..< largest].randomElement()!

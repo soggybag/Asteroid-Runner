@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000024 /* InventoryTests.swift */; };
+		A1B2C3D4E5F6000000000023 /* ItemTray.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000022 /* ItemTray.swift */; };
+		A1B2C3D4E5F6000000000021 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000020 /* Inventory.swift */; };
+		A1B2C3D4E5F600000000001B /* WaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000001A /* WaveTests.swift */; };
 		D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82D19E2205E34DF00807C85 /* Fonts.swift */; };
 		A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000001 /* HighScore.swift */; };
+		A1B2C3D4E5F600000000000A /* Tuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000009 /* Tuning.swift */; };
 		D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */; };
 		D82F3DE8206DD115002BEFC1 /* MissileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F3DE7206DD115002BEFC1 /* MissileMode.swift */; };
 		D84E3731205CD3B500512E12 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3730205CD3B500512E12 /* Ship.swift */; };
@@ -59,9 +64,25 @@
 		A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000003 /* AsteroidType.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A1B2C3D4E5F6000000000017 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8DB9C07205CD2DB006455F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D8DB9C0E205CD2DB006455F9;
+			remoteInfo = "Asteroid Runner";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000024 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000022 /* ItemTray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTray.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000020 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000014 /* Asteroid RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Asteroid RunnerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D4E5F600000000001A /* WaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveTests.swift; sourceTree = "<group>"; };
 		D82D19E2205E34DF00807C85 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000001 /* HighScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScore.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000009 /* Tuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuning.swift; sourceTree = "<group>"; };
 		D82F3DE4206D76C0002BEFC1 /* MissilePower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissilePower.swift; sourceTree = "<group>"; };
 		D82F3DE7206DD115002BEFC1 /* MissileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileMode.swift; sourceTree = "<group>"; };
 		D84E3730205CD3B500512E12 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
@@ -115,6 +136,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D4E5F6000000000016 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8DB9C0C205CD2DB006455F9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,6 +154,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1B2C3D4E5F6000000000019 /* Asteroid RunnerTests */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F600000000001A /* WaveTests.swift */,
+				A1B2C3D4E5F6000000000024 /* InventoryTests.swift */,
+			);
+			path = "Asteroid RunnerTests";
+			sourceTree = "<group>";
+		};
 		D82F3DE3206D7682002BEFC1 /* Missile */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +183,7 @@
 				D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */,
 				D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */,
 				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
+				A1B2C3D4E5F6000000000020 /* Inventory.swift */,
 			);
 			path = PowerUp;
 			sourceTree = "<group>";
@@ -169,6 +207,7 @@
 			children = (
 				D84E3754205D941800512E12 /* Menu.swift */,
 				D84E3738205CF98C00512E12 /* Hud.swift */,
+				A1B2C3D4E5F6000000000022 /* ItemTray.swift */,
 				D84E3742205CFF2100512E12 /* Button.swift */,
 				D8AFDFFE2060CCB200BC11D8 /* Shapes.swift */,
 			);
@@ -194,6 +233,7 @@
 				D84E375A205DCC6E00512E12 /* Colors.swift */,
 				D82D19E2205E34DF00807C85 /* Fonts.swift */,
 				A1B2C3D4E5F6000000000001 /* HighScore.swift */,
+				A1B2C3D4E5F6000000000009 /* Tuning.swift */,
 				D84E3758205DAB3000512E12 /* Screen.swift */,
 				D84E3756205DAB0000512E12 /* PublicExtension.swift */,
 				D8AFDFFA205F7F8B00BC11D8 /* MotionManager.swift */,
@@ -233,6 +273,7 @@
 			children = (
 				D8AFF7D6207452A80027750A /* Satellite_4.atlas */,
 				D8DB9C11205CD2DB006455F9 /* Asteroid Runner */,
+				A1B2C3D4E5F6000000000019 /* Asteroid RunnerTests */,
 				D8DB9C10205CD2DB006455F9 /* Products */,
 				D8B1F2F7205EC27700418F40 /* Frameworks */,
 			);
@@ -242,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				D8DB9C0F205CD2DB006455F9 /* Asteroid Runner.app */,
+				A1B2C3D4E5F6000000000014 /* Asteroid RunnerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -300,6 +342,23 @@
 			productReference = D8DB9C0F205CD2DB006455F9 /* Asteroid Runner.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A1B2C3D4E5F6000000000010 /* Asteroid RunnerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D4E5F6000000000011 /* Build configuration list for PBXNativeTarget "Asteroid RunnerTests" */;
+			buildPhases = (
+				A1B2C3D4E5F6000000000015 /* Sources */,
+				A1B2C3D4E5F6000000000016 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A1B2C3D4E5F6000000000018 /* PBXTargetDependency */,
+			);
+			name = "Asteroid RunnerTests";
+			productName = "Asteroid RunnerTests";
+			productReference = A1B2C3D4E5F6000000000014 /* Asteroid RunnerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -313,6 +372,10 @@
 					D8DB9C0E205CD2DB006455F9 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+					};
+					A1B2C3D4E5F6000000000010 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = D8DB9C0E205CD2DB006455F9;
 					};
 				};
 			};
@@ -330,6 +393,7 @@
 			projectRoot = "";
 			targets = (
 				D8DB9C0E205CD2DB006455F9 /* Asteroid Runner */,
+				A1B2C3D4E5F6000000000010 /* Asteroid RunnerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -351,6 +415,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A1B2C3D4E5F6000000000015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D4E5F600000000001B /* WaveTests.swift in Sources */,
+				A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8DB9C0B205CD2DB006455F9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -362,6 +435,7 @@
 				D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */,
 				D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */,
 				D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */,
+				A1B2C3D4E5F6000000000021 /* Inventory.swift in Sources */,
 				D8E0A4E4206D6B0F00393F37 /* AsteroidDirection.swift in Sources */,
 				D8AFE00B2066ED9100BC11D8 /* GameSceneContact.swift in Sources */,
 				D8AFE0052062039900BC11D8 /* PowerUpMissile.swift in Sources */,
@@ -373,6 +447,7 @@
 				D8AFE0092066B5CB00BC11D8 /* NextLevelState.swift in Sources */,
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */,
+				A1B2C3D4E5F600000000000A /* Tuning.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,
 				D84E375B205DCC6E00512E12 /* Colors.swift in Sources */,
@@ -391,6 +466,7 @@
 				D8AFE00720620E3800BC11D8 /* PowerUpRapid.swift in Sources */,
 				D84E3759205DAB3000512E12 /* Screen.swift in Sources */,
 				D84E3739205CF98C00512E12 /* Hud.swift in Sources */,
+				A1B2C3D4E5F6000000000023 /* ItemTray.swift in Sources */,
 				D8E0A4E6206D6B2D00393F37 /* AsteroidDensity.swift in Sources */,
 				A1B2C3D4E5F6000000000006 /* EnemyShot.swift in Sources */,
 				A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */,
@@ -402,6 +478,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A1B2C3D4E5F6000000000018 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D8DB9C0E205CD2DB006455F9 /* Asteroid Runner */;
+			targetProxy = A1B2C3D4E5F6000000000017 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D8DB9C1C205CD2DB006455F9 /* Main.storyboard */ = {
@@ -562,6 +646,38 @@
 			};
 			name = Release;
 		};
+		A1B2C3D4E5F6000000000012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 753UQ7TNXJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.webdevils.Asteroid-RunnerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Asteroid Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Asteroid Runner";
+			};
+			name = Debug;
+		};
+		A1B2C3D4E5F6000000000013 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 753UQ7TNXJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.webdevils.Asteroid-RunnerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Asteroid Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Asteroid Runner";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -579,6 +695,15 @@
 			buildConfigurations = (
 				D8DB9C28205CD2DB006455F9 /* Debug */,
 				D8DB9C29205CD2DB006455F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D4E5F6000000000011 /* Build configuration list for PBXNativeTarget "Asteroid RunnerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F6000000000012 /* Debug */,
+				A1B2C3D4E5F6000000000013 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

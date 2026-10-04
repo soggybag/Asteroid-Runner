@@ -18,7 +18,7 @@ class PowerUp: SKSpriteNode {
   static let PU_MISSILE_RAPID = "PU_NAME_MISSILE_RAPID"
   static let PU_COIN = "coin"
   
-  static let powerup_duration: TimeInterval = 10
+  static let powerup_duration = Tuning.PowerUps.duration
   
   init() {
     
@@ -40,7 +40,7 @@ class PowerUp: SKSpriteNode {
     physicsBody?.collisionBitMask = PhysicsCategory.None
     physicsBody?.contactTestBitMask = PhysicsCategory.Ship | PhysicsCategory.Edge
     
-    physicsBody?.velocity = CGVector(dx: 0, dy: -25)
+    physicsBody?.velocity = CGVector(dx: 0, dy: -Tuning.PowerUps.fallSpeed)
     physicsBody?.linearDamping = 0
   }
   

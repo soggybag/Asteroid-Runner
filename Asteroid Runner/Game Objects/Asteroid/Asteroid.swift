@@ -34,7 +34,7 @@ class Asteroid: SKSpriteNode {
   var trail: SKEmitterNode?
 
   // Elastroids bounce off the screen edges once they are fully on screen
-  var bouncesLeft = 3
+  var bouncesLeft = Tuning.Hazards.elasticBounces
   var edgeArmed = false
 
 
@@ -105,7 +105,7 @@ class Asteroid: SKSpriteNode {
 
   static func makeIceShardsAt(point: CGPoint) -> [Asteroid] {
     var a = [Asteroid]()
-    let count = 6
+    let count = Tuning.Hazards.iceShards
     for i in 0 ..< count {
       let shard = Asteroid(asteroidSize: .tiny, type: .ice)
       let angle = CGFloat(i) / CGFloat(count) * .pi * 2 + CGFloat.random(in: -0.3 ... 0.3)
@@ -201,14 +201,15 @@ class Asteroid: SKSpriteNode {
 
     case .turret:
       addGun(at: .zero)
-      startFiring(interval: 2.0, spread: [0])
+      startFiring(interval: Tuning.Hazards.turretFireInterval, spread: [0])
 
     case .base:
       let r = asteroidSize.rawValue * 0.5
       addGun(at: CGPoint(x: -r, y: -r))
       addGun(at: CGPoint(x: r, y: -r))
       addGun(at: .zero)
-      startFiring(interval: 2.6, spread: [-0.3, 0, 0.3])
+      let spread = Tuning.Hazards.baseSpread
+      startFiring(interval: Tuning.Hazards.baseFireInterval, spread: [-spread, 0, spread])
 
     default:
       break
@@ -292,7 +293,7 @@ class Asteroid: SKSpriteNode {
     }
 
     var direction = direction
-    if direction != .top && Int.random(in: 0 ..< 3) == 0 {
+    if direction != .top && Double.random(in: 0 ..< 1) < Tuning.Stages.sideWaveTopShare {
       direction = .top
     }
 
@@ -324,7 +325,7 @@ class Asteroid: SKSpriteNode {
     }
 
     // Enemy bases are slow and menacing
-    let speedFactor = type == .base ? min(speed.rawValue, 0.5) : speed.rawValue
+    let speedFactor = type == .base ? min(speed.rawValue, Tuning.Hazards.baseMaxSpeed) : speed.rawValue
 
     position = CGPoint(x: x, y: y)
     physicsBody?.velocity = CGVector(dx: dx * speedFactor, dy: dy * speedFactor)

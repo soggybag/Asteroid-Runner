@@ -22,6 +22,7 @@ class GameEndingState: GKState {
     // Hide the ship.
     scene.ship.hide()
     scene.shield.deactivate()
+    scene.inventory.lowerShield()
     // Show a message on the menu
     scene.menu.message = "Your score is: \(scene.score)"
     let isNewBest = HighScore.submit(scene.score)
@@ -30,7 +31,7 @@ class GameEndingState: GKState {
     scene.stopAsteroids()
     // Wait then go to Game over. Replaces any pending wave action.
     scene.run(SKAction.sequence([
-      SKAction.wait(forDuration: 3),
+      SKAction.wait(forDuration: Tuning.Stages.gameOverDelay),
       SKAction.run({
         self.scene.gameState.enter(GameOverState.self)
       })]), withKey: GameScene.FLOW)

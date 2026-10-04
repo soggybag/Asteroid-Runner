@@ -22,6 +22,8 @@ class ShipShield: SKSpriteNode {
   let shieldRadius: CGFloat = (Ship.shipSize.width / 2) + 6
   let shieldShape = SKShapeNode()
   var shieldBody: SKPhysicsBody?
+
+  static let FLICKER = "FLICKER"
   
   
   // MARK: Initializers
@@ -33,7 +35,6 @@ class ShipShield: SKSpriteNode {
     setupPhysics()
     setupShapes()
     deactivate()
-    // activate()
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -64,31 +65,36 @@ class ShipShield: SKSpriteNode {
   // MARK: Public Methods
   
   // ---------------------------------
-  // Activate
+  // Activate. Stays up until deactivated;
+  // the item tray keeps track of the charge.
   // ---------------------------------
+  
+  var isActive: Bool {
+    return !isHidden
+  }
   
   func activate() {
     isHidden = false
+    alpha = 1
     physicsBody = shieldBody
     removeAllActions()
-    let t: TimeInterval = 0.1
-    
-    let wait = SKAction.wait(forDuration: t)
-    let fadeIn = SKAction.fadeIn(withDuration: t)
-    let fadeOut = SKAction.fadeOut(withDuration: t)
-    let seq = SKAction.sequence([wait, fadeOut, wait, fadeIn])
-    let rep = SKAction.repeat(seq, count: 10)
-    
-    let seqEnd = SKAction.sequence([wait, fadeIn, wait, fadeOut])
-    let repEnd = SKAction.repeat(seqEnd, count: 10)
-    
-    let deactivateShield = SKAction.run {
-      self.deactivate()
+  }
+  
+  
+  // ---------------------------------
+  // Flicker as a warning the charge is nearly gone
+  // ---------------------------------
+  
+  func flicker(_ on: Bool) {
+    if on {
+      guard action(forKey: ShipShield.FLICKER) == nil else { return }
+      let t: TimeInterval = 0.1
+      let seq = SKAction.sequence([.fadeOut(withDuration: t), .fadeIn(withDuration: t)])
+      run(.repeatForever(seq), withKey: ShipShield.FLICKER)
+    } else {
+      removeAction(forKey: ShipShield.FLICKER)
+      alpha = 1
     }
-    
-    let longWait = SKAction.wait(forDuration: 10)
-    let longSeq = SKAction.sequence([rep, longWait, repEnd, deactivateShield])
-    run(longSeq)
   }
   
   
@@ -97,6 +103,7 @@ class ShipShield: SKSpriteNode {
   // --------------------------------
   
   func deactivate() {
+    removeAllActions()
     isHidden = true
     physicsBody = nil
   }

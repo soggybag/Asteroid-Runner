@@ -15,9 +15,9 @@ class Missile: SKSpriteNode {
   // MARK: Static Properties
   // --------------------------------
 
-  static let powerLevelLow: CGFloat = 0.00125
-  static let powerLevelMed: CGFloat = 0.0025
-  static let powerLevelHi: CGFloat  = 0.005
+  static let powerLevelLow = Tuning.Weapons.massLow
+  static let powerLevelMed = Tuning.Weapons.massMed
+  static let powerLevelHi  = Tuning.Weapons.massHi
 
   static var power: CGFloat = Missile.powerLevelMed
 
@@ -25,7 +25,7 @@ class Missile: SKSpriteNode {
 
   static let NAME = "missile"
 
-  static let speed: CGFloat = 300
+  static let speed = Tuning.Weapons.missileSpeed
 
 
   // --------------------------------

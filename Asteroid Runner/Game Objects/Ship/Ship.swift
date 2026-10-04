@@ -19,15 +19,15 @@ class Ship: SKSpriteNode {
 
   // MARK: Public Properties
 
-  let shipSpeedSlow: CGFloat = 0.1
-  let shipSpeedMed: CGFloat = 0.25
-  let shipSpeedFast: CGFloat = 0.5
+  let shipSpeedSlow = Tuning.Ship.speedSlow
+  let shipSpeedMed = Tuning.Ship.speedMed
+  let shipSpeedFast = Tuning.Ship.speedFast
 
-  let shipDampingSlow: CGFloat = 0.25
-  let shipDampingMed: CGFloat = 0.5
-  let shipDampingFast: CGFloat = 1
+  let shipDampingSlow = Tuning.Ship.dampingSlow
+  let shipDampingMed = Tuning.Ship.dampingMed
+  let shipDampingFast = Tuning.Ship.dampingFast
 
-  var shipSpeed: CGFloat = 0.25
+  var shipSpeed = Tuning.Ship.speedMed
 
   static var shipSize = CGSize(width: 32, height: 32)
 
@@ -113,7 +113,7 @@ class Ship: SKSpriteNode {
   // Blink and ignore hits for a moment
   // ---------------------------
 
-  func makeInvulnerable(duration: TimeInterval = 2) {
+  func makeInvulnerable(duration: TimeInterval = Tuning.Player.invulnerableTime) {
     isInvulnerable = true
     let blink = SKAction.sequence([.fadeAlpha(to: 0.2, duration: 0.1), .fadeAlpha(to: 1, duration: 0.1)])
     let count = Int(duration / 0.2)

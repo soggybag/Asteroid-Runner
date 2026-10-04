@@ -48,7 +48,7 @@ class NextLevelState: GKState {
       introMessage.append("Watch for: \(scene.asteroidType.toString())")
     }
     
-    let wait = SKAction.wait(forDuration: 1.5)
+    let wait = SKAction.wait(forDuration: Tuning.Stages.announcementLineDelay)
     var array = [SKAction]()
     for message in introMessage {
       array.append(wait)

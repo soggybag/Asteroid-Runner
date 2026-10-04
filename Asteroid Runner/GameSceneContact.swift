@@ -32,7 +32,7 @@ extension GameScene {
       hit(asteroid: asteroid, damage: Missile.missilePower.rawValue)
       // Low mass asteroids get knocked back up the screen
       if asteroid.type == .lowMass, asteroid.parent != nil {
-        asteroid.physicsBody?.velocity.dy += 60
+        asteroid.physicsBody?.velocity.dy += Tuning.Hazards.lowMassKnockback
       }
 
 
@@ -90,24 +90,15 @@ extension GameScene {
       let powerup = secondNode
       guard !ship.isHidden, powerup.parent != nil else { return }
 
-      let points = powerup.name == PowerUp.PU_COIN ? PowerUpCoin.points : 100
+      let points = powerup.name == PowerUp.PU_COIN ? Tuning.PowerUps.coinPoints : Tuning.PowerUps.points
       score += points
       show(points: points, at: powerup.position)
       powerup.removeFromParent()
       lightImpact.impactOccurred()
 
-      switch powerup.name {
-      case PowerUp.PU_BOMB:
-        impact.impactOccurred()
-        shakeScreen(hitAsteroids: true)
-      case PowerUp.PU_SHIELD:
-        shield.activate()
-      case PowerUp.PU_MISSILE_2:
-        missilePowerUp(mode: MissileMode.randomPowerup())
-      case PowerUp.PU_MISSILE_RAPID:
-        missileRapid()
-      default:
-        break
+      // Items go into the tray to be used later. A full tray loses them.
+      if let item = ItemType(powerupName: powerup.name), !inventory.add(item) {
+        addChild(PopupLabelNode(message: "FULL", location: powerup.position + CGPoint(x: 0, y: 20)))
       }
 
     default:

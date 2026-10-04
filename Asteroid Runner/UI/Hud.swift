@@ -39,6 +39,8 @@ class Hud: SKSpriteNode {
 
   var autoFire = true
 
+  let tray = ItemTray(capacity: Tuning.Items.slots)
+
   var button1 = Button()
   var button2 = Button()
   var button3 = Button()
@@ -59,6 +61,7 @@ class Hud: SKSpriteNode {
     setupLives()
     setupActions()
     setupButtons()
+    setupTray()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -80,6 +83,13 @@ class Hud: SKSpriteNode {
   func setupLives() {
     addChild(livesNode)
     livesNode.position = CGPoint(x: 18, y: 18)
+  }
+
+  // Items sit in the middle of the score strip, between lives and score
+
+  func setupTray() {
+    addChild(tray)
+    tray.position = CGPoint(x: Screen.sharedInstance.centerX, y: 20)
   }
 
   func setupActions() {

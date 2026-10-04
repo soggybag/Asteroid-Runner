@@ -15,6 +15,10 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
 - Drag anywhere to steer, or tilt the phone.
 - The ship fires automatically. Turn Auto Fire off in the config panel to
   tap to fire instead.
+- Pickups go into the item tray at the top of the screen. Tap a slot to use
+  it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
+  lower it; it only drains while it's up. The tray holds three; when it's
+  full, new pickups are lost.
 - Tap during the intro to skip it.
 - The game pauses when the app goes to the background. Tap to resume.
 
@@ -53,6 +57,18 @@ features a random one.
 
 Rocks break into smaller rocks when hit enough. Special types are worth more
 points. The shield blocks enemy shots. Gold coins are worth 250 points.
+
+## Development
+
+- **Run on a phone:** connect it, pick it as the run destination in Xcode and
+  press Run. Signing is automatic with the team set in the project.
+- **Tests:** press Cmd-U in Xcode, or run
+  `xcodebuild test -scheme "Asteroid Runner" -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest'`.
+  They cover spawn timing, what each stage unlocks and how asteroids break.
+- **Tuning:** gameplay numbers (lives, fire rate, wave length, hazards) live in
+  `Asteroid Runner/Utilities/Tuning.swift`. Per-type asteroid stats live in
+  `AsteroidType.swift`.
+- **Playtesting:** log games in [docs/playtest-notes.md](docs/playtest-notes.md).
 
 ## Todo
 

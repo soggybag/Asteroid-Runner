@@ -9,8 +9,6 @@ import SpriteKit
 
 class PowerUpCoin: PowerUp {
 
-  static let points = 250
-
   override init() {
     super.init()
 

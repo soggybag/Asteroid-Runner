@@ -1,6 +1,6 @@
 # Asteroid Runner — Design Notes & Roadmap
 
-Last updated: 2026-10-02 · Shared copy: [Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
+Last updated: 2026-10-04 · Shared copy:[Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
 
 ## Vision
 
@@ -10,6 +10,65 @@ Asteroid Runner becomes a game about **piloting a ship you care about**: you dod
 - **Managing is part of the gameplay.** Opening the HUD mid-flight is the pilot looking down at the console. The tension is intended; the UI must be easy, never fiddly.
 - **The ship is a character.** It takes damage, needs repairs and earns upgrades. A bigger power plant over time is the main progression.
 - **The asteroid types make it matter.** Each threat rewards a different allocation, so the stage announcement becomes a cue to reroute power.
+- **A run is a journey between stations** (added 2026-10-04). You fly a few waves, collect items and salvage, then dock at a station to trade, repair and refit. What you carry and what you bolt on are the decisions.
+
+## The core loop (2026-10-04)
+
+Gameplay felt flat because nothing you pick up asks for a decision: powerups fire the moment you touch them, and coins are only points. Three ideas fix that, and they fit together:
+
+```
+ Fly 1–5 waves ──► Station ──► Fly 1–5 waves ──► Station ...
+   collect items      trade, repair,
+   lose modules       refit modules
+   save items for     sell spare items
+   the right moment
+```
+
+- **Items** give in-flight decisions: use it now, save it, or sell it.
+- **Stations** give a place to spend coins and items, and a breather between runs of waves.
+- **Modules** make damage visible and meaningful, and give stations something to sell.
+
+Each one works without the others, so they can be built and tested one at a time: items first (smallest, playable now), then stations, then modules.
+
+### Idea 1: Space stations
+
+A station appears after every 1 to 5 waves. The player docks, meets the station's keeper, and can refuel, buy, sell, repair and upgrade. Stations replace the "Dock between every stage" plan below.
+
+- **Personality.** Each station is an NPC: a name, a keeper, a voice, and a specialty that shapes its shop. Examples: a mining outpost that pays well for salvage, a military depot that sells weapon pods, a shady trader with rare items at bad prices.
+- **Dialog.** Two or three lines on arrival, chosen by the situation: first visit, returning visit, ship badly damaged, carrying something the station wants. Write dialog as data (a JSON or plist file per station), not code, so it's easy to add stations and lines.
+- **Docking sequence.** Short and skippable: the station slides in, the ship lines up, the screen eases into the station view. 3–4 seconds the first time, a tap skips it after that. A docking mini-game (line up with the port) is a later option; it would need to be fun on the 20th time, not just the first.
+- **Warn the player before it arrives.** "Station in 2 waves" on the stage announcement lets players plan: save a bomb to sell, or push on with a damaged ship. Fully random arrival with no warning makes saving items guesswork.
+- **Between stations,** the stage break stays short, as now.
+- **Refuel** depends on whether fuel exists (see the open question). Fuel earlier risked a death spiral; stations make it more workable because there's a known place to refill. If added, an empty tank should cut power, not end the run.
+- **Risk:** content cost. Each station needs a portrait, dialog and a shop list. Start with 3 stations and generic text, then grow.
+
+### Idea 2: Items in the tray, used when you choose (in progress)
+
+Pickups go into a tray of slots in the HUD instead of firing on contact. Tap a slot to use it. Points and coins still count automatically.
+
+- **Three slots to start.** A cargo module (Idea 3) or a station upgrade adds slots.
+- **Bomb, multi-shot and rapid fire** fire when tapped and leave the tray.
+- **Shield toggles.** Tap to raise it, tap again to lower it; it only drains while up, so a shield can be saved for a turret wave. It flickers when about to run out.
+- **Tray full:** a new item is lost, and only its points are kept ("FULL" pops up). This makes the choice real: use something to make room, or let the pickup go. Alternatives to try if it feels bad: replace the oldest item, or convert to coins.
+- **Where the tray goes.** First version sits in the top strip between lives and score. Playtest whether reaching the top of the phone mid-flight works; the fallback is the bottom corners, clear of the ship.
+- **Later:** items have a sell price at stations; rare items only from certain stations.
+
+### Idea 3: A modular ship
+
+The ship is built from modules in a few fixed slots (nose, two wings, tail) around a core. Players add and upgrade modules at stations. When the ship is hit, it loses a module.
+
+- **Modules replace lives.** Each hit knocks off one module; a hit with no modules left destroys the core and ends the run. This answers the "lives or hull meter?" question: the ship itself is the health bar, and you can see it.
+- **Modules are the power systems.** Engine module, shield generator, weapon pods, cargo bay (tray slots), reactor (power units). Losing a weapon pod drops a gun; losing the cargo bay drops an item. This ties damage straight into power management.
+- **Salvage.** A knocked-off module tumbles away for a couple of seconds; fly into it to bolt it back on. Like Sonic's rings, it turns a hit into a scramble instead of a flat loss.
+- **Which module goes?** Options: the one on the side that was hit (readable and skill-based), armor plates first (protects the important modules), or random. Side-that-was-hit is the recommendation.
+- **Death spiral risk.** Lose the guns and the next wave is harder. Mitigations: the core always has a basic gun, salvage lets you recover, and a cheap repair at the next station.
+- **Fixed slots before a free grid.** A grid (like a shape-fitting inventory) is a lot of UI on a phone. Fixed slots are easy to read during play and to draw.
+- **Art impact:** each module is its own sprite drawn to fit its slot, which matters for the hand-drawn art plan.
+
+### Other ideas from 2026-10-02
+
+- **Maze levels:** an alternate stage type with a field of asteroids to navigate rather than shoot. Good variety between stations; parked below.
+- **Hand-drawn art (pencil on paper).** Use PNG with transparency, in an asset catalog sprite atlas. Draw at 3× the in-game point size: the ship is 32 pt, so draw at 96 px or larger; the largest normal asteroid is 60 pt across (about 180 px) and a bosstroid 120 pt (about 360 px). Scan at 300 dpi or more, clean the paper to transparent, and keep line weight consistent so small and large sprites look like the same pencil. Draw rocks as a few shapes per size that the code can rotate and tint, rather than one per rock.
 
 ## Where the game stands
 
@@ -27,8 +86,8 @@ The core loop works on iOS 17+ in the simulator; the gaps are presentation, real
 
 - Asteroids and powerups are plain colored squares
 - No sound or music
-- Never run on a real phone, so tilt steering and haptics are untested
-- Balance numbers are guesses, scattered through the code
+- Runs on a real phone (iPhone 11 Pro), but not yet playtested there
+- Balance numbers are guesses; they now all live in `Tuning.swift`
 - Coins are only points; nothing to spend them on
 
 ## Power management
@@ -67,9 +126,9 @@ The slow-time meter is optional: a budget that drains while the HUD is open woul
 
 ## Game rhythm: Flight and Dock
 
-The game alternates intense waves with calm breaks: **Flight** for quick reactions, **Dock** for careful planning.
+The game alternates intense waves with calm breaks: **Flight** for quick reactions, **Dock** for careful planning. As of 2026-10-04 the Dock happens at a station every 1–5 waves (see Idea 1), not after every stage; the other stage breaks stay short.
 
-| | Flight (during a wave) | Dock (between stages) |
+| | Flight (during a wave) | Dock (at a station) |
 | --- | --- | --- |
 | Pressure | Time slows while the HUD is open, but threats keep coming | None; the player launches when ready |
 | Power | Quick one-tap shifts | Full allocation |
@@ -77,15 +136,15 @@ The game alternates intense waves with calm breaks: **Flight** for quick reactio
 | Information | Stage announcement (later: sensor warnings) | Scanner previews the next wave (later) |
 | Exit | Wave cleared | **Launch** button |
 
-Today's 9-second stage announcement (`NextLevelState`) becomes the Dock. The player controls how long it lasts, so impatient players aren't forced to wait.
+At a station the player controls how long the Dock lasts, so impatient players aren't forced to wait. Between stations, today's stage announcement (`NextLevelState`) stays, shortened.
 
 ## The ship as a character
 
-The ship grows like an RPG character: hits wear it down, the Dock fixes it, and coins make it stronger. These are proposals to test, not decisions yet.
+The ship grows like an RPG character: hits wear it down, the Dock fixes it, and coins make it stronger. These are proposals to test, not decisions yet. As of 2026-10-04 the modular ship (Idea 3) is the planned form of this: modules are the damage model and the upgrades.
 
-- **Damage:** a hull meter could replace the three lives. Shields absorb hits first; hull damage comes after.
-- **System damage:** a heavy hit can damage one system, lowering how much power it can take until repaired. This ties damage straight into power management (FTL works this way).
-- **Repairs:** done in the Dock, paid with coins. Skipping repairs saves coins but flies the next stage weaker.
+- **Damage:** ~~a hull meter could replace the three lives~~ losing modules replaces the three lives. Shields absorb hits first.
+- **System damage:** a hit knocks off a module, and with it part of a system (a weapon pod, the cargo bay). This ties damage straight into power management (FTL works this way).
+- **Repairs:** done at a station, paid with coins. Skipping repairs saves coins but flies the next stage weaker.
 - **Upgrades:** a bigger power plant (the main progression), higher system limits, faster shield recharge, more efficient systems.
 - **Coins gain a purpose:** they pay for repairs and upgrades, giving players a reason to keep playing.
 - **Later:** unlockable ships with different power plants and system limits, and a ship log of stages survived and rocks destroyed.
@@ -100,7 +159,11 @@ Most ideas fit; turning the phone sideways is dropped, and fuel waits until the 
 | Swipe up / down for the HUD | Yes, decided | Already half-built as the config panel. Watch for vertical swipes misfiring while drag-steering; an edge-only swipe is the fallback. |
 | Turn the phone sideways for the HUD | No | Rotating the phone steers the ship through tilt controls. iOS also takes about half a second to register rotation and ignores it under rotation lock. |
 | Gestures for power users | Later | Keep it to 3–4 two-finger gestures that are hard to trigger by accident. List them in settings; map them to controller buttons later. |
-| More time between stages | Yes | Becomes the Dock, with the player choosing when to launch. |
+| More time between stages | Yes | Becomes the Dock, with the player choosing when to launch. Now at stations every 1–5 waves. |
+| Space stations with NPC keepers (2026-10-04) | Yes, Phase 3 | Gives coins and items a purpose and the run a shape. Warn a wave or two ahead so players can plan. |
+| Pickups held in a tray, used on tap (2026-10-04) | Yes, building now | The cheapest fix for flat gameplay: every pickup becomes a decision. |
+| Modular ship, modules lost on hits (2026-10-04) | Yes, Phase 4 | Visible damage, a reason to repair, and the natural shape of upgrades. Salvage softens the death spiral. |
+| Maze levels (2026-10-02) | Later | Variety between stations; parked. |
 | Scanner instead of automatic announcements | Yes, later | Turns information into a resource and gives a fourth system (sensors) a job. Give new players a free basic scan. |
 | Fuel drawn down by power use | Later, maybe changed | Running out tends to cause a death spiral that's hard to recover from. Alternatives: fuel as pickups from destroyed rocks, or heat that forces a cooldown. |
 
@@ -108,18 +171,36 @@ Most ideas fit; turning the phone sideways is dropped, and fuel waits until the 
 
 ## Roadmap
 
-Six phases, each ending at a gate it must pass before the next begins; Phase 0 is next.
+Seven phases, each ending at a gate it must pass before the next begins. Phase 0 is waiting on playtests; Phase 1 (the item tray) started 2026-10-04.
+
+**Phase 0 status**
+
+- [x] Commit current work
+- [x] Fix signing: builds and installs on an iPhone 11 Pro with automatic signing
+- [x] Move tuning numbers to one file (`Asteroid Runner/Utilities/Tuning.swift`)
+- [x] Tests for waves and difficulty: 20 tests in `Asteroid RunnerTests/WaveTests.swift`
+- [ ] Play 10 full games on the phone and log them in [playtest-notes.md](playtest-notes.md)
+- [ ] TestFlight build (needs an App Store Connect app record; can wait until other testers join)
 
 | Phase | Goal | Scope | Gate to move on |
 | --- | --- | --- | --- |
 | **0 · Foundation** | Run it on a real phone | Commit current work, fix signing, TestFlight build. Move tuning numbers to one file; tests for waves. | Runs on your phone; 10 full games played and notes taken |
-| **1 · Power core** | Prototype engines, shields, weapons | Power plant and three systems; swipe up for the HUD. Time slows and steering locks while open; tap [+] to boost. | Testers reroute power without being told, and call it fun |
-| **2 · Dock, look and sound** | Make it feel like a real game | Dock between stages with a Launch button. Procedural rock art, sound, music, hit effects. | Someone who is not you asks to play again |
-| **3 · Ship as a character** | A reason to keep playing | Hull and system damage, repairs in the Dock. Coin shop: bigger power plant, system upgrades. | Players spend coins on upgrades, and games last longer |
-| **4 · Launch** | Ready for strangers | Tutorial that introduces systems one at a time. Settings, Game Center, App Store assets, TestFlight beta. | Shipped to the App Store |
-| **5 · Expand** | Driven by player feedback | Scanner and sensors, power-user gestures, fuel or heat. Bosses, daily challenge, story campaign, iPad, controllers. | — |
+| **1 · Item tray** | Every pickup is a decision | Bomb, shield, multi-shot and rapid fire go into a 3-slot tray; tap to use. Shield toggles on and off. Tray-full rule. | Players save items for a hard wave, and the game feels less flat |
+| **2 · Power core** | Prototype engines, shields, weapons | Power plant and three systems; swipe up for the HUD. Time slows and steering locks while open; tap [+] to boost. | Testers reroute power without being told, and call it fun |
+| **3 · Stations, look and sound** | A run with a shape | Stations every 1–5 waves with a warning, docking sequence, 3 keepers with dialog, a shop to buy and sell items and repair. Procedural rock art, sound, music, hit effects. | Players look forward to the next station; someone who is not you asks to play again |
+| **4 · Modular ship** | A ship you care about | Fixed module slots around a core; hits knock modules off; salvage to recover. Modules map to power systems and tray slots. Buy, repair and upgrade at stations. | Players spend coins on modules, and runs last longer |
+| **5 · Launch** | Ready for strangers | Tutorial that introduces systems one at a time. Settings, Game Center, App Store assets, TestFlight beta. | Shipped to the App Store |
+| **6 · Expand** | Driven by player feedback | Scanner and sensors, power-user gestures, fuel or heat, maze levels. Bosses, daily challenge, story campaign, iPad, controllers. | — |
 
-Phase 1 comes before art and content on purpose: if power management isn't fun on a real phone, it's cheaper to learn that before building the Dock, the shop and the art around it. The scanner, gestures and fuel are spread into Phase 5 so they can be revisited once the core is proven.
+The item tray comes first because it's small, it builds on code that exists, and it's the quickest way to test whether decisions make the game less flat. Power management comes next and before art and content on purpose: if it isn't fun on a real phone, it's cheaper to learn that before building stations, the shop and the art around them. Stations come before modules because modules need somewhere to be bought and repaired; a station with only items and repairs is still worth testing.
+
+**Phase 1 status**
+
+- [x] Pickups go into a 3-slot tray in the top strip; tap a slot to use it
+- [x] Shield toggles and drains only while up; flickers when nearly empty
+- [x] Tray full: the pickup is lost, its points kept
+- [x] Tests for the tray rules in `Asteroid RunnerTests/InventoryTests.swift`
+- [ ] Playtest: is the top strip reachable mid-flight? Is the tray-full rule fun?
 
 ## Ideas parking lot
 
@@ -133,6 +214,9 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - **Coin waves:** a special wave of coin patterns, from the README
 - **iPad layout, game controllers, Mac**
 - **Procedural rock art** for each asteroid type (cracked glass, glowing gas, metallic brass)
+- **Maze levels:** a stage of asteroids to weave through rather than shoot
+- **Docking mini-game:** line up with the station's port; only if it stays fun on repeat
+- **Station reputation:** keepers remember you, give better prices to regulars
 
 ## Open questions and decisions
 
@@ -141,7 +225,11 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] What does success mean: App Store release, portfolio piece, teaching project, or a personal project?
 - [ ] How many hours a week can go into it? This turns phases into dates.
 - [ ] Free, paid, or ads? This decides whether coins tie into a business model.
-- [ ] Lives or a hull meter?
+- [ ] Lives or a hull meter? Proposed answer: modules are the health (Idea 3).
+- [ ] Does fuel exist? If so, does an empty tank cut power (proposed) or end the run?
+- [ ] Which module does a hit knock off: the side that was hit (proposed), armor first, or random?
+- [ ] How far ahead does the game announce a station: one wave, two, or a scanner reading?
+- [ ] Tray full: lose the pickup (built), replace the oldest, or convert to coins?
 - [ ] Should weapons only fire while powered, so cutting them leaves the ship defenseless?
 - [ ] How many power units to start with, and how much does each level do?
 - [ ] How slow should time run while the HUD is open, and is the slow-time budget needed?
@@ -150,6 +238,10 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-04 | Three new directions added: space stations, items held in a tray, a modular ship. Roadmap reordered: item tray is Phase 1, stations Phase 3, modular ship Phase 4 |
+| 2026-10-04 | Stations replace the Dock after every stage; stage breaks between stations stay short |
+| 2026-10-04 | Item tray built: 3 slots in the top strip, tap to use, shield toggles, a full tray loses the pickup |
+| 2026-10-02 | Phase 0 started: device signing fixed, tuning moved to `Tuning.swift`, wave tests added |
 | 2026-10-02 | First HUD version has engines, shields and weapons; scanner comes later |
 | 2026-10-02 | Swipe up reveals the HUD, swipe down hides it; revisit if gestures are added |
 | 2026-10-02 | Steering locks while the HUD is open, for now, to test the feel |
