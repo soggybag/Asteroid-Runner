@@ -17,6 +17,7 @@ import SpriteKit
 class Hud: SKSpriteNode {
 
   let scoreLabel = SKLabelNode()
+  let coinLabel = SKLabelNode()
   let livesNode = SKNode()
   var showAction: SKAction!
   var hideAction: SKAction!
@@ -58,6 +59,7 @@ class Hud: SKSpriteNode {
     position.y = Screen.sharedInstance.hudYHidden
 
     setupLabel()
+    setupCoins()
     setupLives()
     setupActions()
     setupButtons()
@@ -78,6 +80,19 @@ class Hud: SKSpriteNode {
     scoreLabel.text = "0"
     scoreLabel.fontColor = Colors.buttonLabelColor
     scoreLabel.fontName = Fonts.fontName
+  }
+
+  // Coins sit just under the strip, below the score
+
+  func setupCoins() {
+    addChild(coinLabel)
+    coinLabel.fontSize = 14
+    coinLabel.fontName = Fonts.fontName
+    coinLabel.fontColor = Colors.coin
+    coinLabel.horizontalAlignmentMode = .right
+    coinLabel.verticalAlignmentMode = .top
+    coinLabel.position = CGPoint(x: Screen.sharedInstance.width - 10, y: -4)
+    update(coins: 0)
   }
 
   func setupLives() {
@@ -158,6 +173,10 @@ class Hud: SKSpriteNode {
 
   func update(score: Int) {
     scoreLabel.text = "\(score)"
+  }
+
+  func update(coins: Int) {
+    coinLabel.text = "COINS \(coins)"
   }
 
   // Draw one small ship for each remaining life

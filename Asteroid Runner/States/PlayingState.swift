@@ -67,6 +67,7 @@ class PlayingState: GKState {
   func stageClear() {
     let bonus = scene.level * Tuning.Stages.bonusPerStage
     scene.score += bonus
+    scene.coins += Tuning.Stations.stageClearCoins
     scene.addText(message: "Stage Clear +\(bonus)")
     scene.run(.sequence([.wait(forDuration: Tuning.Stages.stageClearPause), .run {
       self.startNextLevel()
@@ -75,11 +76,18 @@ class PlayingState: GKState {
   
   
   // ---------------------------------
-  // Start next wave with a count down
+  // Dock at a station if one is here,
+  // otherwise start the next wave
   // ---------------------------------
   
   func startNextLevel() {
-    scene.gameState.enter(NextLevelState.self)
+    if let station = scene.stationRoute.waveCleared(),
+       let docking = scene.gameState.state(forClass: StationState.self) {
+      docking.station = station
+      scene.gameState.enter(StationState.self)
+    } else {
+      scene.gameState.enter(NextLevelState.self)
+    }
   }
   
   
@@ -88,7 +96,7 @@ class PlayingState: GKState {
   // ---------------------------------
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-    if stateClass == GameEndingState.self || stateClass == NextLevelState.self {
+    if stateClass == GameEndingState.self || stateClass == NextLevelState.self || stateClass == StationState.self {
       return true
     }
     return false

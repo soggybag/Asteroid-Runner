@@ -47,6 +47,10 @@ class NextLevelState: GKState {
     if scene.asteroidType != .normal {
       introMessage.append("Watch for: \(scene.asteroidType.toString())")
     }
+
+    if scene.stationRoute.stationAfterThisWave, let station = scene.stationRoute.next {
+      introMessage.append("Station ahead: \(station.name)")
+    }
     
     let wait = SKAction.wait(forDuration: Tuning.Stages.announcementLineDelay)
     var array = [SKAction]()

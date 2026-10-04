@@ -92,6 +92,9 @@ extension GameScene {
 
       let points = powerup.name == PowerUp.PU_COIN ? Tuning.PowerUps.coinPoints : Tuning.PowerUps.points
       score += points
+      if powerup.name == PowerUp.PU_COIN {
+        coins += Tuning.Stations.coinPickup
+      }
       show(points: points, at: powerup.position)
       powerup.removeFromParent()
       lightImpact.impactOccurred()

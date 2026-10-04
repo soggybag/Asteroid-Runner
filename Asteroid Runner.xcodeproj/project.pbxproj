@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F600000000003A /* StationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000039 /* StationTests.swift */; };
+		A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000037 /* StationState.swift */; };
+		A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000035 /* StationPanel.swift */; };
+		A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000033 /* StationNode.swift */; };
+		A1B2C3D4E5F6000000000032 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000031 /* Station.swift */; };
 		A1B2C3D4E5F600000000002A /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000029 /* GameData.swift */; };
 		A1B2C3D4E5F600000000002C /* intro.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002B /* intro.json */; };
 		A1B2C3D4E5F600000000002E /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002D /* DataTests.swift */; };
@@ -79,6 +84,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000039 /* StationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000037 /* StationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationState.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000035 /* StationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationPanel.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000033 /* StationNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationNode.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000031 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000029 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000002B /* intro.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = intro.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000002D /* DataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
@@ -162,6 +172,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1B2C3D4E5F6000000000030 /* Station */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000031 /* Station.swift */,
+				A1B2C3D4E5F6000000000033 /* StationNode.swift */,
+			);
+			path = Station;
+			sourceTree = "<group>";
+		};
 		A1B2C3D4E5F6000000000026 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F600000000001A /* WaveTests.swift */,
+				A1B2C3D4E5F6000000000039 /* StationTests.swift */,
 				A1B2C3D4E5F600000000002D /* DataTests.swift */,
 				A1B2C3D4E5F6000000000024 /* InventoryTests.swift */,
 			);
@@ -213,6 +233,7 @@
 				D84E374B205D873F00512E12 /* GameOverState.swift */,
 				D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */,
 				D84E374D205D874000512E12 /* PlayingState.swift */,
+				A1B2C3D4E5F6000000000037 /* StationState.swift */,
 				D84E374A205D873F00512E12 /* ReadyState.swift */,
 				D8AFE0002061F0A800BC11D8 /* IntroState.swift */,
 				D8AFE0082066B5CB00BC11D8 /* NextLevelState.swift */,
@@ -225,6 +246,7 @@
 			children = (
 				D84E3754205D941800512E12 /* Menu.swift */,
 				D84E3738205CF98C00512E12 /* Hud.swift */,
+				A1B2C3D4E5F6000000000035 /* StationPanel.swift */,
 				A1B2C3D4E5F6000000000022 /* ItemTray.swift */,
 				D84E3742205CFF2100512E12 /* Button.swift */,
 				D8AFDFFE2060CCB200BC11D8 /* Shapes.swift */,
@@ -240,6 +262,7 @@
 				D82F3DE6206D76FC002BEFC1 /* PowerUp */,
 				D8955B862070633D000102F5 /* Ship */,
 				D8AFE0022061F11C00BC11D8 /* PopupLabelNode.swift */,
+				A1B2C3D4E5F6000000000030 /* Station */,
 			);
 			path = "Game Objects";
 			sourceTree = "<group>";
@@ -466,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1B2C3D4E5F600000000001B /* WaveTests.swift in Sources */,
+				A1B2C3D4E5F600000000003A /* StationTests.swift in Sources */,
 				A1B2C3D4E5F600000000002E /* DataTests.swift in Sources */,
 				A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */,
 			);
@@ -495,6 +519,10 @@
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */,
 				A1B2C3D4E5F600000000000A /* Tuning.swift in Sources */,
+				A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */,
+				A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */,
+				A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */,
+				A1B2C3D4E5F6000000000032 /* Station.swift in Sources */,
 				A1B2C3D4E5F600000000002A /* GameData.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,
 				D84E374E205D874000512E12 /* ReadyState.swift in Sources */,

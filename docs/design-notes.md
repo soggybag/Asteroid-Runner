@@ -30,7 +30,9 @@ Gameplay felt flat because nothing you pick up asks for a decision: powerups fir
 
 Each one works without the others, so they can be built and tested one at a time: items first (smallest, playable now), then stations, then modules.
 
-### Idea 1: Space stations
+### Idea 1: Space stations (first version built 2026-10-04)
+
+**Built:** a station every 1–5 waves, warned one wave ahead; the station slides in and the ship docks (tap to skip); the keeper greets by situation from `stations.json`; a shop to buy items, sell tray items and repair lost lives with coins; Launch starts the next wave. Coins: 5 per gold coin, 3 per stage cleared. Prices and timings are in `Tuning.Stations`. **Not yet:** conversation trees, fuel, modules, station art (placeholder ring for now).
 
 A station appears after every 1 to 5 waves. The player docks, meets the station's keeper, and can refuel, buy, sell, repair and upgrade. Stations replace the "Dock between every stage" plan below.
 
@@ -238,6 +240,16 @@ The item tray comes first because it's small, it builds on code that exists, and
 - [x] Tests for the tray rules in `Asteroid RunnerTests/InventoryTests.swift`
 - [ ] Playtest: is the top strip reachable mid-flight? Is the tray-full rule fun? (Testing now)
 
+**Phase 3 status (started early, 2026-10-04)**
+
+- [x] Named stations every 1–5 waves, warned a wave ahead
+- [x] Docking sequence, tap to skip
+- [x] Keeper greetings by situation from `stations.json`
+- [x] Shop: buy items, sell tray items, repair lost lives; coins earned from coin pickups and stage clears
+- [x] Tests for station data, greetings, prices and the route in `Asteroid RunnerTests/StationTests.swift`
+- [ ] Playtest: do players earn enough coins to buy something at most stations?
+- [ ] Real dialog, station art, sound
+
 ## Ideas parking lot
 
 Good ideas with no phase yet; pull them in when a phase needs them.
@@ -278,6 +290,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-04 | Stations built ahead of the power core: docking, greetings, shop with coins, repairs restore lost lives until modules exist |
 | 2026-10-04 | Opening story moved to `Asteroid Runner/Data/intro.json`; the old draft story is kept there as `draftStory` |
 | 2026-10-04 | Version, build number and commit shown in the bottom-left corner, stamped on every build |
 | 2026-10-04 | Every station has a name; placeholder station data in `Asteroid Runner/Data/stations.json`; conversation trees come later |

@@ -114,6 +114,24 @@ Things the simulator couldn't test. Answer in a few words; skip any that don't a
 
     Answer:
 
+### Stations
+
+21. Did you have enough coins to buy something at most stations?
+
+    Answer:
+
+22. Is the docking sequence too long, or did you skip it every time?
+
+    Answer:
+
+23. Did the "Station ahead" warning change what you did with your items?
+
+    Answer:
+
+24. Are the shop buttons easy to read and tap?
+
+    Answer:
+
 ### Pause
 
 15. Leave the app mid-game and come back. Does it stay paused until you tap?

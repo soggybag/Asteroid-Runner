@@ -23,6 +23,26 @@ enum ItemType: CaseIterable {
     }
   }
 
+  // Ids used in data files such as stations.json
+  init?(id: String) {
+    switch id {
+    case "bomb": self = .bomb
+    case "shield": self = .shield
+    case "multiShot": self = .multiShot
+    case "rapidFire": self = .rapidFire
+    default: return nil
+    }
+  }
+
+  var name: String {
+    switch self {
+    case .bomb: return "Bomb"
+    case .shield: return "Shield"
+    case .multiShot: return "Multi-shot"
+    case .rapidFire: return "Rapid fire"
+    }
+  }
+
   var label: String {
     switch self {
     case .bomb: return "BOMB"
@@ -125,6 +145,15 @@ struct Inventory {
       return true
     }
     return false
+  }
+
+
+  // Take an item out of the tray without using it, to sell it
+  mutating func take(slot: Int) -> Item? {
+    guard items.indices.contains(slot) else { return nil }
+    let item = items[slot]
+    remove(at: slot)
+    return item
   }
 
 

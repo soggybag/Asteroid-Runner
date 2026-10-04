@@ -31,6 +31,8 @@ class ReadyState: GKState {
     scene.ship.position.y = -100
     scene.ship.show()
     scene.score = 0
+    scene.coins = 0
+    scene.stationRoute = StationRoute(stations: scene.allStations)
     
     let moveShipIntoView = SKAction.moveTo(y: Screen.sharedInstance.shipY, duration: 2)
     moveShipIntoView.timingMode = .easeOut

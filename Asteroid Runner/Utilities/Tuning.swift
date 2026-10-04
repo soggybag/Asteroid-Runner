@@ -80,6 +80,37 @@ enum Tuning {
   }
 
 
+  // MARK: Stations and coins
+
+  enum Stations {
+    // A station comes after a random number of waves in this range
+    static let minWaves = 1
+    static let maxWaves = 5
+
+    // Coins for picking up a coin, and for clearing a stage
+    static let coinPickup = 5
+    static let stageClearCoins = 3
+
+    // Base prices in coins. Each station's multipliers adjust them.
+    static func price(_ item: ItemType) -> Int {
+      switch item {
+      case .bomb: return 10
+      case .shield: return 8
+      case .multiShot: return 6
+      case .rapidFire: return 6
+      }
+    }
+    // Selling gets this share of the base price, before the station's multiplier
+    static let resaleShare = 0.5
+    // Repairing one point of damage (one lost life, until modules)
+    static let repairPrice = 15
+
+    // Docking and launching animations, in seconds
+    static let dockTime: TimeInterval = 2.5
+    static let launchTime: TimeInterval = 1.5
+  }
+
+
   // MARK: Stages
 
   enum Stages {

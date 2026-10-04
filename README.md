@@ -19,6 +19,12 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
   it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
   lower it; it only drains while it's up. The tray holds three; when it's
   full, new pickups are lost.
+- Every 1 to 5 stages you dock at a space station. The stage announcement
+  warns you a wave ahead ("Station ahead: Bastion Seven"). Tap to skip the
+  docking. At the station, buy items, sell what's in your tray, repair lost
+  hull (lives), then tap Launch.
+- Coins (shown under the score) pay for it: 5 per gold coin picked up, 3 per
+  stage cleared.
 - Tap during the intro to skip it.
 - The game pauses when the app goes to the background. Tap to resume.
 
@@ -69,7 +75,9 @@ points. The shield blocks enemy shots. Gold coins are worth 250 points.
   `Asteroid Runner/Utilities/Tuning.swift`. Per-type asteroid stats live in
   `AsteroidType.swift`.
 - **Story and dialog:** the opening story is in `Asteroid Runner/Data/intro.json`
-  and station dialog in `Asteroid Runner/Data/stations.json`. Edit them like any
+  and the stations (names, keepers, greetings, what they sell, price
+  multipliers) in `Asteroid Runner/Data/stations.json`. Add a station by
+  adding an entry. Edit them like any
   text file; the tests check that they still load.
 - **Version:** the bottom-left corner shows `v2.0 (32) eb38a83`: the version,
   the build number (commits on the branch) and the commit. A `+` after the

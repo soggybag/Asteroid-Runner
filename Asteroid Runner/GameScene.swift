@@ -78,6 +78,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
 
+  var coins: Int = 0 {
+    didSet {
+      hud.update(coins: coins)
+    }
+  }
+
+  // Every station from Data/stations.json, and this run's route between them
+  let allStations = StationList.load()
+  lazy var stationRoute = StationRoute(stations: allStations)
+
   // Items the player is carrying, shown in the HUD tray
   var inventory = Inventory() {
     didSet {
@@ -164,10 +174,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let gameEndingState = GameEndingState(scene: self)
     let introState = IntroState(scene: self)
     let nextLevel = NextLevelState(scene: self)
+    let station = StationState(scene: self)
 
     gameState = GKStateMachine(states: [
       introState, readyState, playingState,
-      gameOverState, countDownState, gameEndingState, nextLevel
+      gameOverState, countDownState, gameEndingState, nextLevel, station
     ])
   }
 
@@ -310,7 +321,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func pauseGame() {
     let state = gameState.currentState
-    guard !gamePaused, state is PlayingState || state is NextLevelState || state is ReadyState else { return }
+    guard !gamePaused, state is PlayingState || state is NextLevelState || state is ReadyState || state is StationState else { return }
     gamePaused = true
     pauseLabel.isHidden = false
     isPaused = true
@@ -529,7 +540,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func updateShield(seconds: TimeInterval) {
-    guard inventory.shieldIsOn, !gamePaused else { return }
+    guard inventory.shieldIsOn, shipInPlay, !gamePaused else { return }
     if inventory.drainShield(seconds: seconds) {
       shield.deactivate()
     } else {
@@ -553,6 +564,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       return
     }
 
+    if let station = gameState.currentState as? StationState {
+      station.touched()
+      return
+    }
+
     if !autoFireOn && shipInPlay {
       shootMissile()
     }
@@ -561,7 +577,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Drag anywhere to steer the ship
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    guard let touch = touches.first, !gamePaused, !ship.isHidden else { return }
+    guard let touch = touches.first, !gamePaused, !ship.isHidden, !(gameState.currentState is StationState) else { return }
     let dx = touch.location(in: self).x - touch.previousLocation(in: self).x
     let halfWidth = ship.size.width / 2
     let x = ship.position.x + dx
@@ -811,7 +827,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       ship.moveForce(x: x * Tuning.Player.tiltForce)
     }
 
-    if autoFireOn {
+    // Hold fire while docked
+    if autoFireOn && !(gameState.currentState is StationState) {
       timeSinceLastMissile += seconds
 
       if timeSinceLastMissile > missileFireTime {
