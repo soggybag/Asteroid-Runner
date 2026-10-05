@@ -312,7 +312,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Shields: 1 charge at levels 1–2 and 2 at 3–4 (was 1 per level), slower recharge (20/15/12/9 s), start each game empty
     - Drag follows at 140–520 pt/s by engine level (was 250–1200)
     - Before a station: wait up to 20 s for rocks and enemy shots to clear, fade out anything left, then a 5 s approach (station first, then the ship)
-- [ ] Playtest: does a strong player need the HUD to get past stage 20? (the Phase 3 gate)
+- [ ] Playtest in [playtest-round-2.md](playtest-round-2.md): does a strong player need the HUD to get past stage 20? (the Phase 3 gate)
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety

@@ -93,7 +93,8 @@ longer, and from stage 9 rocks sometimes come in pairs. The shield blocks enemy 
   commit means the build had uncommitted changes. `scripts/stamp-version.sh`
   sets these on every build. Change the version itself in the target's
   General settings.
-- **Playtesting:** log games in [docs/playtest-notes.md](docs/playtest-notes.md).
+- **Playtesting:** round 1 notes are in [docs/playtest-notes.md](docs/playtest-notes.md);
+  round 2 (balance pass) is [docs/playtest-round-2.md](docs/playtest-round-2.md).
   Note the version from the corner with each game.
 
 ## Todo

@@ -1,4 +1,4 @@
-# Playtest Notes
+# Playtest Notes (Round 1)
 
 Phase 0 gate: the game runs on a real phone, and 10 full games have been played
 with notes on what feels off. Log each game in the table, answer the questions
@@ -191,22 +191,7 @@ Astervoids
     - Space Virus enters the HUD at a random place and starts to siphon energy. T must be removed manually.
 
 
-## Round 2: balance pass (from build 37)
-
-Same questions, focused on difficulty. Log the version from the corner.
-
-| # | Date | Version | Stage reached | Lives left | Opened power HUD? | What felt off |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
-
-- Where did it start to feel hard? Too early, too late?
-- Did you need the power HUD to survive? When did you open it?
-- Are pickups now rare enough to save, or too rare?
-- Is the drag lag noticeable? Does it feel like piloting, or just sluggish?
-- Did turrets and bases dropping items make you go after them?
-- Does docking feel right now: clear screen, slower approach?
+Round 2 (balance pass) is in [playtest-round-2.md](playtest-round-2.md).
 
 ### Summary (2026-10-05)
 
