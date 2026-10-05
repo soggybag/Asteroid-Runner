@@ -44,6 +44,11 @@ class NextLevelState: GKState {
       "Direction: \(direction)"
     ]
     
+    if scene.asteroidSize == .bosstroid {
+      introMessage.append("WARNING: Bosstroid field")
+      introMessage.append("Raise shields, save a bomb")
+    }
+
     if scene.asteroidType != .normal {
       introMessage.append("Watch for: \(scene.asteroidType.toString())")
     }

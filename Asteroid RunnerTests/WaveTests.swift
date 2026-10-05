@@ -45,6 +45,27 @@ struct DifficultyRampTests {
     #expect(Tuning.Stages.pairChance(level: 200) == 0.5)
   }
 
+  @Test func biggerRocksSpawnLessOften() {
+    let sizes: [AsteroidSize] = [.tiny, .small, .average, .large, .huge, .massive, .bosstroid]
+    for (smaller, bigger) in zip(sizes, sizes.dropFirst()) {
+      #expect(Tuning.Stages.sizeSpacing(bigger) > Tuning.Stages.sizeSpacing(smaller))
+    }
+  }
+
+  @Test func theBiggestRocksNeverComeInPairs() {
+    #expect(AsteroidSize.bosstroid.rawValue >= Tuning.Stages.noPairsFrom.rawValue)
+    #expect(AsteroidSize.huge.rawValue < Tuning.Stages.noPairsFrom.rawValue)
+  }
+
+  @Test func aSmartBombBreaksABosstroid() {
+    let rock = Asteroid(asteroidSize: .bosstroid)
+    var broke = false
+    for _ in 0 ..< Tuning.PowerUps.bombPulses where !broke {
+      broke = rock.hitAsteroid(value: Tuning.PowerUps.bombDamage) != nil
+    }
+    #expect(broke)
+  }
+
   @Test func featuredShareGrowsAfterEveryTypeHasDebuted() {
     #expect(Tuning.Stages.featuredScale(level: 11) == 1)
     #expect(Tuning.Stages.featuredScale(level: 20) > 1)

@@ -456,7 +456,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
 
   var asteroidInterval: TimeInterval {
-    return Tuning.Stages.spawnInterval(level: level)
+    return Tuning.Stages.spawnInterval(level: level) * Tuning.Stages.sizeSpacing(asteroidSize)
   }
 
 
@@ -527,7 +527,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     // Later stages sometimes send rocks in pairs
-    let count = Double.random(in: 0 ..< 1) < Tuning.Stages.pairChance(level: level) ? 2 : 1
+    let pairsAllowed = asteroidSize.rawValue < Tuning.Stages.noPairsFrom.rawValue
+    let count = pairsAllowed && Double.random(in: 0 ..< 1) < Tuning.Stages.pairChance(level: level) ? 2 : 1
     for _ in 0 ..< count {
       makeRock()
     }
@@ -646,7 +647,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     switch inventory.tap(slot: slot) {
     case .use(.bomb):
       impact.impactOccurred()
-      shakeScreen(hitAsteroids: true)
+      shakeScreen(hitAsteroids: true, count: Tuning.PowerUps.bombPulses)
     case .use(.multiShot):
       missilePowerUp(mode: MissileMode.randomPowerup())
     case .use(.rapidFire):
@@ -903,7 +904,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func hitAllAsteroids() {
     enumerateChildNodes(withName: Asteroid.NAME) { (node, stop) in
       if let asteroid = node as? Asteroid {
-        self.hit(asteroid: asteroid, damage: MissilePower.weak.rawValue) // TODO: Adjust this with shake screen above.
+        self.hit(asteroid: asteroid, damage: Tuning.PowerUps.bombDamage)
       }
     }
   }

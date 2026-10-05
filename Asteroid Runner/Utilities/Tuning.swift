@@ -38,21 +38,21 @@ enum Tuning {
 
     // Engines: tilt steering force and drift damping, and how fast the
     // ship can follow a dragging finger, in points per second
-    static let engineTilt: [CGFloat] = [0.08, 0.15, 0.25, 0.38, 0.5]
+    static let engineTilt: [CGFloat] = [0.05, 0.12, 0.25, 0.42, 0.65]
     static let engineDamping: [CGFloat] = [0.25, 0.35, 0.5, 0.75, 1]
-    static let engineDragSpeed: [CGFloat] = [140, 200, 280, 380, 520]
+    static let engineDragSpeed: [CGFloat] = [100, 170, 280, 420, 620]
 
     // Weapons: seconds between shots, damage per hit, and missile mass
     // (how hard a shot pushes an asteroid). Level 0 is the Command
     // module's weak trickle shot.
-    static let weaponFireTime: [TimeInterval] = [0.6, 0.4, 0.3, 0.22, 0.16]
-    static let weaponDamage: [CGFloat] = [0.5, 1, 2, 2.5, 3]
+    static let weaponFireTime: [TimeInterval] = [0.7, 0.45, 0.3, 0.2, 0.12]
+    static let weaponDamage: [CGFloat] = [0.5, 1, 2, 3, 4]
     static let weaponMass: [CGFloat] = [0.001, 0.00125, 0.0025, 0.004, 0.005]
 
     // Shields: charges held at each level (each blocks one hit), and seconds
     // to rebuild one charge. The shield starts each game empty.
-    static let shieldCapacity: [Int] = [0, 1, 1, 2, 2]
-    static let shieldRecharge: [TimeInterval] = [0, 20, 15, 12, 9]
+    static let shieldCapacity: [Int] = [0, 1, 1, 2, 3]
+    static let shieldRecharge: [TimeInterval] = [0, 22, 15, 10, 6]
     // Blinking, can't be hit, after the shield blocks a hit
     static let shieldHitInvulnerable: TimeInterval = 1
 
@@ -83,6 +83,11 @@ enum Tuning {
     // How long multi-shot and rapid fire last
     static let duration: TimeInterval = 10
     static let fallSpeed: CGFloat = 25
+
+    // The smart bomb shakes the screen in pulses, damaging every rock each
+    // pulse. 10 pulses of 2 breaks a bosstroid (12 hits).
+    static let bombPulses = 10
+    static let bombDamage: CGFloat = 2
 
     static let points = 100
     static let coinPoints = 250
@@ -187,6 +192,23 @@ enum Tuning {
       return min(0.5, max(0, 0.04 * Double(level - 8)))
     }
 
+    // Rocks this size or bigger never come in pairs
+    static let noPairsFrom = AsteroidSize.massive
+
+    // Bigger rocks spawn less often, so a wave covers about the same amount
+    // of screen whatever the size. Multiplies the time between spawns.
+    static func sizeSpacing(_ size: AsteroidSize) -> TimeInterval {
+      switch size {
+      case .tiny: return 0.6
+      case .small: return 0.8
+      case .average: return 1
+      case .large: return 1.4
+      case .huge: return 1.9
+      case .massive: return 2.6
+      case .bosstroid: return 5
+      }
+    }
+
     // Once every type has debuted (stage 12), the featured type makes up a
     // growing share of each wave: 5% more each stage, up to double
     static func featuredScale(level: Int) -> Double {
@@ -198,9 +220,12 @@ enum Tuning {
   // MARK: Asteroid hazards
 
   enum Hazards {
-    static let bosstroidFromLevel = 6
-    // Chance a wave is bosstroids once they're unlocked
-    static let bosstroidChance = 0.25
+    // Bosstroid waves are a rare set piece, announced with a warning
+    static let bosstroidFromLevel = 8
+    // Chance a wave is bosstroids once they're unlocked (was 0.25)
+    static let bosstroidChance = 0.12
+    // Bosstroid waves are shorter than others
+    static let bosstroidWaveShare = 0.7
 
     // Upward speed a low mass asteroid gains from each hit
     static let lowMassKnockback: CGFloat = 60
