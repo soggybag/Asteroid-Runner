@@ -12,9 +12,10 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
 
 ## Controls
 
-- Drag anywhere to steer, or tilt the phone.
-- The ship fires automatically. Turn Auto Fire off in the config panel to
-  tap to fire instead.
+- Drag anywhere to steer, or tilt the phone. The ship follows your finger as
+  fast as its engines allow.
+- The ship fires automatically. Turn Auto Fire off in the power HUD (swipe
+  up) to tap to fire instead.
 - Pickups go into the item tray at the top of the screen. Tap a slot to use
   it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
   lower it; it only drains while it's up. The tray holds three; when it's
@@ -28,19 +29,24 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
 - Tap during the intro to skip it.
 - The game pauses when the app goes to the background. Tap to resume.
 
-## Configure your ship
+## Power
 
-Swipe down to show the ship configuration screen. Here you can choose one of three
-ship configuration schemes. 
+Swipe up mid-flight to open the power HUD; swipe down to close it. Time slows
+to a quarter speed and steering locks while it's open.
 
-- Speed > Power - Moves faster shots are weaker
-- Speed = Power - Speed and weapon are average
-- Speed < Power - Moves slower, weapon is more powerful
+The reactor makes 6 units of power, shared between three systems, each from
+0 to 4. Tap + to give a system a unit. If the reactor is maxed out, the unit
+comes from the system with the most. Tap − to free a unit.
 
-In the future this screen will represent power allocation inthe ship for more 
-complex and detail configuration. 
+- **Engines:** how fast the ship follows your finger, and how hard tilt pushes it.
+- **Shields:** each level holds one charge that blocks one hit, shown as a ring
+  around the ship. Charge rebuilds over time, faster with more power. The
+  shield item in the tray is separate and still works.
+- **Weapons:** fire rate and damage. Shots look stronger as power goes up, from
+  a dim speck at 0 (the ship always has a weak shot) to a white-hot bolt at 4.
+  Hits throw sparks.
 
-Swipe up to dismiss this menu. 
+Auto fire is switched on and off in the power HUD.
 
 ## Asteroid types
 

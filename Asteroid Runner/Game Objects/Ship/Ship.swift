@@ -19,15 +19,14 @@ class Ship: SKSpriteNode {
 
   // MARK: Public Properties
 
-  let shipSpeedSlow = Tuning.Ship.speedSlow
-  let shipSpeedMed = Tuning.Ship.speedMed
-  let shipSpeedFast = Tuning.Ship.speedFast
+  // Tilt force multiplier, set by engine power
+  var shipSpeed = Tuning.Power.value(Tuning.Power.engineTilt, level: Tuning.Power.startingLevel)
 
-  let shipDampingSlow = Tuning.Ship.dampingSlow
-  let shipDampingMed = Tuning.Ship.dampingMed
-  let shipDampingFast = Tuning.Ship.dampingFast
+  // How fast the ship can follow a dragging finger, set by engine power
+  var dragSpeed = Tuning.Power.value(Tuning.Power.engineDragSpeed, level: Tuning.Power.startingLevel)
 
-  var shipSpeed = Tuning.Ship.speedMed
+  // Faint ring showing powered shield charge
+  let barrier = SKShapeNode(circleOfRadius: 24)
 
   static var shipSize = CGSize(width: 32, height: 32)
 
@@ -54,6 +53,7 @@ class Ship: SKSpriteNode {
 
     setupTextures()
     setupPhysics()
+    setupBarrier()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -84,6 +84,14 @@ class Ship: SKSpriteNode {
 
     physicsBody!.linearDamping = 0.5
     physicsBody!.allowsRotation = false
+  }
+
+
+  func setupBarrier() {
+    barrier.strokeColor = Colors.shieldStrokeColor
+    barrier.fillColor = .clear
+    barrier.isHidden = true
+    addChild(barrier)
   }
 
 
@@ -148,31 +156,32 @@ class Ship: SKSpriteNode {
 
 
   // ---------------------------
-  // Set speed slow
+  // Engine power level
   // ---------------------------
 
-  func setShipSpeedSlow() {
-    shipSpeed = shipSpeedSlow
-    physicsBody?.linearDamping = shipDampingSlow
+  func setEngine(level: Int) {
+    shipSpeed = Tuning.Power.value(Tuning.Power.engineTilt, level: level)
+    dragSpeed = Tuning.Power.value(Tuning.Power.engineDragSpeed, level: level)
+    physicsBody?.linearDamping = Tuning.Power.value(Tuning.Power.engineDamping, level: level)
   }
 
 
   // ---------------------------
-  // Set speed med
+  // Powered shield ring: brighter and thicker with more charge
   // ---------------------------
 
-  func setShipSpeedMed() {
-    shipSpeed = shipSpeedMed
-    physicsBody?.linearDamping = shipDampingMed
+  func showBarrier(charge: Int, capacity: Int) {
+    barrier.isHidden = charge == 0
+    barrier.lineWidth = CGFloat(charge)
+    barrier.alpha = 0.2 + 0.15 * CGFloat(charge)
   }
 
-
-  // ---------------------------
-  // Set speed fast
-  // ---------------------------
-
-  func setShipSpeedFast() {
-    shipSpeed = shipSpeedFast
-    physicsBody?.linearDamping = shipDampingFast
+  // A bright flash when the barrier blocks a hit
+  func flashBarrier() {
+    let ring = SKShapeNode(circleOfRadius: 24)
+    ring.strokeColor = Colors.shieldStrokeColor
+    ring.lineWidth = 3
+    addChild(ring)
+    ring.run(.sequence([.group([.scale(to: 1.6, duration: 0.3), .fadeOut(withDuration: 0.3)]), .removeFromParent()]))
   }
 }

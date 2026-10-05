@@ -19,13 +19,19 @@ struct Colors {
   static let powerupMissile = UIColor(red: 0, green: 1, blue: 0, alpha: 1)
   static let powerupRapid = UIColor(red: 0.25, green: 1, blue: 0, alpha: 1)
   
+  // Missiles by weapons power, weakest to strongest
+  static let missileWeak = UIColor(r: 140, g: 130, b: 70)
+  static let missileLow = UIColor(r: 230, g: 220, b: 120)
   static let missile = UIColor.yellow
+  static let missileHigh = UIColor(r: 255, g: 150, b: 40)
+  static let missileMax = UIColor(r: 255, g: 245, b: 220)
   
   static let highScore = UIColor(r: 255, g: 210, b: 0)
   static let coin = UIColor(r: 230, g: 170, b: 0)
   static let enemyShot = UIColor(r: 255, g: 60, b: 60)
   static let gasExplosion = UIColor(r: 160, g: 255, b: 80)
   static let station = UIColor(r: 120, g: 200, b: 255)
+  static let engines = UIColor(r: 120, g: 255, b: 140)
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   

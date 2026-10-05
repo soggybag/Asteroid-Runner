@@ -27,9 +27,10 @@ extension GameScene {
     // -----------------------------
 
     case PhysicsCategory.Missile | PhysicsCategory.Asteroid:
-      guard let asteroid = firstNode as? Asteroid, secondNode.parent != nil else { return }
-      secondNode.removeFromParent()
-      hit(asteroid: asteroid, damage: Missile.missilePower.rawValue)
+      guard let asteroid = firstNode as? Asteroid, let missile = secondNode as? Missile, missile.parent != nil else { return }
+      missile.removeFromParent()
+      sparks(at: contact.contactPoint, level: missile.level, color: missile.color)
+      hit(asteroid: asteroid, damage: missile.damage)
       // Low mass asteroids get knocked back up the screen
       if asteroid.type == .lowMass, asteroid.parent != nil {
         asteroid.physicsBody?.velocity.dy += Tuning.Hazards.lowMassKnockback

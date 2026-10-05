@@ -29,9 +29,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   var missileMode = MissileMode.normal
 
-  var missileFireTime: TimeInterval = Tuning.Weapons.fireTime
-  var shipSpeed: CGFloat = 5
-  var autoFireOn = true
+  var rapidFireOn = false
+  var autoFireOn = true {
+    didSet {
+      powerPanel.update(grid: power, autoFire: autoFireOn)
+    }
+  }
+
+  // Seconds between shots, from weapons power and rapid fire
+  var missileFireTime: TimeInterval {
+    let base = Tuning.Power.value(Tuning.Power.weaponFireTime, level: power.level(.weapons))
+    return rapidFireOn ? base * Tuning.Weapons.rapidFireFactor : base
+  }
 
   var level = 0
   var timeSinceLastMissile: TimeInterval = 0
@@ -95,11 +104,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
 
-  var configVisible = false {
+  // Reactor power shared between engines, shields and weapons
+  var power = PowerGrid() {
     didSet {
-      hud.showConfig(show: configVisible)
+      applyPower()
     }
   }
+
+  // Charge in the powered shield, one hit per point
+  var shieldCharge = ShieldCharge(level: Tuning.Power.startingLevel)
+
+  // The power HUD, opened with a swipe up
+  var powerPanel: PowerPanel!
+  var powerPanelOpen = false
+
+  // Where a dragging finger wants the ship; the ship follows at engine speed
+  var dragTargetX: CGFloat?
 
   // True while the player is flying and can score or be hit
   var shipInPlay: Bool {
@@ -235,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     addChild(ship)
     ship.position.x = Screen.sharedInstance.centerX
     ship.position.y = Screen.sharedInstance.shipY
-    ship.setShipSpeedMed()
+    ship.setEngine(level: power.level(.engines))
 
     addChild(shield)
     ship.shield = shield
@@ -261,30 +281,74 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     hud = Hud()
     addChild(hud)
 
-    hud.button1Action = {
-      self.ship.setShipSpeedFast()
-      Missile.setPowerLow()
-    }
-
-    hud.button2Action = {
-      self.ship.setShipSpeedMed()
-      Missile.setPowerMed()
-    }
-
-    hud.button3Action = {
-      self.ship.setShipSpeedSlow()
-      Missile.setPowerHi()
-    }
-
-    hud.autoFireButtonAction = { autoFire in
-      self.autoFireOn = autoFire
-    }
-
     hud.tray.slotTapped = { slot in
       self.useItem(slot: slot)
     }
 
     lives = Tuning.Player.startingLives
+    setupPowerPanel()
+  }
+
+
+  // ---------------------------------
+  // Setup the power HUD
+  // ---------------------------------
+
+  func setupPowerPanel() {
+    let screen = Screen.sharedInstance
+    powerPanel = PowerPanel(width: screen.width - 16, maxLevel: power.maxLevel, reactor: power.reactor)
+    powerPanel.position = CGPoint(x: 8, y: screen.shipY + 40)
+    powerPanel.onRaise = { system in
+      if self.power.raise(system) { self.lightImpact.impactOccurred() }
+    }
+    powerPanel.onLower = { system in
+      if self.power.lower(system) { self.lightImpact.impactOccurred() }
+    }
+    powerPanel.onAutoFire = {
+      self.autoFireOn.toggle()
+    }
+    powerPanel.update(grid: power, autoFire: autoFireOn)
+  }
+
+
+  // ---------------------------------
+  // Open and close the power HUD. Time slows
+  // and steering locks while it's open.
+  // ---------------------------------
+
+  func openPowerPanel() {
+    guard !powerPanelOpen, shipInPlay, !gamePaused else { return }
+    powerPanelOpen = true
+    dragTargetX = nil
+    let scale = Tuning.Power.hudTimeScale
+    speed = scale
+    physicsWorld.speed = scale
+    // The panel's own animations run at full speed
+    powerPanel.speed = 1 / scale
+    powerPanel.alpha = 0
+    addChild(powerPanel)
+    powerPanel.run(.fadeIn(withDuration: 0.12))
+  }
+
+  func closePowerPanel() {
+    guard powerPanelOpen else { return }
+    powerPanelOpen = false
+    speed = 1
+    physicsWorld.speed = 1
+    powerPanel.removeAllActions()
+    powerPanel.removeFromParent()
+  }
+
+
+  // ---------------------------------
+  // Apply power levels to the ship
+  // ---------------------------------
+
+  func applyPower() {
+    ship.setEngine(level: power.level(.engines))
+    shieldCharge.setLevel(power.level(.shields))
+    ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
+    powerPanel?.update(grid: power, autoFire: autoFireOn)
   }
 
 
@@ -349,7 +413,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     ship.clearInvulnerable()
     shield.deactivate()
     missileMode = .normal
-    missileFireTime = Tuning.Weapons.fireTime
+    rapidFireOn = false
+    closePowerPanel()
+    power = PowerGrid()
+    shieldCharge = ShieldCharge(level: power.level(.shields))
+    ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
     level = 0
     lives = Tuning.Player.startingLives
     inventory.removeAll()
@@ -460,6 +528,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
   // ---------------------------------
+  // Sparks where a shot hits, more and
+  // brighter with weapons power
+  // ---------------------------------
+
+  func sparks(at point: CGPoint, level: Int, color: UIColor) {
+    let emitter = SKEmitterNode()
+    emitter.particleTexture = SKTexture(imageNamed: "spark")
+    emitter.position = point
+    emitter.zPosition = 20
+    emitter.particleBirthRate = 400
+    emitter.numParticlesToEmit = 4 + level * 3
+    emitter.particleLifetime = 0.25
+    emitter.particleLifetimeRange = 0.1
+    emitter.particleSpeed = 60 + CGFloat(level) * 25
+    emitter.particleSpeedRange = 40
+    emitter.emissionAngleRange = .pi * 2
+    emitter.particleScale = 0.08 + CGFloat(level) * 0.02
+    emitter.particleScaleSpeed = -0.3
+    emitter.particleAlphaSpeed = -3
+    emitter.particleColor = color
+    emitter.particleColorBlendFactor = 1
+    emitter.particleBlendMode = .add
+    addChild(emitter)
+    emitter.run(.sequence([.wait(forDuration: 0.5), .removeFromParent()]))
+  }
+
+
+  // ---------------------------------
   // Shoot missile
   // ---------------------------------
 
@@ -467,7 +563,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let points = missileMode.getPoints()
 
     for point in points {
-      let missile = Missile()
+      let missile = Missile(level: power.level(.weapons))
       addChild(missile)
       missile.position = ship.position + point
     }
@@ -491,9 +587,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func missileRapid() {
-    missileFireTime = Tuning.Weapons.rapidFireTime
+    rapidFireOn = true
     run(.sequence([.wait(forDuration: PowerUp.powerup_duration), .run({
-      self.missileFireTime = Tuning.Weapons.fireTime
+      self.rapidFireOn = false
     })]), withKey: RAPID_FIRE_TIMER)
   }
 
@@ -532,6 +628,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       return
     }
     lightImpact.impactOccurred()
+  }
+
+
+  // ---------------------------------
+  // Recharge the powered shield
+  // ---------------------------------
+
+  func updateShieldCharge(seconds: TimeInterval) {
+    guard shipInPlay, !gamePaused else { return }
+    let before = shieldCharge.charge
+    shieldCharge.update(seconds: seconds)
+    if shieldCharge.charge != before {
+      ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
+    }
   }
 
 
@@ -576,20 +686,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   // Drag anywhere to steer the ship
 
+  // Drag anywhere to steer. The finger sets a target and the ship follows
+  // as fast as its engines allow (see followDrag). Locked while the power
+  // HUD is open.
+
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    guard let touch = touches.first, !gamePaused, !ship.isHidden, !(gameState.currentState is StationState) else { return }
+    guard let touch = touches.first, !gamePaused, !ship.isHidden, !powerPanelOpen,
+          !(gameState.currentState is StationState) else { return }
     let dx = touch.location(in: self).x - touch.previousLocation(in: self).x
     let halfWidth = ship.size.width / 2
-    let x = ship.position.x + dx
-    ship.position.x = min(max(x, halfWidth), size.width - halfWidth)
+    let x = (dragTargetX ?? ship.position.x) + dx
+    dragTargetX = min(max(x, halfWidth), size.width - halfWidth)
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-
+    dragTargetX = nil
   }
 
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    dragTargetX = nil
+  }
 
+  // Move the ship toward the drag target at engine speed
+
+  func followDrag(seconds: TimeInterval) {
+    guard let target = dragTargetX else { return }
+    let step = ship.dragSpeed * CGFloat(seconds)
+    let dx = target - ship.position.x
+    ship.position.x += abs(dx) <= step ? dx : (dx > 0 ? step : -step)
   }
 
 
@@ -757,6 +881,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func shipHit() {
     guard shipInPlay, ship.canBeHit else { return }
 
+    // Powered shields take the hit if they have charge
+    if shieldCharge.absorb() {
+      ship.flashBarrier()
+      ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
+      lightImpact.impactOccurred()
+      ship.makeInvulnerable(duration: Tuning.Power.shieldHitInvulnerable)
+      return
+    }
+
     lives -= 1
     explode(at: ship.position)
     impact.impactOccurred()
@@ -802,13 +935,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var lastUpdateTime: TimeInterval = 0
   override func update(_ currentTime: TimeInterval) {
     // Clamp so a stall or a pause doesn't produce one huge step
-    let deltaTime = lastUpdateTime == 0 ? 0 : min(currentTime - lastUpdateTime, 1 / 20)
+    let frameTime = lastUpdateTime == 0 ? 0 : min(currentTime - lastUpdateTime, 1 / 20)
     lastUpdateTime = currentTime
+    // Game time runs slow while the power HUD is open
+    let deltaTime = frameTime * TimeInterval(speed)
+
+    if powerPanelOpen && !shipInPlay {
+      closePowerPanel()
+    }
+
     gameState.update(deltaTime: deltaTime)
     handleUpdate(seconds: deltaTime)
 
     shield.position = ship.position
     updateShield(seconds: deltaTime)
+    updateShieldCharge(seconds: deltaTime)
 
     let screenRect = CGRect(origin: .zero, size: size)
     for case let asteroid as Asteroid in children where asteroid.type == .elastic && !asteroid.edgeArmed {
@@ -822,7 +963,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func handleUpdate(seconds: TimeInterval) {
-    if let accelerationData = MotionManager.sharedInstance.accelerometer {
+    followDrag(seconds: seconds)
+
+    if !powerPanelOpen, let accelerationData = MotionManager.sharedInstance.accelerometer {
       let x = CGFloat(accelerationData.acceleration.x)
       ship.moveForce(x: x * Tuning.Player.tiltForce)
     }
@@ -852,8 +995,8 @@ extension GameScene {
       return
     }
 
-    // Steering is by drag (see touchesMoved) or tilt. Vertical swipes open
-    // and close the config panel.
+    // Steering is by drag (see touchesMoved) or tilt. Swipe up opens the
+    // power HUD, swipe down closes it.
 
     swipeDown.addTarget(self, action: #selector(GameScene.handleSwipe))
     swipeDown.direction = .down
@@ -868,11 +1011,11 @@ extension GameScene {
 
   @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
     switch gesture.direction {
-    case .down:
-      configVisible = true
-
     case .up:
-      configVisible = false
+      openPowerPanel()
+
+    case .down:
+      closePowerPanel()
 
     default:
       return

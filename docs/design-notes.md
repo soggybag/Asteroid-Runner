@@ -102,6 +102,14 @@ The HUD should feel like the ship's console. Two layouts to try, possibly togeth
 - **Bars:** one bar per system. Raising a bar sends it more energy; if there isn't enough power, raising one lowers another.
 - The power HUD decisions above (swipe up, time slows, one tap per decision) still apply.
 
+### More kinds of waves (2026-10-05)
+
+Every wave today is the same shape: rocks fall, you shoot. The game needs some different types of levels and waves for variety between stations.
+
+- **Maze wave:** a field of obstacles the ship navigates by dodging, not shooting. Indestructible rocks or walls with gaps to weave through.
+- **Lane wave:** obstacles arrive in lanes, so the choice is which lane to be in and when to switch.
+- Both reward engine power over weapons, which gives the power HUD a reason to change between waves. The stage announcement says what kind of wave is coming.
+
 ### Other ideas from 2026-10-02
 
 - **Maze levels:** an alternate stage type with a field of asteroids to navigate rather than shoot. Good variety between stations; parked below.
@@ -240,6 +248,18 @@ The item tray comes first because it's small, it builds on code that exists, and
 - [x] Tests for the tray rules in `Asteroid RunnerTests/InventoryTests.swift`
 - [ ] Playtest: is the top strip reachable mid-flight? Is the tray-full rule fun? (Testing now)
 
+**Phase 2 status (started 2026-10-05)**
+
+- [x] Reactor of 6 units shared by engines, shields and weapons, each 0–4, starting 2/2/2
+- [x] Power HUD as bars: swipe up to open, down to close; time runs at 25% and steering locks while open; + and − per system; raising when maxed takes from the system with the most
+- [x] Engines: drag-follow speed and tilt force
+- [x] Shields: one charge per level that blocks a hit and recharges; ring around the ship
+- [x] Weapons: fire rate and damage; level 0 is a weak trickle shot; shots look stronger with power; sparks where shots hit
+- [x] Old speed-vs-power config panel removed; auto fire toggle moved into the power HUD
+- [x] Tests in `Asteroid RunnerTests/PowerTests.swift`
+- [ ] Playtest: do players reroute power without being told? (the Phase 2 gate)
+- [ ] Later in Phase 2: fuel as a boost; the ship-view HUD once module art exists
+
 **Phase 3 status (started early, 2026-10-04)**
 
 - [x] Named stations every 1–5 waves, warned a wave ahead
@@ -262,7 +282,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - **Coin waves:** a special wave of coin patterns, from the README
 - **iPad layout, game controllers, Mac**
 - **Procedural rock art** for each asteroid type (cracked glass, glowing gas, metallic brass)
-- **Maze levels:** a stage of asteroids to weave through rather than shoot
+- **Maze and lane waves:** see "More kinds of waves" above
 - **Docking mini-game:** line up with the station's port; only if it stays fun on repeat
 - **Station reputation:** keepers remember you, give better prices to regulars
 
@@ -277,19 +297,22 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] How do modules and a hull meter combine: hull on the Command module only, or a small meter per module?
 - [x] Does fuel exist? Yes (2026-10-04): it boosts the reactor and depletes; empty means reactor power only.
 - [ ] Does fuel use tray slots, its own tank, or cargo bay space?
-- [ ] HUD: ship view, bars, or both?
+- [ ] HUD: ship view, bars, or both? Bars built first (2026-10-05); ship view once module art exists
 - [ ] Does the item tray stay on screen, or move into the HUD so using items means opening it?
 - [ ] Which module does a hit knock off: the side that was hit (proposed), armor first, or random?
 - [ ] How far ahead does the game announce a station: one wave, two, or a scanner reading?
 - [ ] Tray full: lose the pickup (built), replace the oldest, or convert to coins?
-- [ ] Should weapons only fire while powered, so cutting them leaves the ship defenseless?
-- [ ] How many power units to start with, and how much does each level do?
+- [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
+- [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
 - [ ] How slow should time run while the HUD is open, and is the slow-time budget needed?
 
 **Decisions log**
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | Phase 2 power core built: 6-unit reactor, bars HUD, engines/shields/weapons effects; weapons at 0 keep a trickle shot |
+| 2026-10-05 | Shots show their power level; sparks where they hit |
+| 2026-10-05 | Need more kinds of waves: a maze wave (dodge obstacles) and a lane wave (obstacles in lanes) |
 | 2026-10-04 | Stations built ahead of the power core: docking, greetings, shop with coins, repairs restore lost lives until modules exist |
 | 2026-10-04 | Opening story moved to `Asteroid Runner/Data/intro.json`; the old draft story is kept there as `draftStory` |
 | 2026-10-04 | Version, build number and commit shown in the bottom-left corner, stamped on every build |

@@ -23,32 +23,56 @@ enum Tuning {
   }
 
 
-  // MARK: Ship handling, set by the config panel
+  // MARK: Power
+  //
+  // The reactor's units are shared between engines, shields and weapons.
+  // Tables are indexed by a system's power level, 0 ... maxLevel.
 
-  enum Ship {
-    static let speedSlow: CGFloat = 0.1
-    static let speedMed: CGFloat = 0.25
-    static let speedFast: CGFloat = 0.5
+  enum Power {
+    static let reactorUnits = 6
+    static let maxLevel = 4
+    static let startingLevel = 2
 
-    static let dampingSlow: CGFloat = 0.25
-    static let dampingMed: CGFloat = 0.5
-    static let dampingFast: CGFloat = 1
+    // Game speed while the power HUD is open
+    static let hudTimeScale: CGFloat = 0.25
+
+    // Engines: tilt steering force and drift damping, and how fast the
+    // ship can follow a dragging finger, in points per second
+    static let engineTilt: [CGFloat] = [0.08, 0.15, 0.25, 0.38, 0.5]
+    static let engineDamping: [CGFloat] = [0.25, 0.35, 0.5, 0.75, 1]
+    static let engineDragSpeed: [CGFloat] = [250, 400, 600, 850, 1200]
+
+    // Weapons: seconds between shots, damage per hit, and missile mass
+    // (how hard a shot pushes an asteroid). Level 0 is the Command
+    // module's weak trickle shot.
+    static let weaponFireTime: [TimeInterval] = [0.6, 0.4, 0.3, 0.22, 0.16]
+    static let weaponDamage: [CGFloat] = [0.5, 1, 2, 2.5, 3]
+    static let weaponMass: [CGFloat] = [0.001, 0.00125, 0.0025, 0.004, 0.005]
+
+    // Shields: each level holds one charge that absorbs one hit. Seconds
+    // to rebuild one charge at each level (level 0 has no shield).
+    static let shieldRecharge: [TimeInterval] = [0, 15, 12, 9, 6]
+    // Blinking, can't be hit, after the shield blocks a hit
+    static let shieldHitInvulnerable: TimeInterval = 1
+
+    static func shieldRechargeTime(level: Int) -> TimeInterval {
+      return shieldRecharge[min(max(level, 1), maxLevel)]
+    }
+
+    // Read a table safely at a level
+    static func value<T>(_ table: [T], level: Int) -> T {
+      return table[min(max(level, 0), table.count - 1)]
+    }
   }
 
 
   // MARK: Weapons
 
   enum Weapons {
-    // Seconds between shots
-    static let fireTime: TimeInterval = 0.3
-    static let rapidFireTime: TimeInterval = 0.15
+    // Rapid fire multiplies the time between shots by this
+    static let rapidFireFactor: TimeInterval = 0.5
 
     static let missileSpeed: CGFloat = 300
-
-    // Missile mass, how hard a shot pushes an asteroid
-    static let massLow: CGFloat = 0.00125
-    static let massMed: CGFloat = 0.0025
-    static let massHi: CGFloat = 0.005
   }
 
 

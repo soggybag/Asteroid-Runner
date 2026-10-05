@@ -162,8 +162,8 @@ class StationPanel: SKNode {
 }
 
 
-// A small button for one thing in the shop. Dimmed when it can't be
-// afforded, but still tappable so the station can say why.
+// A small button for one thing in the shop, also used by the power HUD.
+// Dimmed when it can't be used, but still tappable so the game can say why.
 
 class ShopButton: SKSpriteNode {
 
@@ -177,11 +177,11 @@ class ShopButton: SKSpriteNode {
     }
   }
 
-  init(title: String, color: UIColor) {
-    super.init(texture: nil, color: .clear, size: ShopButton.size)
+  init(title: String, color: UIColor, width: CGFloat = ShopButton.size.width) {
+    let s = CGSize(width: width, height: ShopButton.size.height)
+    super.init(texture: nil, color: .clear, size: s)
     isUserInteractionEnabled = true
 
-    let s = ShopButton.size
     let shape = SKShapeNode(rect: CGRect(x: -s.width / 2, y: -s.height / 2, width: s.width, height: s.height), cornerRadius: 8)
     shape.strokeColor = color
     shape.fillColor = color.withAlphaComponent(0.15)

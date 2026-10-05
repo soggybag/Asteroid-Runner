@@ -138,9 +138,25 @@ Things the simulator couldn't test. Answer in a few words; skip any that don't a
 
     Answer:
 
-### Config panel
+### Power HUD
 
-16. Did you use the speed-vs-power options (swipe down)? Did they make a noticeable difference?
+16. Did you open the power HUD (swipe up) without being reminded? When?
+
+    Answer:
+
+16a. Can you tell what each system does from how the ship feels?
+
+    Answer:
+
+16b. Do the slowed time and locked steering feel fair, or frustrating?
+
+    Answer:
+
+16c. Can you see your weapon level in the shots, and the sparks on hits?
+
+    Answer:
+
+16d. Did the shield ring block hits you expected it to? Did you notice it recharge?
 
     Answer:
 
