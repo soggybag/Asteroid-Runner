@@ -186,6 +186,40 @@ Multi-shot is the most fun pickup. Develop a wide range of weapons in that spiri
 
 Haptics feel right. Sound and music come with the art update.
 
+### What the game borrows from FTL (2026-10-05)
+
+FTL: Faster Than Light is the closest model for the ship-and-journey side of the game. What carries over, and what changes:
+
+| FTL | Asteroid Runner | Status |
+| --- | --- | --- |
+| Reactor power split between systems with bars | Reactor units shared by engines, shields and weapons in the power HUD | Built |
+| Damage knocks out systems, repaired at stores | Hits knock off modules; repairs at stations | Planned (Phase 5) |
+| Sector map: choose the next beacon, see a little of what's there | System map: choose the next station and see hints of the stages on the way | New idea, below |
+| Stores at some beacons; scrap as currency | Stations with shops; coins | Built (basic) |
+| Text events with choices and side effects | Station conversations and visits with side effects | Planned (Phase 4 and 9) |
+| Real-time fights you can pause | Action flight; time slows while the HUD is open | Built |
+
+What stays our own: the moment-to-moment game is flying and shooting through asteroid fields, not tactical ship-to-ship combat.
+
+### System map (2026-10-05)
+
+An abstract map of the solar system, shown at a station when the player is ready to launch. The player chooses the next destination; the map hints at what lies between here and there.
+
+```
+   SUN ·  ◉ Halden's Rock ──── ◉ Bastion Seven ──── ◉ The Lucky Drift ···· outer planets
+               (you are here)    ▲▲ rocks, turrets      ▦ maze, ▲ rocks
+                     \               3 stages              5 stages
+                      ◉ Mars Yard
+                        ║ lanes, bosstroids
+                        2 stages
+```
+
+- **Each route shows hints, not details:** icons for the kinds of stages on the way (rocks, maze, lanes, turrets, a bosstroid set piece) and how many stages long it is. A scanner or sensor upgrade could reveal more.
+- **The route sets the number of stages** to the next station, replacing today's random 1–5.
+- **Choice is the point.** A short route through turrets, or a long safe one; a station with good trade prices, or one that repairs cheaply. Players set their own pace, which answers the question of how hard flying should be once trading is added.
+- **The voyage goes outward.** Inner planets first, outer planets later; distance traveled is shown in the HUD and at game over. Difficulty can rise with distance from the sun.
+- **Ties into other ideas:** trade (prices differ by station), station side effects (a rumor marks a route), pirates (a route known for them), and sensors (more detail on the map).
+
 ### Other ideas from 2026-10-02
 
 - **Maze levels:** an alternate stage type with a field of asteroids to navigate rather than shoot. Good variety between stations; parked below.
@@ -312,7 +346,7 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 | **1 · Item tray** | Every pickup is a decision | Built. Playtest: pickups too common to save; the tray looks like a phone app. Rework folds into Phase 2's HUD and Phase 3's pickup balance. | Players save items for a hard wave (not yet) |
 | **2 · Power core and HUD** | Prototype engines, shields, weapons | Built: reactor, bars HUD, per-level effects. Next: HUD slides down from the top as a transparent overlay (swipe down); items move into it with counts; thrust and maneuver split; maybe left and right panels. Later: fuel. | Testers reroute power without being told, and call it fun (not yet: the game is too easy to need it) |
 | **3 · Challenge and variety** | Make choices matter | Fewer, more purposeful pickups. Steeper, wider difficulty ramp; weaker early shields; drag lag. Wave types: maze and lanes. More enemies that shoot back. Weapon variety in the spirit of multi-shot (Tyrian). | A strong player needs the HUD to get past stage 20, and stages feel different from each other |
-| **4 · Stations and trade** | A reason to dock | Screen clears and a slower approach before docking. Trade goods and cargo; powerups mostly from stations; visits with side effects; stations orbiting planets on the voyage outward; real dialog. | Players spend coins at most stations |
+| **4 · Stations and trade** | A reason to dock | Screen clears and a slower approach before docking. A system map to choose the next station, with hints of the stages on each route. Trade goods and cargo; powerups mostly from stations; visits with side effects; stations orbiting planets on the voyage outward; real dialog. | Players spend coins at most stations |
 | **5 · Modular ship** | A ship you care about | Command module as the base; modules bolt on and replace lives; maybe a hull meter; cargo modules. Salvage to recover. Buy, repair and upgrade at stations. | Players spend coins on modules, and runs last longer |
 | **6 · Encounters** | Threats inside the ship | Space pirates boarding to steal cargo; a space virus draining energy; both removed by hand in the HUD. | Players handle an encounter without being told how |
 | **7 · Look and sound** | Feel like a real game | Art update (hand-drawn), station and module art, sound, music, hit effects. | Someone who is not you asks to play again |
@@ -415,6 +449,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Should powerups mostly come from stations, with space giving loot and coins?
 - [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
 - [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
+- [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
 - [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
@@ -424,6 +459,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | New idea: a system map, FTL style. Choose the next station at launch; routes hint at their stages and length. Added to Phase 4 |
 | 2026-10-05 | Round 2 playtest: a better game but too hard past stage 10 (bosstroid waves). Next: balance pass 2, pickups collected before docking, game over stats, then the HUD rework |
 | 2026-10-05 | Balance pass: pickups a quarter as common and capped, turrets and bases drop items, a ramp that keeps climbing, weaker early shields, slower drag, a clear screen before docking |
 | 2026-10-05 | Phase 0 playtest done (about 10 games, best stage 48 on 3 lives). Game too easy and samey; challenge and variety (new Phase 3) come before more systems |
