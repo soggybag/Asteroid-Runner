@@ -112,7 +112,7 @@ Five games on build 37. **"This is a better game"**, but the balance pass oversh
 - **Shields fair; docking better; coins spent; drag lag needs fine-tuning.**
 - **New ideas:** the station screen should look different from the HUD; show stats at game over (stage reached, distance traveled, asteroids destroyed, turrets destroyed), with distance in the HUD too; a wider range of power-ups and ship modifications so players personalize their ships; if commerce is added, the difficulty has to leave room for it.
 
-Changes are in [design-notes.md](design-notes.md#playtest-round-2-findings-2026-10-05).
+Changes are in [design-notes.md](design-notes.md#playtest-round-2-findings-2026-10-05). Round 3 is [playtest-round-3.md](playtest-round-3.md).
 
 ## General notes
 

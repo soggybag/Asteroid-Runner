@@ -99,7 +99,8 @@ with a warning; a smart bomb can break bosstroids. The shield blocks enemy shots
   sets these on every build. Change the version itself in the target's
   General settings.
 - **Playtesting:** round 1 notes are in [docs/playtest-notes.md](docs/playtest-notes.md);
-  round 2 (balance pass) is [docs/playtest-round-2.md](docs/playtest-round-2.md).
+  round 2 (balance pass) is [docs/playtest-round-2.md](docs/playtest-round-2.md);
+  round 3 (balance pass 2) is [docs/playtest-round-3.md](docs/playtest-round-3.md).
   Note the version from the corner with each game.
 
 ## Todo

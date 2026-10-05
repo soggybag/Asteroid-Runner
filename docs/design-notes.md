@@ -381,7 +381,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Smart bomb: 10 pulses of 2 damage, enough to break a bosstroid (was 1)
     - Wider power gaps: drag 100–620 pt/s, fire 0.7–0.12 s, damage 0.5–4, shields up to 3 charges recharging in 6 s at level 4
 - [x] Quick wins: pickups on screen are pulled into the ship before docking; distance in AU in the HUD; game over shows stage, distance, asteroids and turrets destroyed
-- [ ] Playtest round 3
+- [ ] Playtest round 3 in [playtest-round-3.md](playtest-round-3.md)
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
