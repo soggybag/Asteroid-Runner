@@ -38,7 +38,7 @@
 		D84E3743205CFF2100512E12 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3742205CFF2100512E12 /* Button.swift */; };
 		D84E3745205D0A3E00512E12 /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3744205D0A3E00512E12 /* PowerUp.swift */; };
 		D84E3747205D6A4000512E12 /* PowerUpBomb.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3746205D6A4000512E12 /* PowerUpBomb.swift */; };
-		D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3748205D6C1600512E12 /* PowerUpType.swift */; };
+		D84E3749205D6C1600512E12 /* Pickup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3748205D6C1600512E12 /* Pickup.swift */; };
 		D84E374E205D874000512E12 /* ReadyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E374A205D873F00512E12 /* ReadyState.swift */; };
 		D84E374F205D874000512E12 /* GameOverState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E374B205D873F00512E12 /* GameOverState.swift */; };
 		D84E3750205D874000512E12 /* CountDownState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E374C205D874000512E12 /* CountDownState.swift */; };
@@ -119,7 +119,7 @@
 		D84E3742205CFF2100512E12 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D84E3744205D0A3E00512E12 /* PowerUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		D84E3746205D6A4000512E12 /* PowerUpBomb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpBomb.swift; sourceTree = "<group>"; };
-		D84E3748205D6C1600512E12 /* PowerUpType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpType.swift; sourceTree = "<group>"; };
+		D84E3748205D6C1600512E12 /* Pickup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pickup.swift; sourceTree = "<group>"; };
 		D84E374A205D873F00512E12 /* ReadyState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadyState.swift; sourceTree = "<group>"; };
 		D84E374B205D873F00512E12 /* GameOverState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverState.swift; sourceTree = "<group>"; };
 		D84E374C205D874000512E12 /* CountDownState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountDownState.swift; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 				A1B2C3D4E5F6000000000007 /* PowerUpCoin.swift */,
 				D8AFE0042062039900BC11D8 /* PowerUpMissile.swift */,
 				D8AFE00620620E3800BC11D8 /* PowerUpRapid.swift */,
-				D84E3748205D6C1600512E12 /* PowerUpType.swift */,
+				D84E3748205D6C1600512E12 /* Pickup.swift */,
 				A1B2C3D4E5F6000000000020 /* Inventory.swift */,
 			);
 			path = PowerUp;
@@ -515,7 +515,7 @@
 				D84E3750205D874000512E12 /* CountDownState.swift in Sources */,
 				D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */,
 				D82F3DE5206D76C0002BEFC1 /* MissilePower.swift in Sources */,
-				D84E3749205D6C1600512E12 /* PowerUpType.swift in Sources */,
+				D84E3749205D6C1600512E12 /* Pickup.swift in Sources */,
 				A1B2C3D4E5F6000000000021 /* Inventory.swift in Sources */,
 				D8E0A4E4206D6B0F00393F37 /* AsteroidDirection.swift in Sources */,
 				D8AFE00B2066ED9100BC11D8 /* GameSceneContact.swift in Sources */,

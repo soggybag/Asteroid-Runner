@@ -79,22 +79,30 @@ struct PowerGridTests {
 
 struct ShieldChargeTests {
 
-  @Test func startsFullAndBlocksOneHitPerLevel() {
+  @Test func startsEmpty() {
     var shield = ShieldCharge(level: 2)
-    let first = shield.absorb()
-    let second = shield.absorb()
-    let third = shield.absorb()
-    #expect(first && second)
-    #expect(!third)
+    #expect(shield.charge == 0)
+    let blocked = shield.absorb()
+    #expect(!blocked)
+  }
+
+  @Test func blocksOneHitPerCharge() {
+    var shield = ShieldCharge(level: 4, full: true)
+    #expect(shield.charge == Tuning.Power.shieldCapacity[4])
+    for _ in 0 ..< shield.capacity {
+      let blocked = shield.absorb()
+      #expect(blocked)
+    }
+    let extra = shield.absorb()
+    #expect(!extra)
   }
 
   @Test func rechargesOverTime() {
     var shield = ShieldCharge(level: 2)
-    shield.absorb()
     shield.update(seconds: Tuning.Power.shieldRechargeTime(level: 2) - 0.1)
-    #expect(shield.charge == 1)
+    #expect(shield.charge == 0)
     shield.update(seconds: 0.2)
-    #expect(shield.charge == 2)
+    #expect(shield.charge == 1)
   }
 
   @Test func noShieldAtLevelZero() {
@@ -105,11 +113,11 @@ struct ShieldChargeTests {
   }
 
   @Test func loweringPowerDropsExtraCharge() {
-    var shield = ShieldCharge(level: 3)
+    var shield = ShieldCharge(level: 4, full: true)
     shield.setLevel(1)
-    #expect(shield.charge == 1)
-    shield.setLevel(3)
-    #expect(shield.charge == 1)
+    #expect(shield.charge == Tuning.Power.shieldCapacity[1])
+    shield.setLevel(4)
+    #expect(shield.charge == Tuning.Power.shieldCapacity[1])
   }
 }
 
@@ -124,6 +132,7 @@ struct PowerTuningTests {
     #expect(Tuning.Power.weaponDamage.count == count)
     #expect(Tuning.Power.weaponMass.count == count)
     #expect(Tuning.Power.shieldRecharge.count == count)
+    #expect(Tuning.Power.shieldCapacity.count == count)
     #expect(Missile.sizes.count == count)
     #expect(Missile.colors.count == count)
   }
@@ -136,6 +145,7 @@ struct PowerTuningTests {
     }
     for level in 1 ..< Tuning.Power.maxLevel {
       #expect(Tuning.Power.shieldRecharge[level + 1] < Tuning.Power.shieldRecharge[level])
+      #expect(Tuning.Power.shieldCapacity[level + 1] >= Tuning.Power.shieldCapacity[level])
     }
   }
 

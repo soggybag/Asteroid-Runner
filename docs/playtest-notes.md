@@ -191,6 +191,23 @@ Astervoids
     - Space Virus enters the HUD at a random place and starts to siphon energy. T must be removed manually.
 
 
+## Round 2: balance pass (from build 37)
+
+Same questions, focused on difficulty. Log the version from the corner.
+
+| # | Date | Version | Stage reached | Lives left | Opened power HUD? | What felt off |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | | | | | | |
+| 2 | | | | | | |
+| 3 | | | | | | |
+
+- Where did it start to feel hard? Too early, too late?
+- Did you need the power HUD to survive? When did you open it?
+- Are pickups now rare enough to save, or too rare?
+- Is the drag lag noticeable? Does it feel like piloting, or just sluggish?
+- Did turrets and bases dropping items make you go after them?
+- Does docking feel right now: clear screen, slower approach?
+
 ### Summary (2026-10-05)
 
 Build v2.0 (35), about 10 games. **Too easy and too samey: best run stage 48 on 3 lives, without needing the power HUD.** Pickups come too often to be worth saving, coins are never spent, and stages feel alike. Turrets and multi-shot are the most fun. The tray and power panel feel like a phone app rather than a ship's HUD. Findings and the changes they lead to are in [design-notes.md](design-notes.md#playtest-findings-2026-10-05).

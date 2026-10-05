@@ -44,6 +44,9 @@ class StationState: GKState {
     scene.inventory.lowerShield()
     scene.shield.deactivate()
 
+    // Anything still on screen fades away before the station arrives
+    scene.fadeOutLeftovers()
+
     let ship = scene.ship
     ship.physicsBody?.velocity = .zero
     ship.physicsBody?.isDynamic = false
@@ -53,14 +56,15 @@ class StationState: GKState {
     scene.addChild(node)
     stationNode = node
 
+    // The station drifts in first, then the ship flies up to its port
     let dockTime = Tuning.Stations.dockTime
-    let slideIn = SKAction.moveTo(y: stationY, duration: dockTime)
+    let slideIn = SKAction.moveTo(y: stationY, duration: dockTime * 0.6)
     slideIn.timingMode = .easeOut
     node.run(slideIn, withKey: StationState.DOCK)
 
-    let fly = SKAction.move(to: dockingPoint, duration: dockTime * 0.8)
+    let fly = SKAction.move(to: dockingPoint, duration: dockTime * 0.45)
     fly.timingMode = .easeInEaseOut
-    ship.run(.sequence([.wait(forDuration: dockTime * 0.2), fly]), withKey: StationState.DOCK)
+    ship.run(.sequence([.wait(forDuration: dockTime * 0.55), fly]), withKey: StationState.DOCK)
 
     scene.run(.sequence([.wait(forDuration: dockTime), .run {
       self.finishDocking()

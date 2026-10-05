@@ -25,7 +25,59 @@ struct SpawnIntervalTests {
   }
 
   @Test func neverDropsBelowTheFloor() {
-    #expect(Tuning.Stages.spawnInterval(level: 100) == 0.35)
+    #expect(Tuning.Stages.spawnInterval(level: 100) == Tuning.Stages.spawnFloor)
+  }
+}
+
+struct DifficultyRampTests {
+
+  @Test func rocksSpeedUpEveryStageThenLevelOff() {
+    #expect(Tuning.Stages.speedScale(level: 1) == 1)
+    for level in 1 ..< 30 {
+      #expect(Tuning.Stages.speedScale(level: level + 1) > Tuning.Stages.speedScale(level: level))
+    }
+    #expect(Tuning.Stages.speedScale(level: 200) == 2)
+  }
+
+  @Test func pairsStartAtStageNine() {
+    #expect(Tuning.Stages.pairChance(level: 8) == 0)
+    #expect(Tuning.Stages.pairChance(level: 9) > 0)
+    #expect(Tuning.Stages.pairChance(level: 200) == 0.5)
+  }
+
+  @Test func featuredShareGrowsAfterEveryTypeHasDebuted() {
+    #expect(Tuning.Stages.featuredScale(level: 11) == 1)
+    #expect(Tuning.Stages.featuredScale(level: 20) > 1)
+    #expect(Tuning.Stages.featuredScale(level: 200) == 2)
+    // Even doubled, a wave is never all one special type
+    for type in AsteroidType.unlockOrder {
+      #expect(type.waveShare * Tuning.Stages.featuredScale(level: 200) < 1)
+    }
+  }
+
+  @Test func wavesGetLongerUpToACap() {
+    #expect(Tuning.Stages.waveDuration(level: 1) == 10)
+    #expect(Tuning.Stages.waveDuration(level: 20) > 10)
+    #expect(Tuning.Stages.waveDuration(level: 200) == 18)
+  }
+}
+
+struct PickupTests {
+
+  @Test func everyPickupCanTurnUp() {
+    let weighted = Set(Tuning.PowerUps.weights.filter { $0.weight > 0 }.map(\.pickup))
+    #expect(weighted == Set(Pickup.allCases))
+  }
+
+  @Test func itemsOnlyNeverGivesPointsOrCoins() {
+    for _ in 0 ..< 500 {
+      #expect(Pickup.random(itemsOnly: true).isItem)
+    }
+  }
+
+  @Test func pickupsAreRare() {
+    #expect(Tuning.PowerUps.pickupChance <= 0.1)
+    #expect(Tuning.PowerUps.maxItemsPerWave >= 1)
   }
 }
 

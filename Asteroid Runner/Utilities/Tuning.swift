@@ -40,7 +40,7 @@ enum Tuning {
     // ship can follow a dragging finger, in points per second
     static let engineTilt: [CGFloat] = [0.08, 0.15, 0.25, 0.38, 0.5]
     static let engineDamping: [CGFloat] = [0.25, 0.35, 0.5, 0.75, 1]
-    static let engineDragSpeed: [CGFloat] = [250, 400, 600, 850, 1200]
+    static let engineDragSpeed: [CGFloat] = [140, 200, 280, 380, 520]
 
     // Weapons: seconds between shots, damage per hit, and missile mass
     // (how hard a shot pushes an asteroid). Level 0 is the Command
@@ -49,9 +49,10 @@ enum Tuning {
     static let weaponDamage: [CGFloat] = [0.5, 1, 2, 2.5, 3]
     static let weaponMass: [CGFloat] = [0.001, 0.00125, 0.0025, 0.004, 0.005]
 
-    // Shields: each level holds one charge that absorbs one hit. Seconds
-    // to rebuild one charge at each level (level 0 has no shield).
-    static let shieldRecharge: [TimeInterval] = [0, 15, 12, 9, 6]
+    // Shields: charges held at each level (each blocks one hit), and seconds
+    // to rebuild one charge. The shield starts each game empty.
+    static let shieldCapacity: [Int] = [0, 1, 1, 2, 2]
+    static let shieldRecharge: [TimeInterval] = [0, 20, 15, 12, 9]
     // Blinking, can't be hit, after the shield blocks a hit
     static let shieldHitInvulnerable: TimeInterval = 1
 
@@ -86,9 +87,18 @@ enum Tuning {
     static let points = 100
     static let coinPoints = 250
 
-    // Each spawn rolls 0 ..< spawnRoll. Rolls 0 to 5 are powerups and coins,
-    // so 6 in 25 spawns are pickups and the rest are asteroids.
-    static let spawnRoll = 25
+    // Chance that a spawn is a pickup instead of a rock. Was 24%.
+    static let pickupChance = 0.06
+
+    // At most this many items (bomb, shield, multi-shot, rapid fire) drift
+    // in per wave. Points and coins don't count. Items dropped by destroyed
+    // turrets and bases don't count either.
+    static let maxItemsPerWave = 2
+
+    // How often each pickup turns up, relative to the others
+    static let weights: [(pickup: Pickup, weight: Int)] = [
+      (.points, 3), (.coin, 3), (.multiShot, 2), (.rapidFire, 2), (.bomb, 1), (.shield, 1)
+    ]
   }
 
 
@@ -129,8 +139,12 @@ enum Tuning {
     // Repairing one point of damage (one lost life, until modules)
     static let repairPrice = 15
 
-    // Docking and launching animations, in seconds
-    static let dockTime: TimeInterval = 2.5
+    // Before a station, wait up to this long for the screen to clear
+    static let maxClearWait: TimeInterval = 20
+
+    // Docking and launching animations, in seconds. The station arrives in
+    // the first part, then the ship flies up to it.
+    static let dockTime: TimeInterval = 5
     static let launchTime: TimeInterval = 1.5
   }
 
@@ -138,8 +152,11 @@ enum Tuning {
   // MARK: Stages
 
   enum Stages {
-    // How long asteroids keep spawning each wave
-    static let waveDuration: TimeInterval = 10
+    // How long asteroids keep spawning: 10 s at stage 1, a quarter second
+    // longer each stage, up to 18 s
+    static func waveDuration(level: Int) -> TimeInterval {
+      return min(18, 10 + 0.25 * TimeInterval(level - 1))
+    }
     // After a wave, wait for the screen to clear, checking this often, up to the max
     static let clearCheckInterval: TimeInterval = 0.5
     static let maxClearWait: TimeInterval = 10
@@ -153,9 +170,27 @@ enum Tuning {
     // In waves from the left or right, this share still come from the top
     static let sideWaveTopShare = 1.0 / 3
 
-    // Seconds between spawns: 1.0 at stage 1, 0.06 faster each stage, never below 0.35
+    // Seconds between spawns: 1.0 at stage 1, 0.05 faster each stage,
+    // never below the floor (reached at stage 17)
+    static let spawnFloor: TimeInterval = 0.2
     static func spawnInterval(level: Int) -> TimeInterval {
-      return max(0.35, 1.0 - 0.06 * TimeInterval(level - 1))
+      return max(spawnFloor, 1.0 - 0.05 * TimeInterval(level - 1))
+    }
+
+    // Rocks get faster every stage: 3% a stage, up to double speed at stage 35
+    static func speedScale(level: Int) -> CGFloat {
+      return min(2, 1 + 0.03 * CGFloat(level - 1))
+    }
+
+    // From stage 9, a spawn sometimes brings two rocks: 4% more each stage, up to half
+    static func pairChance(level: Int) -> Double {
+      return min(0.5, max(0, 0.04 * Double(level - 8)))
+    }
+
+    // Once every type has debuted (stage 12), the featured type makes up a
+    // growing share of each wave: 5% more each stage, up to double
+    static func featuredScale(level: Int) -> Double {
+      return min(2, 1 + 0.05 * Double(max(0, level - 11)))
     }
   }
 

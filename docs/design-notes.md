@@ -295,13 +295,27 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 
 **Up next (2026-10-05).** The playtest showed the decision systems aren't needed because nothing pushes back, so challenge comes before more systems:
 
-1. **Balance pass** (Phase 3): fewer pickups, a steeper ramp, weaker early shields, more drag lag; wait for the screen to clear before docking.
+1. ~~**Balance pass** (Phase 3)~~ Done 2026-10-05; see Phase 3 status.
 2. **HUD rework** (Phase 2): slides down from the top as a transparent overlay; items move into it with counts.
 3. **Thrust and maneuver** (Phase 2).
 4. **Maze and lane waves** (Phase 3).
 5. **Weapon variety** (Phase 3).
 
 Stations were built early, ahead of their phase, to see how they work; trade waits for Phase 4.
+
+**Phase 3 status (started 2026-10-05)**
+
+- [x] Balance pass. Numbers in `Tuning.swift`:
+    - Pickups: 6% of spawns (was 24%), weighted toward points, coins, multi-shot and rapid fire; at most 2 items drift in per wave
+    - Turrets and bases drop an item when destroyed
+    - Ramp keeps climbing: spawn floor 0.2 s (was 0.35) reached at stage 17; rocks 3% faster each stage up to double; pairs from stage 9 up to half of spawns; featured type's share grows after stage 11 up to double; waves 10 s rising to 18 s
+    - Shields: 1 charge at levels 1–2 and 2 at 3–4 (was 1 per level), slower recharge (20/15/12/9 s), start each game empty
+    - Drag follows at 140–520 pt/s by engine level (was 250–1200)
+    - Before a station: wait up to 20 s for rocks and enemy shots to clear, fade out anything left, then a 5 s approach (station first, then the ship)
+- [ ] Playtest: does a strong player need the HUD to get past stage 20? (the Phase 3 gate)
+- [ ] Maze and lane waves
+- [ ] More enemies that shoot back
+- [ ] Weapon variety
 
 **Phase 1 status**
 
@@ -379,6 +393,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | Balance pass: pickups a quarter as common and capped, turrets and bases drop items, a ramp that keeps climbing, weaker early shields, slower drag, a clear screen before docking |
 | 2026-10-05 | Phase 0 playtest done (about 10 games, best stage 48 on 3 lives). Game too easy and samey; challenge and variety (new Phase 3) come before more systems |
 | 2026-10-05 | HUD: swipe down shows it, sliding from the top as a transparent overlay; swipe up hides it. Items move into the HUD |
 | 2026-10-05 | Engines to split into thrust (forward) and maneuver (sideways); drag follows at maneuver speed |

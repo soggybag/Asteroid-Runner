@@ -45,6 +45,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var level = 0
   var timeSinceLastMissile: TimeInterval = 0
 
+  // Items that have drifted in this wave, capped by Tuning.PowerUps.maxItemsPerWave
+  var itemsThisWave = 0
+
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
   var asteroidDirection = AsteroidDirection.top
@@ -488,42 +491,70 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     return children.filter { $0 is Asteroid }.count
   }
 
+  var enemyShotCount: Int {
+    return children.filter { $0 is EnemyShot }.count
+  }
+
+
+  // Fade out whatever is still flying around, for a clean screen
+
+  func fadeOutLeftovers() {
+    for node in children where node is Asteroid || node is EnemyShot || node is PowerUp {
+      node.physicsBody = nil
+      node.run(.sequence([.fadeOut(withDuration: 0.5), .removeFromParent()]))
+    }
+  }
+
 
   // ------------------------------------------------------------
   // Make an asteroid or power up
   // ------------------------------------------------------------
 
   func makeAsteroid() {
-    // Get a random int to select object type to generate
-    let r = Int.random(in: 0 ..< Tuning.PowerUps.spawnRoll)
-
-    // Generate a random object
-    let powerup: PowerUp
-    switch r {
-    case 0:
-      powerup = PowerUpBomb()     // smart Bomb
-    case 1:
-      powerup = PowerUp()         // Points
-    case 2:
-      powerup = PowerUpShield()   // Shield
-    case 3:
-      powerup = PowerUpMissile()  // Missile multifire
-    case 4:
-      powerup = PowerUpRapid()    // Missile rapid fire
-    case 5:
-      powerup = PowerUpCoin()     // Coin, extra points
-    default:
-      // Create an Asteroid, sometimes of the wave's featured type
-      let type = Double.random(in: 0 ..< 1) < asteroidType.waveShare ? asteroidType : .normal
-      let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection, type: type)
-      addChild(asteroid)
-      asteroid.trail?.targetNode = self
-      return
+    // Now and then a pickup instead of a rock. Items are capped per wave.
+    if Double.random(in: 0 ..< 1) < Tuning.PowerUps.pickupChance {
+      let pickup = Pickup.random()
+      if !pickup.isItem || itemsThisWave < Tuning.PowerUps.maxItemsPerWave {
+        if pickup.isItem {
+          itemsThisWave += 1
+        }
+        let powerup = pickup.make()
+        addChild(powerup)
+        powerup.position.x = CGFloat.random(in: 0 ... Screen.sharedInstance.width)
+        powerup.position.y = size.height
+        return
+      }
     }
 
+    // Later stages sometimes send rocks in pairs
+    let count = Double.random(in: 0 ..< 1) < Tuning.Stages.pairChance(level: level) ? 2 : 1
+    for _ in 0 ..< count {
+      makeRock()
+    }
+  }
+
+  // A rock, sometimes of the wave's featured type, faster in later stages
+
+  func makeRock() {
+    let share = asteroidType.waveShare * Tuning.Stages.featuredScale(level: level)
+    let type = Double.random(in: 0 ..< 1) < share ? asteroidType : .normal
+    let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection, type: type)
+    if let velocity = asteroid.physicsBody?.velocity {
+      let scale = Tuning.Stages.speedScale(level: level)
+      asteroid.physicsBody?.velocity = CGVector(dx: velocity.dx * scale, dy: velocity.dy * scale)
+    }
+    addChild(asteroid)
+    asteroid.trail?.targetNode = self
+  }
+
+
+  // Turrets and enemy bases drop an item when destroyed: a reward for
+  // taking on the enemies that shoot back
+
+  func dropItem(at point: CGPoint) {
+    let powerup = Pickup.random(itemsOnly: true).make()
+    powerup.position = point
     addChild(powerup)
-    powerup.position.x = CGFloat.random(in: 0 ... Screen.sharedInstance.width)
-    powerup.position.y = size.height
   }
 
 
@@ -794,6 +825,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       }
 
       asteroid.removeFromParent()
+
+      if asteroid.type == .turret || asteroid.type == .base {
+        dropItem(at: asteroid.position)
+      }
 
       for rock in debris {
         addChild(rock)

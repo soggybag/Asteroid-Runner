@@ -29,9 +29,10 @@ class PlayingState: GKState {
     // TODO: Balance time for each Stage/Level and time between stages
     
     // Start making asteroids
+    scene.itemsThisWave = 0
     scene.makeAsteroids()
-    // This wave lasts 10 seconds
-    scene.run(SKAction.sequence([.wait(forDuration: Tuning.Stages.waveDuration),.run({
+    // Waves last longer as the stages go up
+    scene.run(SKAction.sequence([.wait(forDuration: Tuning.Stages.waveDuration(level: scene.level)),.run({
       // Then stop and wait before starting a new wave
       self.stopAsteroidsAndWaitForScreenToClear()
     })]), withKey: GameScene.FLOW)
@@ -45,12 +46,17 @@ class PlayingState: GKState {
   func stopAsteroidsAndWaitForScreenToClear() {
     // Stop making asteroids
     scene.stopAsteroids()
-    // Check until the last asteroid is gone, giving up after 10 seconds
-    let maxChecks = Int(Tuning.Stages.maxClearWait / Tuning.Stages.clearCheckInterval)
+    // Check until the last asteroid is gone, giving up after a while. Before
+    // a station, also wait for enemy shots, and give it longer, so the ship
+    // doesn't dock through a field of rocks.
+    let stationNext = scene.stationRoute.stationAfterThisWave
+    let maxWait = stationNext ? Tuning.Stations.maxClearWait : Tuning.Stages.maxClearWait
+    let maxChecks = Int(maxWait / Tuning.Stages.clearCheckInterval)
     var checks = 0
     let check = SKAction.run {
       checks += 1
-      if self.scene.asteroidCount == 0 || checks >= maxChecks {
+      let clear = self.scene.asteroidCount == 0 && (!stationNext || self.scene.enemyShotCount == 0)
+      if clear || checks >= maxChecks {
         self.scene.removeAction(forKey: GameScene.FLOW)
         self.stageClear()
       }

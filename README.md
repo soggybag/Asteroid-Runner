@@ -39,9 +39,10 @@ The reactor makes 6 units of power, shared between three systems, each from
 comes from the system with the most. Tap − to free a unit.
 
 - **Engines:** how fast the ship follows your finger, and how hard tilt pushes it.
-- **Shields:** each level holds one charge that blocks one hit, shown as a ring
-  around the ship. Charge rebuilds over time, faster with more power. The
-  shield item in the tray is separate and still works.
+- **Shields:** charges that each block one hit, shown as a ring around the
+  ship: 1 charge at levels 1–2, 2 at levels 3–4. The shield starts each game
+  empty and rebuilds over time, faster with more power. The shield item in
+  the tray is separate and still works.
 - **Weapons:** fire rate and damage. Shots look stronger as power goes up, from
   a dim speck at 0 (the ship always has a weak shot) to a white-hot bolt at 4.
   Hits throw sparks.
@@ -68,7 +69,9 @@ features a random one.
 | 11 | Enemy base | Big, slow and armored, fires a three-shot spread |
 
 Rocks break into smaller rocks when hit enough. Special types are worth more
-points. The shield blocks enemy shots. Gold coins are worth 250 points.
+points. Turrets and enemy bases drop an item when destroyed. Stages keep
+getting harder: rocks spawn faster and move faster every stage, waves get
+longer, and from stage 9 rocks sometimes come in pairs. The shield blocks enemy shots. Gold coins are worth 250 points.
 
 ## Development
 

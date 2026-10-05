@@ -81,9 +81,9 @@ struct PowerGrid: Equatable {
 }
 
 
-// Powered shields: each shield level holds one point of charge, and each
-// point absorbs one hit. Charge rebuilds a point at a time, faster with
-// more power. Separate from the shield item in the tray.
+// Powered shields: each level holds some charge (Tuning.Power.shieldCapacity),
+// and each point absorbs one hit. Charge rebuilds a point at a time,
+// faster with more power. Separate from the shield item in the tray.
 
 struct ShieldCharge: Equatable {
 
@@ -91,15 +91,24 @@ struct ShieldCharge: Equatable {
   private(set) var capacity = 0
   private var timer: TimeInterval = 0
 
-  init(level: Int = 0) {
-    capacity = level
-    charge = level
+  // Starts empty unless `full`
+  init(level: Int = 0, full: Bool = false) {
+    capacity = ShieldCharge.capacity(level: level)
+    charge = full ? capacity : 0
+    self.level = level
+  }
+
+  private var level = 0
+
+  static func capacity(level: Int) -> Int {
+    return Tuning.Power.value(Tuning.Power.shieldCapacity, level: level)
   }
 
   // Call when the shield's power level changes. Charge above the new
   // capacity is lost; new capacity has to recharge.
   mutating func setLevel(_ level: Int) {
-    capacity = level
+    self.level = level
+    capacity = ShieldCharge.capacity(level: level)
     charge = min(charge, capacity)
     if capacity == 0 {
       timer = 0
@@ -112,7 +121,7 @@ struct ShieldCharge: Equatable {
       return
     }
     timer += seconds
-    let rechargeTime = Tuning.Power.shieldRechargeTime(level: capacity)
+    let rechargeTime = Tuning.Power.shieldRechargeTime(level: level)
     if timer >= rechargeTime {
       timer -= rechargeTime
       charge += 1
