@@ -1,6 +1,6 @@
 # Asteroid Runner — Design Notes & Roadmap
 
-Last updated: 2026-10-04 · Shared copy:[Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
+Last updated: 2026-10-05 · Shared copy:[Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
 
 ## Vision
 
@@ -10,7 +10,26 @@ Asteroid Runner becomes a game about **piloting a ship you care about**: you dod
 - **Managing is part of the gameplay.** Opening the HUD mid-flight is the pilot looking down at the console. The tension is intended; the UI must be easy, never fiddly.
 - **The ship is a character.** It takes damage, needs repairs and earns upgrades. A bigger power plant over time is the main progression.
 - **The asteroid types make it matter.** Each threat rewards a different allocation, so the stage announcement becomes a cue to reroute power.
+- **The setting is an in-system voyage** (added 2026-10-05). The ship travels from the inner planets to the outer planets at sublight speed. Stations orbit planets and moons, and there are encounters along the way.
 - **A run is a journey between stations** (added 2026-10-04). You fly a few waves, collect items and salvage, then dock at a station to trade, repair and refit. What you carry and what you bolt on are the decisions.
+
+## Playtest findings (2026-10-05)
+
+About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.md](playtest-notes.md). **The game is too easy and too samey, so none of the decision systems are needed yet.** The best run reached stage 48 with all 3 lives, without opening the power HUD.
+
+| Finding | What it means |
+| --- | --- |
+| Reached stages 42–48 on 3 lives; the difficulty range feels narrow | Difficulty must ramp further and faster |
+| Shields plus drag steering are overpowered early | Weaker early shields; drag should lag behind the finger by engine power |
+| Pickups come too often and too randomly; items used as fast as possible to make room | Fewer, more purposeful pickups; saving one only matters if they're scarce |
+| Never spent coins; no need to buy items found everywhere in space | Stations need things space doesn't give: trade goods, repairs, maybe items only sold there |
+| Stages all feel the same as the game goes on | More kinds of waves (maze, lanes) and enemies |
+| Turrets are the most interesting part so far | More enemies that shoot back |
+| Multi-shot is fun | A wide range of weapons in that spirit; study Tyrian's weapon upgrades |
+| The tray and the power panel feel like a phone app, not a ship | The HUD should be a heads-up display: slides down from the top as a transparent overlay |
+| Drag steering is fun but doesn't feel like piloting, and overrides engine speed | Keep it, but the ship lags behind the finger based on engine power |
+| Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
+| Tilt, haptics, pause and performance all good | No change |
 
 ## The core loop (2026-10-04)
 
@@ -45,6 +64,11 @@ A station appears after every 1 to 5 waves. The player docks, meets the station'
 - **Between stations,** the stage break stays short, as now.
 - **Refuel** depends on whether fuel exists (see the open question). Fuel earlier risked a death spiral; stations make it more workable because there's a known place to refill. If added, an empty tank should cut power, not end the run.
 - **Risk:** content cost. Each station needs a portrait, dialog and a shop list. Start with 3 stations and generic text, then grow.
+- **Docking fixes from playtesting (2026-10-05):** a wave should pass and the screen clear before the station appears, and the approach should be slower.
+- **Trading (2026-10-05).** A sub-game: buy raw materials or products at one station and sell them at another, hopefully for a profit. Goods are cargo. The Command module holds a little cargo; cargo modules add more; space pirates can steal it.
+- **Items only from stations?** Since space is full of pickups, nobody buys them. One fix: powerups are mostly bought at stations, and space gives raw loot and coins.
+- **Visits have side effects (2026-10-05).** What happens at a station can affect later encounters: a favor owed, a bounty, a rumor that proves true.
+- **Stations orbit planets and moons** along the voyage outward.
 
 ### Idea 2: Items in the tray, used when you choose (built, testing)
 
@@ -83,6 +107,13 @@ Power comes from two places: a small reactor that never runs out, and fuel you b
 - **Fuel is bought at stations or found in space** (a pickup, or salvage from rocks).
 - This settles the old fuel question: fuel exists, but an empty tank drops you back to reactor power instead of ending the run.
 
+### Thrust and maneuver (2026-10-05)
+
+Split engines in two:
+
+- **Thrust:** forward speed. Reach the next station sooner and move through fields faster. Sometimes going slower is the smart move, such as in a maze.
+- **Maneuver:** side-to-side speed. Dodging obstacles and fighting enemy bases. Drag steering follows the finger at maneuver speed, so the ship visibly lags at low power.
+
 ### HUD redesign (2026-10-04)
 
 The HUD should feel like the ship's console. Two layouts to try, possibly together:
@@ -104,11 +135,30 @@ The HUD should feel like the ship's console. Two layouts to try, possibly togeth
 
 ### More kinds of waves (2026-10-05)
 
-Every wave today is the same shape: rocks fall, you shoot. The game needs some different types of levels and waves for variety between stations.
+Every wave today is the same shape: rocks fall, you shoot. The game needs some different types of levels and waves for variety between stations. Waves need an official name too (see open questions).
 
-- **Maze wave:** a field of obstacles the ship navigates by dodging, not shooting. Indestructible rocks or walls with gaps to weave through.
-- **Lane wave:** obstacles arrive in lanes, so the choice is which lane to be in and when to switch.
+- **Rock waves:** most waves, as now.
+- **Maze wave:** too many rocks, too large to shoot through, but there's a path the ship can navigate by dodging.
+- **Lane wave:** fast asteroids moving straight down the screen, so the player picks a lane and when to switch.
+- **Turrets and bases:** the most interesting thing in the game so far; more enemies that shoot back.
 - Both reward engine power over weapons, which gives the power HUD a reason to change between waves. The stage announcement says what kind of wave is coming.
+
+### Encounters inside the ship (2026-10-05)
+
+Some threats happen in the HUD instead of on screen, so opening it matters:
+
+- **Space pirates board the ship.** They show up in one of the HUD screens and head for the cargo bay to make off with cargo. The player removes them by hand.
+- **A space virus** gets into the HUD at a random place and siphons energy from the reactor until the player removes it.
+
+These need the reworked HUD and cargo first.
+
+### Weapon variety (2026-10-05)
+
+Multi-shot is the most fun pickup. Develop a wide range of weapons in that spirit that keep working through many levels of power, like Tyrian's front and side guns with upgrade levels. Spread shots, side guns, rear guns, homing shots, beams. The tray should show what you have, such as multi ×2 or ×3.
+
+### Sound (2026-10-05)
+
+Haptics feel right. Sound and music come with the art update.
 
 ### Other ideas from 2026-10-02
 
@@ -145,9 +195,11 @@ A power plant produces a fixed number of power units, fewer than the three syste
 | Shields | Stronger, faster-recharging shield that absorbs hits before a life is lost | Turrets, enemy bases | `ShipShield` (today a timed powerup) |
 | Weapons | Higher fire rate and damage | Brasserteroids, bosses | `missileFireTime`, `MissilePower` |
 
-**HUD decisions (2026-10-02)**
+**HUD decisions (2026-10-02, revised 2026-10-05)**
 
-- **Swipe up reveals the HUD, swipe down hides it.** This reverses today's config panel gesture. Revisit if more gestures are added.
+- **Swipe down reveals the HUD, swipe up hides it** (changed 2026-10-05 after playtesting). The HUD slides down from the top of the screen as a transparent overlay, like a heads-up display you operate the ship with, not a dialog box.
+- **Maybe two side panels** revealed by swiping left and right: weapons on the right, shields on the left. To try after the top panel works.
+- **Items move into the HUD.** The tray at the top works for play but looks like a phone app. Items should be part of the ship's console, with counts shown (multi-shot ×2 or ×3) and clear rules for what stacks.
 - **Steering locks while the HUD is open**, for now, to test how it feels.
 - **Time slows while the HUD is open** (about 25% speed) so decisions are tense but fair. Proposed; tune in testing.
 - **One tap per decision.** Tapping a system's [+] moves one unit to it from the system that has the most. No sliders.
@@ -217,7 +269,7 @@ Most ideas fit; turning the phone sideways is dropped, and fuel is back as a boo
 
 ## Roadmap
 
-Seven phases, each ending at a gate it must pass before the next begins. Phase 0 is waiting on playtests; Phase 1 (the item tray) started 2026-10-04.
+Ten phases, each ending at a gate it must pass before the next begins. Phase 0 is done; Phases 1 and 2 are built but their gates aren't met, because the game is too easy for their choices to matter.
 
 **Phase 0 status**
 
@@ -225,20 +277,31 @@ Seven phases, each ending at a gate it must pass before the next begins. Phase 0
 - [x] Fix signing: builds and installs on an iPhone 11 Pro with automatic signing
 - [x] Move tuning numbers to one file (`Asteroid Runner/Utilities/Tuning.swift`)
 - [x] Tests for waves and difficulty: 20 tests in `Asteroid RunnerTests/WaveTests.swift`
-- [ ] Play 10 full games on the phone and log them in [playtest-notes.md](playtest-notes.md)
+- [x] Play 10 full games on the phone and log them in [playtest-notes.md](playtest-notes.md) (2026-10-05)
 - [ ] TestFlight build (needs an App Store Connect app record; can wait until other testers join)
 
 | Phase | Goal | Scope | Gate to move on |
 | --- | --- | --- | --- |
-| **0 · Foundation** | Run it on a real phone | Commit current work, fix signing, TestFlight build. Move tuning numbers to one file; tests for waves. | Runs on your phone; 10 full games played and notes taken |
-| **1 · Item tray** | Every pickup is a decision | Bomb, shield, multi-shot and rapid fire go into a 3-slot tray; tap to use. Shield toggles on and off. Tray-full rule. | Players save items for a hard wave, and the game feels less flat |
-| **2 · Power core and HUD** | Prototype engines, shields, weapons | Command module reactor (small, never runs out) and fuel that boosts it and depletes. HUD redesign: ship view and/or bars; swipe up to open. Time slows and steering locks while open. | Testers reroute power without being told, and call it fun |
-| **3 · Stations, look and sound** | A run with a shape | Named stations every 1–5 waves with a warning, docking sequence, 3 keepers with greetings from `stations.json`, a shop to buy and sell items and fuel, and repair. Procedural rock art, sound, music, hit effects. | Players look forward to the next station; someone who is not you asks to play again |
-| **4 · Modular ship** | A ship you care about | Command module as the base; modules bolt on and replace lives; maybe a hull meter. Salvage to recover. Modules map to power systems, tray slots and fuel space. Buy, repair and upgrade at stations. | Players spend coins on modules, and runs last longer |
-| **5 · Launch** | Ready for strangers | Tutorial that introduces systems one at a time. Settings, Game Center, App Store assets, TestFlight beta. | Shipped to the App Store |
-| **6 · Expand** | Driven by player feedback | Station conversations (Star Control style decision trees), scanner and sensors, power-user gestures, maze levels. Bosses, daily challenge, story campaign, iPad, controllers. | — |
+| **0 · Foundation** | Run it on a real phone | Signing, tuning file, wave tests, 10 games played. Done 2026-10-05 except TestFlight. | Runs on your phone; 10 full games played and notes taken (passed) |
+| **1 · Item tray** | Every pickup is a decision | Built. Playtest: pickups too common to save; the tray looks like a phone app. Rework folds into Phase 2's HUD and Phase 3's pickup balance. | Players save items for a hard wave (not yet) |
+| **2 · Power core and HUD** | Prototype engines, shields, weapons | Built: reactor, bars HUD, per-level effects. Next: HUD slides down from the top as a transparent overlay (swipe down); items move into it with counts; thrust and maneuver split; maybe left and right panels. Later: fuel. | Testers reroute power without being told, and call it fun (not yet: the game is too easy to need it) |
+| **3 · Challenge and variety** | Make choices matter | Fewer, more purposeful pickups. Steeper, wider difficulty ramp; weaker early shields; drag lag. Wave types: maze and lanes. More enemies that shoot back. Weapon variety in the spirit of multi-shot (Tyrian). | A strong player needs the HUD to get past stage 20, and stages feel different from each other |
+| **4 · Stations and trade** | A reason to dock | Screen clears and a slower approach before docking. Trade goods and cargo; powerups mostly from stations; visits with side effects; stations orbiting planets on the voyage outward; real dialog. | Players spend coins at most stations |
+| **5 · Modular ship** | A ship you care about | Command module as the base; modules bolt on and replace lives; maybe a hull meter; cargo modules. Salvage to recover. Buy, repair and upgrade at stations. | Players spend coins on modules, and runs last longer |
+| **6 · Encounters** | Threats inside the ship | Space pirates boarding to steal cargo; a space virus draining energy; both removed by hand in the HUD. | Players handle an encounter without being told how |
+| **7 · Look and sound** | Feel like a real game | Art update (hand-drawn), station and module art, sound, music, hit effects. | Someone who is not you asks to play again |
+| **8 · Launch** | Ready for strangers | Tutorial that introduces systems one at a time. Settings, Game Center, App Store assets, TestFlight beta. | Shipped to the App Store |
+| **9 · Expand** | Driven by player feedback | Station conversations (Star Control style), scanner and sensors, fuel, power-user gestures. Bosses, daily challenge, story campaign, iPad, controllers. | — |
 
-The item tray comes first because it's small, it builds on code that exists, and it's the quickest way to test whether decisions make the game less flat. Power management comes next and before art and content on purpose: if it isn't fun on a real phone, it's cheaper to learn that before building stations, the shop and the art around them. Stations come before modules because modules need somewhere to be bought and repaired; a station with only items and repairs is still worth testing.
+**Up next (2026-10-05).** The playtest showed the decision systems aren't needed because nothing pushes back, so challenge comes before more systems:
+
+1. **Balance pass** (Phase 3): fewer pickups, a steeper ramp, weaker early shields, more drag lag; wait for the screen to clear before docking.
+2. **HUD rework** (Phase 2): slides down from the top as a transparent overlay; items move into it with counts.
+3. **Thrust and maneuver** (Phase 2).
+4. **Maze and lane waves** (Phase 3).
+5. **Weapon variety** (Phase 3).
+
+Stations were built early, ahead of their phase, to see how they work; trade waits for Phase 4.
 
 **Phase 1 status**
 
@@ -246,7 +309,7 @@ The item tray comes first because it's small, it builds on code that exists, and
 - [x] Shield toggles and drains only while up; flickers when nearly empty
 - [x] Tray full: the pickup is lost, its points kept
 - [x] Tests for the tray rules in `Asteroid RunnerTests/InventoryTests.swift`
-- [ ] Playtest: is the top strip reachable mid-flight? Is the tray-full rule fun? (Testing now)
+- [x] Playtest (2026-10-05): reachable, but it feels like a phone app; items come too often to save; multi-shot should show ×2 or ×3; unclear what stacks
 
 **Phase 2 status (started 2026-10-05)**
 
@@ -257,17 +320,19 @@ The item tray comes first because it's small, it builds on code that exists, and
 - [x] Weapons: fire rate and damage; level 0 is a weak trickle shot; shots look stronger with power; sparks where shots hit
 - [x] Old speed-vs-power config panel removed; auto fire toggle moved into the power HUD
 - [x] Tests in `Asteroid RunnerTests/PowerTests.swift`
-- [ ] Playtest: do players reroute power without being told? (the Phase 2 gate)
+- [x] Playtest (2026-10-05): systems feel distinct and weapon levels read clearly, but the HUD wasn't needed; the game is too easy. Swipe down preferred, as an overlay from the top
+- [ ] HUD rework: slides down from the top as a transparent overlay; items move into it
+- [ ] Thrust and maneuver
 - [ ] Later in Phase 2: fuel as a boost; the ship-view HUD once module art exists
 
-**Phase 3 status (started early, 2026-10-04)**
+**Stations status (built early 2026-10-04; now part of Phase 4)**
 
 - [x] Named stations every 1–5 waves, warned a wave ahead
 - [x] Docking sequence, tap to skip
 - [x] Keeper greetings by situation from `stations.json`
 - [x] Shop: buy items, sell tray items, repair lost lives; coins earned from coin pickups and stage clears
 - [x] Tests for station data, greetings, prices and the route in `Asteroid RunnerTests/StationTests.swift`
-- [ ] Playtest: do players earn enough coins to buy something at most stations?
+- [x] Playtest (2026-10-05): coins never spent; docking too quick and flies through rocks; the warning is good
 - [ ] Real dialog, station art, sound
 
 ## Ideas parking lot
@@ -302,6 +367,10 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Which module does a hit knock off: the side that was hit (proposed), armor first, or random?
 - [ ] How far ahead does the game announce a station: one wave, two, or a scanner reading?
 - [ ] Tray full: lose the pickup (built), replace the oldest, or convert to coins?
+- [ ] What's the official name for a wave/stage/level? Options: wave, stage, sector, leg (the stretch between stations). Pick one and use it everywhere.
+- [ ] Do powerups stack? Two shields, or rapid fire with multi-shot: show it clearly either way.
+- [ ] Should powerups mostly come from stations, with space giving loot and coins?
+- [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
 - [ ] How slow should time run while the HUD is open, and is the slow-time budget needed?
@@ -310,6 +379,11 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | Phase 0 playtest done (about 10 games, best stage 48 on 3 lives). Game too easy and samey; challenge and variety (new Phase 3) come before more systems |
+| 2026-10-05 | HUD: swipe down shows it, sliding from the top as a transparent overlay; swipe up hides it. Items move into the HUD |
+| 2026-10-05 | Engines to split into thrust (forward) and maneuver (sideways); drag follows at maneuver speed |
+| 2026-10-05 | New ideas: in-system voyage setting, trading and cargo, station side effects, pirates and a space virus in the HUD, Tyrian-style weapon variety, sound |
+| 2026-10-05 | Roadmap reordered: 3 challenge and variety, 4 stations and trade, 5 modular ship, 6 encounters, 7 look and sound, 8 launch, 9 expand |
 | 2026-10-05 | Phase 2 power core built: 6-unit reactor, bars HUD, engines/shields/weapons effects; weapons at 0 keep a trickle shot |
 | 2026-10-05 | Shots show their power level; sparks where they hit |
 | 2026-10-05 | Need more kinds of waves: a maze wave (dodge obstacles) and a lane wave (obstacles in lanes) |
