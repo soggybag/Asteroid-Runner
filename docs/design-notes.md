@@ -31,6 +31,32 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
 
+## Playtest round 2 findings (2026-10-05)
+
+Five games on build 37 after the balance pass; details in [playtest-round-2.md](playtest-round-2.md). **A better game, but it overshot:** runs now end at stages 7–13 with no lives left, almost always on a screen full of bosstroids.
+
+| Finding | What it means |
+| --- | --- |
+| A wall around stage 10: a screen of bosstroids leaves no room to move | Bigger rocks should spawn less often, so a wave covers about the same area whatever the size. No pairs of huge rocks. A bosstroid wave becomes a set piece, rarer and announced, that shields and a bomb can get you through |
+| The smart bomb doesn't help against big rocks | Make it stronger: enough to break a bosstroid |
+| The power HUD gets used (4 of 5 games); effects noticeable, not dramatic | Widen the gap between power levels |
+| The HUD covers what's underneath | Place it higher and make it transparent (HUD rework) |
+| Pickup rarity is right | Keep it |
+| Pickups on screen fade away when a station arrives; frustrating | Pull remaining pickups into the ship before docking |
+| Turret and base drops make you go after them | Keep it; maybe special items only turrets drop |
+| Shields starting empty: fair | Keep it |
+| Drag lag noticeable; needs fine-tuning | Tune after the HUD rework |
+| Game over doesn't say how far you got | Show stage reached, distance traveled, asteroids destroyed, turrets destroyed |
+
+**New ideas from round 2:**
+
+- **Station screens need their own look,** different from the HUD, to give each station flavor.
+- **Distance traveled** shown in the HUD as the ship moves out through the system, and at game over. Fits the voyage setting.
+- **Stats at game over:** stage reached, distance, asteroids destroyed, turrets destroyed.
+- **Special items only turrets drop.**
+- **A wider range of power-ups and ship modifications,** so players personalize their ships and stay engaged.
+- **Difficulty vs. other activities:** if the game centers on flying through asteroids, a steep ramp past stage 10 is fine. If commerce and other tasks are added, the pressure has to leave room for them. See open questions.
+
 ## The core loop (2026-10-04)
 
 Gameplay felt flat because nothing you pick up asks for a decision: powerups fire the moment you touch them, and coins are only points. Three ideas fix that, and they fit together:
@@ -293,13 +319,15 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 | **8 · Launch** | Ready for strangers | Tutorial that introduces systems one at a time. Settings, Game Center, App Store assets, TestFlight beta. | Shipped to the App Store |
 | **9 · Expand** | Driven by player feedback | Station conversations (Star Control style), scanner and sensors, fuel, power-user gestures. Bosses, daily challenge, story campaign, iPad, controllers. | — |
 
-**Up next (2026-10-05).** The playtest showed the decision systems aren't needed because nothing pushes back, so challenge comes before more systems:
+**Up next (revised after round 2, 2026-10-05).**
 
 1. ~~**Balance pass** (Phase 3)~~ Done 2026-10-05; see Phase 3 status.
-2. **HUD rework** (Phase 2): slides down from the top as a transparent overlay; items move into it with counts.
-3. **Thrust and maneuver** (Phase 2).
-4. **Maze and lane waves** (Phase 3).
-5. **Weapon variety** (Phase 3).
+2. **Balance pass 2** (Phase 3): spawn density scaled by rock size, no pairs of huge rocks, bosstroid waves as a rarer announced set piece, a smart bomb that breaks bosstroids, wider gaps between power levels.
+3. **Quick wins:** pull pickups into the ship before docking; game over shows stage, distance, asteroids and turrets destroyed.
+4. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts.
+5. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
+6. **Maze and lane waves** (Phase 3).
+7. **Weapon variety** (Phase 3), including turret-only items.
 
 Stations were built early, ahead of their phase, to see how they work; trade waits for Phase 4.
 
@@ -312,7 +340,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Shields: 1 charge at levels 1–2 and 2 at 3–4 (was 1 per level), slower recharge (20/15/12/9 s), start each game empty
     - Drag follows at 140–520 pt/s by engine level (was 250–1200)
     - Before a station: wait up to 20 s for rocks and enemy shots to clear, fade out anything left, then a 5 s approach (station first, then the ship)
-- [ ] Playtest in [playtest-round-2.md](playtest-round-2.md): does a strong player need the HUD to get past stage 20? (the Phase 3 gate)
+- [x] Playtest round 2 ([playtest-round-2.md](playtest-round-2.md)): overshot. Runs end at stages 7–13 on bosstroid waves; the HUD gets used. Gate not met yet
+- [ ] Balance pass 2: size-scaled spawn density, bosstroid set piece, stronger smart bomb, wider power gaps
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
@@ -385,6 +414,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Do powerups stack? Two shields, or rapid fire with multi-shot: show it clearly either way.
 - [ ] Should powerups mostly come from stations, with space giving loot and coins?
 - [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
+- [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
+- [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
 - [ ] How slow should time run while the HUD is open, and is the slow-time budget needed?
@@ -393,6 +424,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | Round 2 playtest: a better game but too hard past stage 10 (bosstroid waves). Next: balance pass 2, pickups collected before docking, game over stats, then the HUD rework |
 | 2026-10-05 | Balance pass: pickups a quarter as common and capped, turrets and bases drop items, a ramp that keeps climbing, weaker early shields, slower drag, a clear screen before docking |
 | 2026-10-05 | Phase 0 playtest done (about 10 games, best stage 48 on 3 lives). Game too easy and samey; challenge and variety (new Phase 3) come before more systems |
 | 2026-10-05 | HUD: swipe down shows it, sliding from the top as a transparent overlay; swipe up hides it. Items move into the HUD |
