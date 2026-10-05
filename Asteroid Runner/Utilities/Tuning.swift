@@ -154,6 +154,14 @@ enum Tuning {
   }
 
 
+  // MARK: Travel
+
+  enum Travel {
+    // How far the ship travels per second of flying, in astronomical units
+    static let auPerSecond = 0.004
+  }
+
+
   // MARK: Stages
 
   enum Stages {

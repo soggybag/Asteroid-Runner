@@ -44,8 +44,10 @@ class StationState: GKState {
     scene.inventory.lowerShield()
     scene.shield.deactivate()
 
-    // Anything still on screen fades away before the station arrives
+    // Rocks still on screen fade away before the station arrives; pickups
+    // are pulled into the ship
     scene.fadeOutLeftovers()
+    scene.pullPickupsToShip()
 
     let ship = scene.ship
     ship.physicsBody?.velocity = .zero

@@ -17,6 +17,7 @@ class Hud: SKSpriteNode {
 
   let scoreLabel = SKLabelNode()
   let coinLabel = SKLabelNode()
+  let distanceLabel = SKLabelNode()
   let livesNode = SKNode()
   let tray = ItemTray(capacity: Tuning.Items.slots)
 
@@ -64,6 +65,16 @@ class Hud: SKSpriteNode {
     coinLabel.verticalAlignmentMode = .top
     coinLabel.position = CGPoint(x: Screen.sharedInstance.width - 10, y: -4)
     update(coins: 0)
+
+    // Distance traveled, under the coins
+    addChild(distanceLabel)
+    distanceLabel.fontSize = 12
+    distanceLabel.fontName = Fonts.fontName
+    distanceLabel.fontColor = Colors.station
+    distanceLabel.horizontalAlignmentMode = .right
+    distanceLabel.verticalAlignmentMode = .top
+    distanceLabel.position = CGPoint(x: Screen.sharedInstance.width - 10, y: -22)
+    update(distance: RunStats().distanceText)
   }
 
   func setupLives() {
@@ -84,6 +95,10 @@ class Hud: SKSpriteNode {
 
   func update(coins: Int) {
     coinLabel.text = "COINS \(coins)"
+  }
+
+  func update(distance: String) {
+    distanceLabel.text = distance
   }
 
   // Draw one small ship for each remaining life

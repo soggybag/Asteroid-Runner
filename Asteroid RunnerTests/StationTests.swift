@@ -133,3 +133,13 @@ struct StationRouteTests {
     #expect(!route.stationAfterThisWave)
   }
 }
+
+struct RunStatsTests {
+
+  @Test func distanceShowsTwoDecimals() {
+    var stats = RunStats()
+    #expect(stats.distanceText == "0.00 AU")
+    stats.distance = 1.234
+    #expect(stats.distanceText == "1.23 AU")
+  }
+}

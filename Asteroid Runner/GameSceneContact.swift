@@ -88,22 +88,8 @@ extension GameScene {
     // -------------------------
 
     case PhysicsCategory.Ship | PhysicsCategory.PowerUp:
-      let powerup = secondNode
-      guard !ship.isHidden, powerup.parent != nil else { return }
-
-      let points = powerup.name == PowerUp.PU_COIN ? Tuning.PowerUps.coinPoints : Tuning.PowerUps.points
-      score += points
-      if powerup.name == PowerUp.PU_COIN {
-        coins += Tuning.Stations.coinPickup
-      }
-      show(points: points, at: powerup.position)
-      powerup.removeFromParent()
-      lightImpact.impactOccurred()
-
-      // Items go into the tray to be used later. A full tray loses them.
-      if let item = ItemType(powerupName: powerup.name), !inventory.add(item) {
-        addChild(PopupLabelNode(message: "FULL", location: powerup.position + CGPoint(x: 0, y: 20)))
-      }
+      guard !ship.isHidden, let powerup = secondNode as? PowerUp, powerup.parent != nil else { return }
+      collect(powerup)
 
     default:
       return

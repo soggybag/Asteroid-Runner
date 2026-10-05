@@ -356,8 +356,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 **Up next (revised after round 2, 2026-10-05).**
 
 1. ~~**Balance pass** (Phase 3)~~ Done 2026-10-05; see Phase 3 status.
-2. **Balance pass 2** (Phase 3): spawn density scaled by rock size, no pairs of huge rocks, bosstroid waves as a rarer announced set piece, a smart bomb that breaks bosstroids, wider gaps between power levels.
-3. **Quick wins:** pull pickups into the ship before docking; game over shows stage, distance, asteroids and turrets destroyed.
+2. ~~**Balance pass 2**~~ Done 2026-10-05.
+3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts.
 5. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
 6. **Maze and lane waves** (Phase 3).
@@ -375,7 +375,13 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Drag follows at 140–520 pt/s by engine level (was 250–1200)
     - Before a station: wait up to 20 s for rocks and enemy shots to clear, fade out anything left, then a 5 s approach (station first, then the ship)
 - [x] Playtest round 2 ([playtest-round-2.md](playtest-round-2.md)): overshot. Runs end at stages 7–13 on bosstroid waves; the HUD gets used. Gate not met yet
-- [ ] Balance pass 2: size-scaled spawn density, bosstroid set piece, stronger smart bomb, wider power gaps
+- [x] Balance pass 2 (2026-10-05):
+    - Bigger rocks spawn further apart (`sizeSpacing`: 0.6× tiny to 5× bosstroid); massive rocks and bosstroids never pair
+    - Bosstroid waves: 12% from stage 8 (was 25% from 6), 30% shorter, announced "WARNING: Bosstroid field"
+    - Smart bomb: 10 pulses of 2 damage, enough to break a bosstroid (was 1)
+    - Wider power gaps: drag 100–620 pt/s, fire 0.7–0.12 s, damage 0.5–4, shields up to 3 charges recharging in 6 s at level 4
+- [x] Quick wins: pickups on screen are pulled into the ship before docking; distance in AU in the HUD; game over shows stage, distance, asteroids and turrets destroyed
+- [ ] Playtest round 3
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
@@ -459,6 +465,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-05 | Balance pass 2: size-scaled spawn spacing, rarer announced bosstroid waves, a smart bomb that breaks bosstroids, wider power gaps. Quick wins: pickups pulled in before docking, distance and stats at game over |
 | 2026-10-05 | New idea: a system map, FTL style. Choose the next station at launch; routes hint at their stages and length. Added to Phase 4 |
 | 2026-10-05 | Round 2 playtest: a better game but too hard past stage 10 (bosstroid waves). Next: balance pass 2, pickups collected before docking, game over stats, then the HUD rework |
 | 2026-10-05 | Balance pass: pickups a quarter as common and capped, turrets and bases drop items, a ramp that keeps climbing, weaker early shields, slower drag, a clear screen before docking |

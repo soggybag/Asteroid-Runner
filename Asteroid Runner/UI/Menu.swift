@@ -12,6 +12,8 @@ class Menu: SKSpriteNode {
 
   var label: SKLabelNode!
   var bestLabel: SKLabelNode!
+  var stageLabel: SKLabelNode!
+  var killsLabel: SKLabelNode!
 
   var message = "" {
     didSet {
@@ -49,6 +51,20 @@ class Menu: SKSpriteNode {
     bestLabel.fontSize = 20
     bestLabel.position = label.position
     bestLabel.position.y = label.position.y - 40
+
+    // How far the run got
+    stageLabel = statLabel(y: bestLabel.position.y - 44)
+    killsLabel = statLabel(y: stageLabel.position.y - 26)
+  }
+
+  private func statLabel(y: CGFloat) -> SKLabelNode {
+    let node = SKLabelNode()
+    addChild(node)
+    node.fontColor = Colors.station
+    node.fontName = Fonts.fontName
+    node.fontSize = 17
+    node.position = CGPoint(x: 0, y: y)
+    return node
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -66,6 +82,13 @@ class Menu: SKSpriteNode {
   func show(message: String) {
     self.message = message
     show()
+  }
+
+  // Show how far the run got
+
+  func show(stage: Int, stats: RunStats) {
+    stageLabel.text = "Stage \(stage)  ·  \(stats.distanceText)"
+    killsLabel.text = "Asteroids \(stats.asteroidsDestroyed)  ·  Turrets \(stats.turretsDestroyed)"
   }
 
   // Show the best score, highlighted when it was just beaten

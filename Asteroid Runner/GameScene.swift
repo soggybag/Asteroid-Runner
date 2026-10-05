@@ -48,6 +48,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Items that have drifted in this wave, capped by Tuning.PowerUps.maxItemsPerWave
   var itemsThisWave = 0
 
+  // Counts for the game over screen
+  var stats = RunStats() {
+    didSet {
+      hud.update(distance: stats.distanceText)
+    }
+  }
+
   var asteroidSize = AsteroidSize.average
   var asteroidSpeed = AsteroidSpeed.average
   var asteroidDirection = AsteroidDirection.top
@@ -496,12 +503,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 
 
-  // Fade out whatever is still flying around, for a clean screen
+  // Fade out rocks and enemy shots still flying around, for a clean screen
 
   func fadeOutLeftovers() {
-    for node in children where node is Asteroid || node is EnemyShot || node is PowerUp {
+    for node in children where node is Asteroid || node is EnemyShot {
       node.physicsBody = nil
       node.run(.sequence([.fadeOut(withDuration: 0.5), .removeFromParent()]))
+    }
+  }
+
+
+  // Before docking, pickups still on screen are pulled into the ship,
+  // so nothing the player could see is lost
+
+  func pullPickupsToShip() {
+    for case let powerup as PowerUp in children {
+      powerup.physicsBody = nil
+      let pull = SKAction.move(to: ship.position, duration: 0.6)
+      pull.timingMode = .easeIn
+      powerup.run(.sequence([pull, .run { self.collect(powerup) }]))
+    }
+  }
+
+
+  // ------------------------------------------------------------
+  // Collect a pickup: points, coins, or an item for the tray
+  // ------------------------------------------------------------
+
+  func collect(_ powerup: PowerUp) {
+    guard powerup.parent != nil else { return }
+
+    let points = powerup.name == PowerUp.PU_COIN ? Tuning.PowerUps.coinPoints : Tuning.PowerUps.points
+    score += points
+    if powerup.name == PowerUp.PU_COIN {
+      coins += Tuning.Stations.coinPickup
+    }
+    show(points: points, at: powerup.position)
+    powerup.removeFromParent()
+    lightImpact.impactOccurred()
+
+    // Items go into the tray to be used later. A full tray loses them.
+    if let item = ItemType(powerupName: powerup.name), !inventory.add(item) {
+      addChild(PopupLabelNode(message: "FULL", location: powerup.position + CGPoint(x: 0, y: 20)))
     }
   }
 
@@ -823,6 +866,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       if shipInPlay {
         score += points
         show(points: points, at: asteroid.position)
+        stats.asteroidsDestroyed += 1
+        if asteroid.type == .turret || asteroid.type == .base {
+          stats.turretsDestroyed += 1
+        }
       }
 
       asteroid.removeFromParent()
@@ -982,6 +1029,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     gameState.update(deltaTime: deltaTime)
     handleUpdate(seconds: deltaTime)
+
+    // The voyage goes on while the ship flies the waves
+    if shipInPlay && !gamePaused {
+      stats.distance += deltaTime * Tuning.Travel.auPerSecond
+    }
 
     shield.position = ship.position
     updateShield(seconds: deltaTime)

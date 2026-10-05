@@ -25,7 +25,10 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
   docking. At the station, buy items, sell what's in your tray, repair lost
   hull (lives), then tap Launch.
 - Coins (shown under the score) pay for it: 5 per gold coin picked up, 3 per
-  stage cleared.
+  stage cleared. Pickups still on screen when a station arrives are pulled
+  into the ship.
+- Distance traveled (in AU) shows under the coins. Game over shows the stage
+  reached, distance, and asteroids and turrets destroyed.
 - Tap during the intro to skip it.
 - The game pauses when the app goes to the background. Tap to resume.
 
@@ -71,7 +74,9 @@ features a random one.
 Rocks break into smaller rocks when hit enough. Special types are worth more
 points. Turrets and enemy bases drop an item when destroyed. Stages keep
 getting harder: rocks spawn faster and move faster every stage, waves get
-longer, and from stage 9 rocks sometimes come in pairs. The shield blocks enemy shots. Gold coins are worth 250 points.
+longer, and from stage 9 smaller rocks sometimes come in pairs. Bigger rocks
+spawn further apart. From stage 8, an occasional bosstroid wave is announced
+with a warning; a smart bomb can break bosstroids. The shield blocks enemy shots. Gold coins are worth 250 points.
 
 ## Development
 

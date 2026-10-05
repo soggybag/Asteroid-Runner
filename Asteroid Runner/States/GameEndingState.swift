@@ -27,6 +27,7 @@ class GameEndingState: GKState {
     scene.menu.message = "Your score is: \(scene.score)"
     let isNewBest = HighScore.submit(scene.score)
     scene.menu.show(best: HighScore.best, isNew: isNewBest)
+    scene.menu.show(stage: scene.level, stats: scene.stats)
     // Stop the waves
     scene.stopAsteroids()
     // Wait then go to Game over. Replaces any pending wave action.
