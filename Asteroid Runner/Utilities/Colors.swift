@@ -31,6 +31,7 @@ struct Colors {
   static let enemyShot = UIColor(r: 255, g: 60, b: 60)
   static let gasExplosion = UIColor(r: 160, g: 255, b: 80)
   static let station = UIColor(r: 120, g: 200, b: 255)
+  static let mazeWall = UIColor(r: 90, g: 95, b: 110)
   static let engines = UIColor(r: 120, g: 255, b: 140)
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)

@@ -65,15 +65,16 @@ enum AsteroidSize: CGFloat {
     return allSizes.randomElement()!
   }
   
-  // Larger asteroids become possible as the stages go by.
-  // Bosstroids only show up from stage 6.
-  static func random(forLevel level: Int) -> AsteroidSize {
+  // Sizes a rock field can have: larger ones become possible as the
+  // stages go by. Bosstroids only come in bosstroid field waves.
+  static func pool(forLevel level: Int) -> [AsteroidSize] {
     let sizes: [AsteroidSize] = [.tiny, .small, .average, .large, .huge, .massive]
     let largest = min(sizes.count, 2 + level)
-    if level >= Tuning.Hazards.bosstroidFromLevel && Double.random(in: 0 ..< 1) < Tuning.Hazards.bosstroidChance {
-      return .bosstroid
-    }
-    return sizes[0 ..< largest].randomElement()!
+    return Array(sizes[0 ..< largest])
+  }
+
+  static func random(forLevel level: Int) -> AsteroidSize {
+    return pool(forLevel: level).randomElement()!
   }
   
 }

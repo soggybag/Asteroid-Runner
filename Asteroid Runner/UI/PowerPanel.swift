@@ -135,7 +135,7 @@ class PowerPanel: SKNode {
       }
       levelLabels[system]?.text = "\(level)"
     }
-    autoFireLabel.text = autoFire ? "Auto fire ON" : "Tap to fire"
+    autoFireLabel.text = autoFire ? "Auto fire ON" : "Hold to fire"
   }
 
   private func label(_ text: String, size: CGFloat, color: UIColor) -> SKLabelNode {

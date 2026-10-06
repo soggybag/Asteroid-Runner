@@ -32,11 +32,7 @@ class PlayingState: GKState {
     scene.itemsThisWave = 0
     scene.makeAsteroids()
     // Waves last longer as the stages go up
-    var duration = Tuning.Stages.waveDuration(level: scene.level)
-    if scene.asteroidSize == .bosstroid {
-      duration *= Tuning.Hazards.bosstroidWaveShare
-    }
-    scene.run(SKAction.sequence([.wait(forDuration: duration),.run({
+    scene.run(SKAction.sequence([.wait(forDuration: scene.wave.duration),.run({
       // Then stop and wait before starting a new wave
       self.stopAsteroidsAndWaitForScreenToClear()
     })]), withKey: GameScene.FLOW)

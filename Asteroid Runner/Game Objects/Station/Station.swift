@@ -105,11 +105,21 @@ struct StationRoute {
   let stations: [Station]
   private(set) var next: Station?
   private(set) var wavesLeft = 0
+  // Waves from the last station to the next
+  private(set) var legLength = 0
   private(set) var visited = Set<String>()
 
   init(stations: [Station]) {
     self.stations = stations
     planNext()
+  }
+
+  // How far along the run to the next station the coming wave is: 0 for
+  // the first wave after a station, 1 for the last before the next.
+  // With no stations, always 1.
+  var legProgress: Double {
+    guard next != nil, legLength > 1 else { return 1 }
+    return Double(legLength - wavesLeft) / Double(legLength - 1)
   }
 
   // True when the coming wave is the last before a station
@@ -139,5 +149,6 @@ struct StationRoute {
     let others = stations.filter { $0.id != next?.id }
     next = (others.isEmpty ? stations : others).randomElement()
     wavesLeft = Int.random(in: Tuning.Stations.minWaves ... Tuning.Stations.maxWaves)
+    legLength = wavesLeft
   }
 }

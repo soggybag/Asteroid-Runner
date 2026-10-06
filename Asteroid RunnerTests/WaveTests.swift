@@ -7,6 +7,7 @@
 // which sizes, speeds and types unlock when. Random pickers are sampled
 // many times and checked against what each stage allows.
 
+import CoreGraphics
 import Testing
 @testable import Asteroid_Runner
 
@@ -39,9 +40,9 @@ struct DifficultyRampTests {
     #expect(Tuning.Stages.speedScale(level: 200) == 2)
   }
 
-  @Test func pairsStartAtStageNine() {
-    #expect(Tuning.Stages.pairChance(level: 8) == 0)
-    #expect(Tuning.Stages.pairChance(level: 9) > 0)
+  @Test func pairsStartAtStageEleven() {
+    #expect(Tuning.Stages.pairChance(level: 10) == 0)
+    #expect(Tuning.Stages.pairChance(level: 11) > 0)
     #expect(Tuning.Stages.pairChance(level: 200) == 0.5)
   }
 
@@ -111,18 +112,17 @@ struct AsteroidSizeTests {
     }
   }
 
-  @Test func noBosstroidsBeforeTheirStage() {
-    for level in 1 ..< Tuning.Hazards.bosstroidFromLevel {
-      for _ in 0 ..< samples / 10 {
-        #expect(AsteroidSize.random(forLevel: level) != .bosstroid)
-      }
+  @Test func rockFieldsNeverHaveBosstroids() {
+    for level in 1 ..< 100 {
+      #expect(!AsteroidSize.pool(forLevel: level).contains(.bosstroid))
     }
   }
 
-  @Test func bosstroidsAppearOnceUnlocked() {
-    let level = Tuning.Hazards.bosstroidFromLevel
-    let sizes = (0 ..< samples).map { _ in AsteroidSize.random(forLevel: level) }
-    #expect(sizes.contains(.bosstroid))
+  @Test func onlyBosstroidFieldsHaveBosstroids() {
+    for recipe in WaveRecipe.allCases {
+      let sizes = recipe.sizes(difficulty: 50).map(\.size)
+      #expect(sizes.contains(.bosstroid) == (recipe == .bosstroidField))
+    }
   }
 
   // Debris shrinks every time, so breaking rocks always ends
@@ -258,5 +258,168 @@ struct AsteroidBreakTests {
   @Test func aHitThatDoesNotBreakItReturnsNil() {
     let brass = Asteroid(asteroidSize: .large, type: .brass)
     #expect(brass.hitAsteroid(value: MissilePower.weak.rawValue) == nil)
+  }
+}
+
+
+// Wave recipes and pacing: which kind of wave comes when, how difficulty
+// eases after a station, and the lane and maze layouts.
+
+struct PacingTests {
+
+  @Test func easierJustAfterAStation() {
+    let stage = 12
+    #expect(Tuning.Pacing.difficulty(stage: stage, progress: 0) == stage - Tuning.Pacing.relief)
+    #expect(Tuning.Pacing.difficulty(stage: stage, progress: 1) == stage)
+  }
+
+  @Test func neverEasesBelowStageOne() {
+    #expect(Tuning.Pacing.difficulty(stage: 1, progress: 0) == 1)
+    #expect(Tuning.Pacing.difficulty(stage: 2, progress: 0) == 1)
+  }
+
+  @Test func buildsUpAlongTheWay() {
+    var last = 0
+    for step in 0 ... 10 {
+      let difficulty = Tuning.Pacing.difficulty(stage: 20, progress: Double(step) / 10)
+      #expect(difficulty >= last)
+      last = difficulty
+    }
+  }
+
+  @Test func legProgressRunsFromZeroToOne() {
+    let station = Station(id: "a", name: "A", keeper: .init(name: "K", title: "T"), greetings: [:], farewell: nil,
+                          shop: .init(sells: [], buyMultiplier: 1, sellMultiplier: 1))
+    for _ in 0 ..< 50 {
+      var route = StationRoute(stations: [station])
+      if route.legLength > 1 {
+        #expect(route.legProgress == 0)
+      }
+      while !route.stationAfterThisWave {
+        _ = route.waveCleared()
+      }
+      #expect(route.legProgress == 1)
+    }
+  }
+
+  @Test func noStationsMeansFullDifficulty() {
+    #expect(StationRoute(stations: []).legProgress == 1)
+  }
+}
+
+struct WaveRecipeTests {
+
+  @Test func firstStagesArePlainRockFields() {
+    for stage in 1 ... Tuning.Waves.fieldOnlyThrough {
+      for _ in 0 ..< 50 {
+        #expect(WaveRecipe.choose(stage: stage, progress: 1, previous: nil) == .field)
+      }
+    }
+  }
+
+  @Test func recipesWaitForTheirStage() {
+    for stage in 1 ..< 30 {
+      for _ in 0 ..< 40 {
+        let recipe = WaveRecipe.choose(stage: stage, progress: 1, previous: nil)
+        #expect(recipe.unlockStage <= stage)
+      }
+    }
+  }
+
+  @Test func hardWavesOnlyInTheSecondHalfOfTheTrip() {
+    for _ in 0 ..< 500 {
+      let recipe = WaveRecipe.choose(stage: 30, progress: 0.2, previous: nil)
+      #expect(!recipe.isHard)
+    }
+  }
+
+  @Test func everyRecipeTurnsUpEventually() {
+    let seen = Set((0 ..< 2000).map { _ in WaveRecipe.choose(stage: 30, progress: 1, previous: nil) })
+    #expect(seen == Set(WaveRecipe.allCases))
+  }
+
+  @Test func noSpecialWaveTwiceInARow() {
+    for recipe in WaveRecipe.allCases where recipe != .field {
+      for _ in 0 ..< 100 {
+        #expect(WaveRecipe.choose(stage: 30, progress: 1, previous: recipe) != recipe)
+      }
+    }
+  }
+
+  @Test func aDebutStageShowsTheNewType() {
+    for stage in 3 ... 11 {
+      for _ in 0 ..< 40 {
+        #expect(WaveRecipe.choose(stage: stage, progress: 1, previous: nil).usesFeatured)
+      }
+    }
+  }
+
+  @Test func scatterWavesMixSizes() {
+    for recipe in WaveRecipe.allCases where recipe.layout == .scatter {
+      #expect(recipe.sizes(difficulty: 10).count >= 2)
+    }
+  }
+
+  @Test func bouncersAreAllElastroids() {
+    let plan = WavePlan(recipe: .bouncers, stage: 12, difficulty: 12, featured: .turret, speed: .average,
+                        direction: .top, sizes: WaveRecipe.bouncers.sizes(difficulty: 12))
+    for _ in 0 ..< 100 {
+      #expect(plan.randomType() == .elastic)
+    }
+  }
+
+  @Test func onlyScatterWavesSendPairs() {
+    for recipe in WaveRecipe.allCases {
+      let plan = WavePlan(recipe: recipe, stage: 40, difficulty: 40, featured: .normal, speed: .average,
+                          direction: .top, sizes: recipe.sizes(difficulty: 40))
+      #expect((plan.pairChance > 0) == (recipe.layout == .scatter))
+    }
+  }
+}
+
+struct WaveLayoutTests {
+
+  let width: CGFloat = 375
+
+  @Test func lanesAreOnScreenAndWiderThanTheShip() {
+    for lane in 0 ..< Tuning.Waves.laneCount {
+      let x = WavePlan.laneX(lane, width: width)
+      #expect(x > 0 && x < width)
+    }
+    let laneWidth = width / CGFloat(Tuning.Waves.laneCount)
+    #expect(laneWidth > Ship.shipSize.width * 2)
+  }
+
+  @Test func someLanesAreAlwaysClear() {
+    for _ in 0 ..< 50 {
+      let lanes = WavePlan.activeLanes()
+      #expect(lanes.count < Tuning.Waves.laneCount)
+      #expect(Set(lanes).count == lanes.count)
+    }
+  }
+
+  @Test func theMazeGapStaysOnScreen() {
+    var center = width / 2
+    for _ in 0 ..< 500 {
+      center = WavePlan.nextMazeGap(after: center, width: width)
+      #expect(center - Tuning.Waves.mazeGap / 2 >= 0)
+      #expect(center + Tuning.Waves.mazeGap / 2 <= width)
+    }
+  }
+
+  @Test func mazeRowsLeaveTheGapClear() {
+    let rock = AsteroidSize.large.rawValue
+    for center in stride(from: CGFloat(80), through: width - 80, by: 25) {
+      let xs = WavePlan.mazeRow(gapCenter: center, width: width)
+      #expect(!xs.isEmpty)
+      for x in xs {
+        let clear = x + rock <= center - Tuning.Waves.mazeGap / 2 || x - rock >= center + Tuning.Waves.mazeGap / 2
+        #expect(clear)
+      }
+    }
+  }
+
+  @Test func theMazeGapFitsTheShip() {
+    #expect(Tuning.Waves.mazeGap > Ship.shipSize.width * 2.5)
   }
 }

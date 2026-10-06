@@ -24,52 +24,27 @@ class NextLevelState: GKState {
     self.scene = scene
   }
   
-  // This method is called when the state machine enters this state
+  private var scanner: ScannerPanel?
+
+  // Plan the wave and show the scanner briefing, then start the wave
   override func didEnter(from previousState: GKState?) {
-    // print("Did enter Intro State")
-    
     scene.level += 1
-    
-    scene.defineAsteroidsForWave()
-    
-    let size = scene.asteroidSize.toString()
-    let speed = scene.asteroidSpeed.toString()
-    let direction = scene.asteroidDirection.toString()
-    
-    var introMessage = [
-      "Prepare for",
-      "Stage: \(scene.level)",
-      "Size: \(size)",
-      "Speed: \(speed)",
-      "Direction: \(direction)"
-    ]
-    
-    if scene.asteroidSize == .bosstroid {
-      introMessage.append("WARNING: Bosstroid field")
-      introMessage.append("Raise shields, save a bomb")
-    }
+    scene.planWave()
 
-    if scene.asteroidType != .normal {
-      introMessage.append("Watch for: \(scene.asteroidType.toString())")
-    }
+    let route = scene.stationRoute
+    let stationAhead = route.stationAfterThisWave ? route.next?.name : nil
 
-    if scene.stationRoute.stationAfterThisWave, let station = scene.stationRoute.next {
-      introMessage.append("Station ahead: \(station.name)")
-    }
-    
-    let wait = SKAction.wait(forDuration: Tuning.Stages.announcementLineDelay)
-    var array = [SKAction]()
-    for message in introMessage {
-      array.append(wait)
-      array.append(.run { self.scene.addText(message: message)})
-    }
-    
-    array.append( .run {
+    let screen = Screen.sharedInstance
+    let panel = ScannerPanel(wave: scene.wave, stationAhead: stationAhead, width: screen.width - 32)
+    panel.position = CGPoint(x: 16, y: screen.height - screen.hudScoreHeight - 44 - ScannerPanel.height)
+    panel.alpha = 0
+    scene.addChild(panel)
+    panel.run(.fadeIn(withDuration: 0.3))
+    scanner = panel
+
+    scene.run(.sequence([.wait(forDuration: Tuning.Stages.briefingTime), .run {
       self.scene.gameState.enter(PlayingState.self)
-    })
-    
-    scene.run(.sequence(array), withKey: GameScene.FLOW)
-    
+    }]), withKey: GameScene.FLOW)
   }
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
@@ -80,8 +55,10 @@ class NextLevelState: GKState {
     return false
   }
   
+  // The briefing fades as the wave begins
   override func willExit(to nextState: GKState) {
-    // print("Will Exit Intro State")
+    scanner?.run(.sequence([.fadeOut(withDuration: 0.6), .removeFromParent()]))
+    scanner = nil
   }
   
   override func update(deltaTime seconds: TimeInterval) {

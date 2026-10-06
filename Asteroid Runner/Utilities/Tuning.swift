@@ -154,6 +154,73 @@ enum Tuning {
   }
 
 
+  // MARK: Waves
+  //
+  // Each wave follows a recipe; see Wave.swift for what each one holds.
+
+  enum Waves {
+    // Early stages are plain rock fields while the player learns
+    static let fieldOnlyThrough = 2
+
+    static func unlockStage(_ recipe: WaveRecipe) -> Int {
+      switch recipe {
+      case .field: return 1
+      case .swarm: return 3
+      case .fastMovers: return 4
+      case .heavy: return 6
+      case .lanes: return 7
+      case .bouncers: return 8     // elastroids debut at stage 8
+      case .bosstroidField: return Hazards.bosstroidFromLevel
+      case .maze: return 9
+      }
+    }
+
+    // How often each recipe is picked, relative to the others
+    static func weight(_ recipe: WaveRecipe) -> Int {
+      switch recipe {
+      case .field: return 3
+      case .swarm, .fastMovers, .heavy: return 2
+      case .lanes, .maze, .bouncers, .bosstroidField: return 1
+      }
+    }
+
+    // Lanes: how many, how many have rocks at once, the gap between
+    // rocks, and how many rocks before the busy lanes change
+    static let laneCount = 4
+    static let activeLanes = 2
+    static let laneGap: TimeInterval = 0.32
+    static let laneSwitchEvery = 10
+    static let laneSpeed: CGFloat = 230
+
+    // Maze: seconds between rows, width of the way through, how far the
+    // gap can move from one row to the next, and how fast rows fall
+    static let mazeRowTime: TimeInterval = 1.8
+    static let mazeGap: CGFloat = 120
+    static let mazeGapStep: CGFloat = 70
+    static let mazeSpeed: CGFloat = 80
+  }
+
+
+  // MARK: Pacing
+  //
+  // Difficulty rises and falls with the journey: easier just after a
+  // station, building to full strength on the last wave before the next.
+
+  enum Pacing {
+    // Right after a station the ramp acts this many stages easier
+    static let relief = 3
+    // Hard recipes (maze, bouncers, bosstroid field) only from this far
+    // along the run to the next station
+    static let hardFrom = 0.5
+
+    // The stage number the difficulty ramp uses
+    static func difficulty(stage: Int, progress: Double) -> Int {
+      let ease = Int((Double(relief) * (1 - min(max(progress, 0), 1))).rounded())
+      return max(1, stage - ease)
+    }
+  }
+
+
   // MARK: Travel
 
   enum Travel {
@@ -174,8 +241,8 @@ enum Tuning {
     static let clearCheckInterval: TimeInterval = 0.5
     static let maxClearWait: TimeInterval = 10
 
-    // Gap between lines of the stage announcement
-    static let announcementLineDelay: TimeInterval = 1.5
+    // How long the scanner briefing shows before a wave
+    static let briefingTime: TimeInterval = 6
     static let stageClearPause: TimeInterval = 1.5
     static let bonusPerStage = 50
     static let gameOverDelay: TimeInterval = 3
@@ -190,14 +257,14 @@ enum Tuning {
       return max(spawnFloor, 1.0 - 0.05 * TimeInterval(level - 1))
     }
 
-    // Rocks get faster every stage: 3% a stage, up to double speed at stage 35
+    // Rocks get faster every stage: 2.5% a stage, up to double speed at stage 41
     static func speedScale(level: Int) -> CGFloat {
-      return min(2, 1 + 0.03 * CGFloat(level - 1))
+      return min(2, 1 + 0.025 * CGFloat(level - 1))
     }
 
-    // From stage 9, a spawn sometimes brings two rocks: 4% more each stage, up to half
+    // From stage 11, a spawn sometimes brings two rocks: 3% more each stage, up to half
     static func pairChance(level: Int) -> Double {
-      return min(0.5, max(0, 0.04 * Double(level - 8)))
+      return min(0.5, max(0, 0.03 * Double(level - 10)))
     }
 
     // Rocks this size or bigger never come in pairs
@@ -228,12 +295,8 @@ enum Tuning {
   // MARK: Asteroid hazards
 
   enum Hazards {
-    // Bosstroid waves are a rare set piece, announced with a warning
+    // Bosstroids come in bosstroid field waves (see Waves), from this stage
     static let bosstroidFromLevel = 8
-    // Chance a wave is bosstroids once they're unlocked (was 0.25)
-    static let bosstroidChance = 0.12
-    // Bosstroid waves are shorter than others
-    static let bosstroidWaveShare = 0.7
 
     // Upward speed a low mass asteroid gains from each hit
     static let lowMassKnockback: CGFloat = 60

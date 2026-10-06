@@ -30,6 +30,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var missileMode = MissileMode.normal
 
   var rapidFireOn = false
+
+  // With auto fire off, the ship fires while a finger is held down
+  var activeTouches = Set<UITouch>()
+
   var autoFireOn = true {
     didSet {
       powerPanel.update(grid: power, autoFire: autoFireOn)
@@ -55,10 +59,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
 
-  var asteroidSize = AsteroidSize.average
-  var asteroidSpeed = AsteroidSpeed.average
-  var asteroidDirection = AsteroidDirection.top
-  var asteroidType = AsteroidType.normal
+  // The wave being flown, or about to be: its recipe, sizes, speed and difficulty
+  var wave = WavePlan.make(stage: 1, progress: 0, previous: nil)
+
+  // Lanes and maze waves keep track of where rocks go
+  var activeLanes = WavePlan.activeLanes()
+  var laneRocks = 0
+  var mazeGapCenter: CGFloat = 0
 
   var gameState: GKStateMachine!
 
@@ -445,43 +452,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 
   // ------------------------------------------------------------
-  // Define asteroid params for next wave
+  // Plan the next wave. Difficulty eases after a station and builds
+  // toward the next one.
   // ------------------------------------------------------------
 
-
-  func defineAsteroidsForWave() {
-    // Random params for asteroids, harder as the levels go up
-    asteroidSize = AsteroidSize.random(forLevel: level)
-    asteroidSpeed = AsteroidSpeed.random(forLevel: level)
-    asteroidDirection = AsteroidDirection.random()
-    asteroidType = AsteroidType.featured(forLevel: level)
+  func planWave() {
+    wave = WavePlan.make(stage: level, progress: stationRoute.legProgress, previous: wave.recipe)
   }
 
 
   // ------------------------------------------------------------
-  // Time between asteroids, shorter as the levels go up
-  // ------------------------------------------------------------
-
-  var asteroidInterval: TimeInterval {
-    return Tuning.Stages.spawnInterval(level: level) * Tuning.Stages.sizeSpacing(asteroidSize)
-  }
-
-
-  // ------------------------------------------------------------
-  // Start making asteroids
+  // Start making asteroids. Each spawn schedules the next, so the gap
+  // can follow the size of the last rock or the wave's layout.
   // ------------------------------------------------------------
 
   func makeAsteroids() {
-    // Bosstroid waves are spaced far apart, so the first arrives right away
-    if asteroidSize == .bosstroid {
-      makeAsteroid()
+    switch wave.recipe.layout {
+    case .scatter:
+      if wave.recipe == .bosstroidField {
+        // The centerpiece arrives first
+        makeRock(size: .bosstroid)
+        scheduleSpawn(after: wave.baseInterval * Tuning.Stages.sizeSpacing(.bosstroid))
+      } else {
+        scheduleSpawn(after: wave.baseInterval)
+      }
+    case .lanes:
+      activeLanes = WavePlan.activeLanes()
+      laneRocks = 0
+      scheduleSpawn(after: Tuning.Waves.laneGap)
+    case .maze:
+      mazeGapCenter = size.width / 2
+      scheduleSpawn(after: 0)
     }
-    let wait = SKAction.wait(forDuration: asteroidInterval)
-    let makeAsteroid = SKAction.run {
-      self.makeAsteroid()
+  }
+
+  private func scheduleSpawn(after gap: TimeInterval) {
+    run(.sequence([.wait(forDuration: gap), .run { self.spawnNext() }]), withKey: MAKE_ASTEROIDS)
+  }
+
+  private func spawnNext() {
+    let gap: TimeInterval
+    switch wave.recipe.layout {
+    case .scatter:
+      gap = makeAsteroid()
+    case .lanes:
+      makeLaneRock()
+      gap = Tuning.Waves.laneGap
+    case .maze:
+      makeMazeRow()
+      gap = Tuning.Waves.mazeRowTime
     }
-    let seq = SKAction.sequence([wait, makeAsteroid])
-    run(SKAction.repeatForever(seq), withKey: MAKE_ASTEROIDS)
+    scheduleSpawn(after: gap)
   }
 
 
@@ -554,10 +575,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
   // ------------------------------------------------------------
-  // Make an asteroid or power up
+  // Make an asteroid or power up. Returns the time until the next spawn:
+  // longer after a big rock, so a wave covers about the same amount of
+  // screen whatever its sizes.
   // ------------------------------------------------------------
 
-  func makeAsteroid() {
+  func makeAsteroid() -> TimeInterval {
     // Now and then a pickup instead of a rock. Items are capped per wave.
     if Double.random(in: 0 ..< 1) < Tuning.PowerUps.pickupChance {
       let pickup = Pickup.random()
@@ -569,33 +592,64 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(powerup)
         powerup.position.x = CGFloat.random(in: 0 ... Screen.sharedInstance.width)
         powerup.position.y = size.height
-        return
+        return wave.baseInterval
       }
     }
 
-    // Later stages sometimes send rocks in pairs
-    let pairsAllowed = asteroidSize.rawValue < Tuning.Stages.noPairsFrom.rawValue
-    let count = pairsAllowed && Double.random(in: 0 ..< 1) < Tuning.Stages.pairChance(level: level) ? 2 : 1
-    for _ in 0 ..< count {
-      makeRock()
+    // Later stages sometimes send smaller rocks in pairs
+    let rockSize = wave.randomSize()
+    let pairsAllowed = rockSize.rawValue < Tuning.Stages.noPairsFrom.rawValue
+    let count = pairsAllowed && Double.random(in: 0 ..< 1) < wave.pairChance ? 2 : 1
+    for i in 0 ..< count {
+      makeRock(size: i == 0 ? rockSize : wave.randomSize())
     }
+    return wave.baseInterval * Tuning.Stages.sizeSpacing(rockSize)
   }
 
-  // A rock, sometimes of the wave's featured type, faster in later stages
+  // A rock from the wave's direction, sometimes of its featured type,
+  // faster in later stages
 
-  func makeRock() {
-    let share = asteroidType.waveShare * Tuning.Stages.featuredScale(level: level)
-    let type = Double.random(in: 0 ..< 1) < share ? asteroidType : .normal
+  func makeRock(size rockSize: AsteroidSize) {
+    let type = wave.randomType()
     // Bosstroids always come from the top: from the side they drift in so
     // slowly they can stay off screen for the whole wave
-    let direction = asteroidSize == .bosstroid ? .top : asteroidDirection
-    let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: direction, type: type)
+    let direction = rockSize == .bosstroid ? .top : wave.direction
+    let asteroid = Asteroid(asteroidSize: rockSize, speed: wave.speed, direction: direction, type: type)
     if let velocity = asteroid.physicsBody?.velocity {
-      let scale = Tuning.Stages.speedScale(level: level)
+      let scale = wave.speedScale
       asteroid.physicsBody?.velocity = CGVector(dx: velocity.dx * scale, dy: velocity.dy * scale)
     }
     addChild(asteroid)
     asteroid.trail?.targetNode = self
+  }
+
+  // Lanes: fast rocks straight down the busy lanes. Every so often the
+  // busy lanes change, so the player has to move.
+
+  func makeLaneRock() {
+    laneRocks += 1
+    if laneRocks % Tuning.Waves.laneSwitchEvery == 0 {
+      activeLanes = WavePlan.activeLanes()
+    }
+    guard let lane = activeLanes.randomElement() else { return }
+    let asteroid = Asteroid(asteroidSize: wave.randomSize())
+    asteroid.position = CGPoint(x: WavePlan.laneX(lane, width: size.width) + CGFloat.random(in: -6 ... 6),
+                                y: size.height + asteroid.size.height)
+    asteroid.physicsBody?.velocity = CGVector(dx: 0, dy: -Tuning.Waves.laneSpeed * wave.speedScale)
+    addChild(asteroid)
+  }
+
+  // Maze: a row of unbreakable rocks with a gap, the gap a step left or
+  // right of the last row's
+
+  func makeMazeRow() {
+    mazeGapCenter = WavePlan.nextMazeGap(after: mazeGapCenter, width: size.width)
+    for x in WavePlan.mazeRow(gapCenter: mazeGapCenter, width: size.width) {
+      let rock = Asteroid(asteroidSize: .large)
+      rock.position = CGPoint(x: x, y: size.height + rock.size.height)
+      addChild(rock)
+      rock.makeWall(speed: Tuning.Waves.mazeSpeed)
+    }
   }
 
 
@@ -761,9 +815,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       return
     }
 
-    if !autoFireOn && shipInPlay {
-      shootMissile()
-    }
+    activeTouches.formUnion(touches)
   }
 
   // Drag anywhere to steer the ship
@@ -782,11 +834,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    dragTargetX = nil
+    activeTouches.subtract(touches)
+    if activeTouches.isEmpty {
+      dragTargetX = nil
+    }
   }
 
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    dragTargetX = nil
+    touchesEnded(touches, with: event)
   }
 
   // Move the ship toward the drag target at engine speed
@@ -1065,15 +1120,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       ship.moveForce(x: x * Tuning.Player.tiltForce)
     }
 
-    // Hold fire while docked
-    if autoFireOn && !(gameState.currentState is StationState) {
-      timeSinceLastMissile += seconds
-
-      if timeSinceLastMissile > missileFireTime {
-        timeSinceLastMissile = 0
-        if !ship.isHidden {
-          shootMissile()
-        }
+    // Fire on auto, or while a finger is held down, at the weapon's rate.
+    // Hold fire while docked.
+    timeSinceLastMissile = min(timeSinceLastMissile + seconds, missileFireTime)
+    let firing = autoFireOn || !activeTouches.isEmpty
+    if firing && !(gameState.currentState is StationState) && timeSinceLastMissile >= missileFireTime {
+      timeSinceLastMissile = 0
+      if !ship.isHidden {
+        shootMissile()
       }
     }
   }

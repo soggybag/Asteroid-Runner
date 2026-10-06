@@ -15,7 +15,7 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
 - Drag anywhere to steer, or tilt the phone. The ship follows your finger as
   fast as its engines allow.
 - The ship fires automatically. Turn Auto Fire off in the power HUD (swipe
-  up) to tap to fire instead.
+  up) to fire only while a finger is held down, at the weapon's rate.
 - Pickups go into the item tray at the top of the screen. Tap a slot to use
   it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
   lower it; it only drains while it's up. The tray holds three; when it's
@@ -71,12 +71,32 @@ features a random one.
 | 10 | Turret | Fires aimed shots at the ship |
 | 11 | Enemy base | Big, slow and armored, fires a three-shot spread |
 
+## Waves
+
+Before each wave the scanner shows what's coming: the kind of wave, rock
+sizes and speed, any special asteroid type, a suggested power setting, and
+whether a station is next. Waves come in kinds, unlocked as stages go by:
+
+| From stage | Wave | What it is |
+|---|---|---|
+| 1 | Rock field | Mixed sizes from the wave's direction |
+| 3 | Swarm | Lots of tiny and small rocks, close together |
+| 4 | Fast movers | Small rocks moving fast straight down; dodge them |
+| 6 | Heavy rocks | Fewer, bigger, faster rocks |
+| 7 | Lanes | Fast rocks down a few lanes; the busy lanes change |
+| 8 | Bouncers | Elastroids bouncing around the screen |
+| 8 | Bosstroid field | A swarm of small rocks around a bosstroid |
+| 9 | Asteroid maze | Rows of unbreakable rocks with a gap to fly through |
+
+Difficulty rises and falls: the first wave after a station is a few stages
+easier, building to full strength just before the next station. Mazes,
+bouncers and bosstroid fields only come in the second half of the way.
+
 Rocks break into smaller rocks when hit enough. Special types are worth more
 points. Turrets and enemy bases drop an item when destroyed. Stages keep
 getting harder: rocks spawn faster and move faster every stage, waves get
-longer, and from stage 9 smaller rocks sometimes come in pairs. Bigger rocks
-spawn further apart. From stage 8, an occasional bosstroid wave is announced
-with a warning; a smart bomb can break bosstroids. The shield blocks enemy shots. Gold coins are worth 250 points.
+longer, and from stage 11 smaller rocks sometimes come in pairs. Bigger rocks
+spawn further apart. A smart bomb can break bosstroids. The shield blocks enemy shots. Gold coins are worth 250 points.
 
 ## Development
 

@@ -124,6 +124,18 @@ class Asteroid: SKSpriteNode {
   // MARK: Public methods
   // --------------------------------
 
+  // Turn this rock into a maze wall: it can't be broken or pushed, and
+  // drifts straight down at a steady speed, then leaves
+
+  func makeWall(speed: CGFloat) {
+    hits = .greatestFiniteMagnitude
+    color = Colors.mazeWall
+    physicsBody?.isDynamic = false
+    let distance = position.y + size.height
+    run(.sequence([.moveBy(x: 0, y: -distance, duration: TimeInterval(distance / speed)), .removeFromParent()]))
+  }
+
+
   // Hit asteroid with value/damage. Returns nil if it survives, otherwise
   // the debris (possibly none) to add to the scene.
 
