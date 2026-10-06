@@ -31,6 +31,29 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
 
+## Playtest round 3 findings (2026-10-06)
+
+Four logged games on build 43 after balance pass 2; details in [playtest-round-3.md](playtest-round-3.md). Stages 12–18, no lives left. **Better, but steep after stage 10, and stages feel flat after a while.** Three bugs fixed in build 44: brasstroids splitting into same-size copies forever, bosstroid waves that showed no bosstroids, and edge swipes reaching iOS.
+
+| Finding | What it means |
+| --- | --- |
+| The ramp climbs too steeply after stage 10 | Pacing in waves: ramp up, back off, ramp up again. Tie it to the journey: easier just after a station, hardest just before the next |
+| The best stages have a clear character: fast rocks to dodge, swarms of tiny rocks, a few big fast ones, chaotic elastroids | Design waves as recipes that mix sizes and types: many tiny rocks with one bosstroid, a couple of massive rocks in a swarm. Every wave mixes sizes somewhat |
+| Stage briefings go by too fast and don't get attention | Make the briefing a scanner or radar readout that stays up, looks like ship equipment, and hints what to set in the HUD |
+| Three tray slots get flat after a few stages | Ship upgrades: more slots, modules (Phase 5) |
+| Tap-to-fire makes rapid fire pointless, and tapping and dragging hit iOS gestures | Rethink fire control: hold to fire at the weapon's rate, or auto fire only |
+| Bought vs sold by mistake at a station; the station looks like the HUD | Rework the station screen: separate buy and sell clearly, its own look |
+| Distance is just a number | Give it meaning with the system map and voyage, or drop it |
+| Ended a game with 36 coins | Coins pile up; stations need more worth buying |
+
+**New ideas from round 3:**
+
+- **Rocks that carry pickups:** some rocks hold an item, with a visible hint (a glint, a different color) so players go after them.
+- **Pacing in waves**, as in many games: tension and release rather than a straight climb.
+- **Wave recipes** instead of one size and type per wave.
+- **A scanner briefing** with the feel of space travel, cueing the player to prepare in the HUD.
+- **When commerce arrives,** flying may need to be easier to leave room for it (already an open question).
+
 ## Playtest round 2 findings (2026-10-05)
 
 Five games on build 37 after the balance pass; details in [playtest-round-2.md](playtest-round-2.md). **A better game, but it overshot:** runs now end at stages 7–13 with no lives left, almost always on a screen full of bosstroids.
@@ -358,10 +381,12 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 1. ~~**Balance pass** (Phase 3)~~ Done 2026-10-05; see Phase 3 status.
 2. ~~**Balance pass 2**~~ Done 2026-10-05.
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
-4. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts.
-5. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
-6. **Maze and lane waves** (Phase 3).
-7. **Weapon variety** (Phase 3), including turret-only items.
+4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
+5. **Waves and pacing** (Phase 3, revised after round 3): wave recipes that mix sizes and types (swarms, fast dodging waves, a few big fast rocks, maze and lane waves); difficulty in waves that eases after each station; a scanner briefing that stays up and hints at HUD settings.
+6. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts. Fix accidental opening. Rethink fire control (hold to fire, or auto only).
+7. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
+8. **Weapon variety and loot** (Phase 3): weapons in the spirit of multi-shot, turret-only items, rocks that carry pickups.
+9. **Station screen rework** (Phase 4): clear buy vs sell, its own look.
 
 Stations were built early, ahead of their phase, to see how they work; trade waits for Phase 4.
 
@@ -381,7 +406,9 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Smart bomb: 10 pulses of 2 damage, enough to break a bosstroid (was 1)
     - Wider power gaps: drag 100–620 pt/s, fire 0.7–0.12 s, damage 0.5–4, shields up to 3 charges recharging in 6 s at level 4
 - [x] Quick wins: pickups on screen are pulled into the ship before docking; distance in AU in the HUD; game over shows stage, distance, asteroids and turrets destroyed
-- [ ] Playtest round 3 in [playtest-round-3.md](playtest-round-3.md)
+- [x] Playtest round 3 ([playtest-round-3.md](playtest-round-3.md)): stages 12–18; steep after stage 10; stages feel flat. Gate not met
+- [x] Round 3 bugs fixed: brasstroid debris, bosstroid waves from the top, home indicator for edge swipes
+- [ ] Waves and pacing: wave recipes, difficulty in waves, scanner briefing
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
@@ -456,6 +483,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
 - [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
 - [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
+- [ ] Tap-to-fire: keep it as hold-to-fire at the weapon's rate, or drop it for auto fire only?
+- [ ] Distance: give it meaning (system map, voyage goals) or drop it?
 - [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
@@ -465,6 +494,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-06 | Round 3 playtest: stages 12–18, steep after 10, flat after a while. Fixed brasstroid splitting, missing bosstroids, edge swipes. Next: waves and pacing (wave recipes, difficulty in waves, scanner briefing) |
 | 2026-10-05 | Balance pass 2: size-scaled spawn spacing, rarer announced bosstroid waves, a smart bomb that breaks bosstroids, wider power gaps. Quick wins: pickups pulled in before docking, distance and stats at game over |
 | 2026-10-05 | New idea: a system map, FTL style. Choose the next station at launch; routes hint at their stages and length. Added to Phase 4 |
 | 2026-10-05 | Round 2 playtest: a better game but too hard past stage 10 (bosstroid waves). Next: balance pass 2, pickups collected before docking, game over stats, then the HUD rework |

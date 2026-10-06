@@ -93,6 +93,22 @@ The game over screen now shows the stage, distance and counts; copy them in.
 
     Answer: Distance isn't dooing anything yet. Its just a number. In the future this could be important or we could drop it. 
 
+## Summary (2026-10-06)
+
+Four logged games on build 43: stages 12, 15, 16 and 18, no lives left, best distance 2.38 AU. **Better, but the ramp is still steep after stage 10 and stages start to feel flat.** No run reached stage 20, so the Phase 3 gate is still open.
+
+**Bugs found, fixed in build 44 (`4fa93ad`):**
+
+- Brasstroids split into same-size brasstroids forever. Brass is forced to at least large when it spawns, and its debris was forced back up too. Debris now always gets smaller.
+- A bosstroid stage with no bosstroids. Likely cause: with the wider spacing only 2–3 spawn, and from the side they drift in so slowly they stay off screen. They now come from the top, and the first arrives right away.
+- Tap-to-fire play pulled the screen down, switched apps and opened the HUD by accident. The home indicator was set to hide, which stops iOS deferring bottom-edge swipes; it now shows (dimmed). The accidental HUD opening is for the HUD rework.
+
+**What worked:** elastroid waves (chaotic, shields useful), fast rocks you must dodge, waves of many tiny rocks, a few large fast rocks; pickups pulled in before docking; the smart bomb on big rocks.
+
+**What didn't:** the ramp after stage 10; stage briefings go by too fast to matter; three tray slots get flat after a few stages; tap-to-fire makes rapid fire pointless; buying vs selling at a station is easy to mix up, and the station looks like the HUD; distance is just a number so far.
+
+Changes are in [design-notes.md](design-notes.md#playtest-round-3-findings-2026-10-06).
+
 ## General notes
 
 Anything else: ideas, bugs, what was fun.
