@@ -107,7 +107,7 @@ Four logged games on build 43: stages 12, 15, 16 and 18, no lives left, best dis
 
 **What didn't:** the ramp after stage 10; stage briefings go by too fast to matter; three tray slots get flat after a few stages; tap-to-fire makes rapid fire pointless; buying vs selling at a station is easy to mix up, and the station looks like the HUD; distance is just a number so far.
 
-Changes are in [design-notes.md](design-notes.md#playtest-round-3-findings-2026-10-06).
+Changes are in [design-notes.md](design-notes.md#playtest-round-3-findings-2026-10-06). Round 4 is [playtest-round-4.md](playtest-round-4.md).
 
 ## General notes
 

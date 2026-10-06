@@ -120,7 +120,8 @@ spawn further apart. A smart bomb can break bosstroids. The shield blocks enemy 
   General settings.
 - **Playtesting:** round 1 notes are in [docs/playtest-notes.md](docs/playtest-notes.md);
   round 2 (balance pass) is [docs/playtest-round-2.md](docs/playtest-round-2.md);
-  round 3 (balance pass 2) is [docs/playtest-round-3.md](docs/playtest-round-3.md).
+  round 3 (balance pass 2) is [docs/playtest-round-3.md](docs/playtest-round-3.md);
+  round 4 (waves and pacing) is [docs/playtest-round-4.md](docs/playtest-round-4.md).
   Note the version from the corner with each game.
 
 ## Todo

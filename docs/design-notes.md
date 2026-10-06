@@ -414,7 +414,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Pacing: difficulty runs 3 stages easier just after a station, back to full on the last wave before the next (`Tuning.Pacing`). Hard recipes only in the second half. Steeper parts softened: rock speed +2.5% a stage (was 3%), pairs from stage 11 (was 9)
     - Scanner briefing replaces the scrolling text: radar, wave name, sizes and speed, featured type, suggested power, station ahead; up for 6 s
     - Hold to fire replaces tap to fire: with auto fire off, a held finger fires at the weapon's rate, so rapid fire counts
-- [ ] Playtest round 4
+- [ ] Playtest round 4 in [playtest-round-4.md](playtest-round-4.md)
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
