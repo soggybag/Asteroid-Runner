@@ -382,8 +382,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 2. ~~**Balance pass 2**~~ Done 2026-10-05.
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
-5. **Waves and pacing** (Phase 3, revised after round 3): wave recipes that mix sizes and types (swarms, fast dodging waves, a few big fast rocks, maze and lane waves); difficulty in waves that eases after each station; a scanner briefing that stays up and hints at HUD settings.
-6. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts. Fix accidental opening. Rethink fire control (hold to fire, or auto only).
+5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
+6. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts. Fix accidental opening.
 7. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
 8. **Weapon variety and loot** (Phase 3): weapons in the spirit of multi-shot, turret-only items, rocks that carry pickups.
 9. **Station screen rework** (Phase 4): clear buy vs sell, its own look.
@@ -408,7 +408,13 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Quick wins: pickups on screen are pulled into the ship before docking; distance in AU in the HUD; game over shows stage, distance, asteroids and turrets destroyed
 - [x] Playtest round 3 ([playtest-round-3.md](playtest-round-3.md)): stages 12–18; steep after stage 10; stages feel flat. Gate not met
 - [x] Round 3 bugs fixed: brasstroid debris, bosstroid waves from the top, home indicator for edge swipes
-- [ ] Waves and pacing: wave recipes, difficulty in waves, scanner briefing
+- [x] Waves and pacing (2026-10-06):
+    - Eight wave recipes in `Wave.swift`: rock field, swarm, fast movers, heavy rocks, lanes, bouncers, bosstroid field, asteroid maze. Each mixes sizes; unlocks and weights in `Tuning.Waves`
+    - Spawn gaps follow each rock's size, so mixed waves keep an even density
+    - Pacing: difficulty runs 3 stages easier just after a station, back to full on the last wave before the next (`Tuning.Pacing`). Hard recipes only in the second half. Steeper parts softened: rock speed +2.5% a stage (was 3%), pairs from stage 11 (was 9)
+    - Scanner briefing replaces the scrolling text: radar, wave name, sizes and speed, featured type, suggested power, station ahead; up for 6 s
+    - Hold to fire replaces tap to fire: with auto fire off, a held finger fires at the weapon's rate, so rapid fire counts
+- [ ] Playtest round 4
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
@@ -483,7 +489,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
 - [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
 - [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
-- [ ] Tap-to-fire: keep it as hold-to-fire at the weapon's rate, or drop it for auto fire only?
+- [x] Tap-to-fire: replaced by hold to fire at the weapon's rate (2026-10-06)
 - [ ] Distance: give it meaning (system map, voyage goals) or drop it?
 - [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
@@ -494,6 +500,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-06 | Waves and pacing built: eight wave recipes, difficulty easing after each station, a scanner briefing, hold to fire. Bosstroids now only in bosstroid field waves |
 | 2026-10-06 | Round 3 playtest: stages 12–18, steep after 10, flat after a while. Fixed brasstroid splitting, missing bosstroids, edge swipes. Next: waves and pacing (wave recipes, difficulty in waves, scanner briefing) |
 | 2026-10-05 | Balance pass 2: size-scaled spawn spacing, rarer announced bosstroid waves, a smart bomb that breaks bosstroids, wider power gaps. Quick wins: pickups pulled in before docking, distance and stats at game over |
 | 2026-10-05 | New idea: a system map, FTL style. Choose the next station at launch; routes hint at their stages and length. Added to Phase 4 |
