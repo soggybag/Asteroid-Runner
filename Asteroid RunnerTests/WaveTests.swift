@@ -234,6 +234,27 @@ struct AsteroidBreakTests {
     #expect(brass.hits > rock.hits)
   }
 
+  // Brasstroids are forced to at least large when they spawn. Their debris
+  // used to be forced back up too, so they split into same-size copies forever.
+  @Test(arguments: [AsteroidType.normal, .lowMass, .black, .brass, .turret, .base, .elastic])
+  func debrisIsAlwaysSmallerThanItsParent(type: AsteroidType) {
+    for size in [AsteroidSize.average, .large, .huge, .massive, .bosstroid] {
+      let rock = Asteroid(asteroidSize: size, type: type)
+      guard let debris = rock.hitAsteroid(value: 1000) else { continue }
+      for piece in debris {
+        #expect(piece.asteroidSize.rawValue < rock.asteroidSize.rawValue)
+      }
+    }
+  }
+
+  @Test func brassBreaksDownToNothingEventually() {
+    var rocks = [Asteroid(asteroidSize: .huge, type: .brass)]
+    for _ in 0 ..< 10 {
+      rocks = rocks.flatMap { $0.hitAsteroid(value: 1000) ?? [] }
+    }
+    #expect(rocks.isEmpty)
+  }
+
   @Test func aHitThatDoesNotBreakItReturnsNil() {
     let brass = Asteroid(asteroidSize: .large, type: .brass)
     #expect(brass.hitAsteroid(value: MissilePower.weak.rawValue) == nil)

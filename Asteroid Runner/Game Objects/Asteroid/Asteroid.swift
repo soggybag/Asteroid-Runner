@@ -45,8 +45,10 @@ class Asteroid: SKSpriteNode {
   // Init with size and type. Call launch(from:speed:) to place it off screen
   // and send it on its way, or set position and velocity directly for debris.
 
-  init(asteroidSize: AsteroidSize, type: AsteroidType = .normal) {
-    let asteroidSize = type.adjust(size: asteroidSize)
+  // Some types force a size when they spawn (brass is at least large).
+  // Debris skips that, so pieces are always smaller than their parent.
+  init(asteroidSize: AsteroidSize, type: AsteroidType = .normal, adjustSize: Bool = true) {
+    let asteroidSize = adjustSize ? type.adjust(size: asteroidSize) : asteroidSize
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
 
@@ -90,7 +92,7 @@ class Asteroid: SKSpriteNode {
   static func makeAsteroidDebrisAt(point: CGPoint, asteroidSize: AsteroidSize, velocity: CGVector, type: AsteroidType = .normal) -> [Asteroid] {
     var a = [Asteroid]()
     for _ in 0 ... 2 {
-      let asteroid = Asteroid(asteroidSize: asteroidSize, type: type)
+      let asteroid = Asteroid(asteroidSize: asteroidSize, type: type, adjustSize: false)
       // Fly apart from the impact while keeping the parent's momentum
       let scatter = CGVector(dx: CGFloat.random(in: -40 ... 40), dy: CGFloat.random(in: -20 ... 40))
       asteroid.physicsBody!.velocity = velocity + scatter

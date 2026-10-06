@@ -46,12 +46,15 @@ class GameViewController: UIViewController {
     return true
   }
 
+  // Leave the home indicator showing (it dims during play). When it's set
+  // to hide, iOS doesn't defer swipes at the bottom edge, and a steering
+  // drag there can switch apps.
   override var prefersHomeIndicatorAutoHidden: Bool {
-    return true
+    return false
   }
 
   // Keep edge swipes from pulling down Control Center or Notification
-  // Center mid-game. The user swipes twice to get them.
+  // Center, or switching apps, mid-game. The user swipes twice to get them.
   override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
     return [.top, .bottom]
   }

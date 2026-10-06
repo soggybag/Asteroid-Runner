@@ -472,6 +472,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ------------------------------------------------------------
 
   func makeAsteroids() {
+    // Bosstroid waves are spaced far apart, so the first arrives right away
+    if asteroidSize == .bosstroid {
+      makeAsteroid()
+    }
     let wait = SKAction.wait(forDuration: asteroidInterval)
     let makeAsteroid = SKAction.run {
       self.makeAsteroid()
@@ -582,7 +586,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func makeRock() {
     let share = asteroidType.waveShare * Tuning.Stages.featuredScale(level: level)
     let type = Double.random(in: 0 ..< 1) < share ? asteroidType : .normal
-    let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: asteroidDirection, type: type)
+    // Bosstroids always come from the top: from the side they drift in so
+    // slowly they can stay off screen for the whole wave
+    let direction = asteroidSize == .bosstroid ? .top : asteroidDirection
+    let asteroid = Asteroid(asteroidSize: asteroidSize, speed: asteroidSpeed, direction: direction, type: type)
     if let velocity = asteroid.physicsBody?.velocity {
       let scale = Tuning.Stages.speedScale(level: level)
       asteroid.physicsBody?.velocity = CGVector(dx: velocity.dx * scale, dy: velocity.dy * scale)
