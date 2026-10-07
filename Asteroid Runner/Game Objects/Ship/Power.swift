@@ -36,10 +36,24 @@ struct PowerGrid: Equatable {
     levels = [:]
     var left = reactor
     for system in ShipSystem.allCases {
-      let level = min(startingLevel, maxLevel, left)
+      var level = min(startingLevel, maxLevel)
+      while level > 0 && PowerGrid.cost(system, level: level) > left {
+        level -= 1
+      }
       levels[system] = level
-      left -= level
+      left -= PowerGrid.cost(system, level: level)
     }
+  }
+
+  // Reactor units a system uses at a level. Most systems use one unit a
+  // level; the top weapons levels cost more (Tuning.Power.levelCost).
+  static func cost(_ system: ShipSystem, level: Int) -> Int {
+    return Tuning.Power.value(Tuning.Power.levelCost(system), level: level)
+  }
+
+  // Units the next level up would add
+  static func stepCost(_ system: ShipSystem, toLevel level: Int) -> Int {
+    return cost(system, level: level) - cost(system, level: level - 1)
   }
 
   func level(_ system: ShipSystem) -> Int {
@@ -47,7 +61,7 @@ struct PowerGrid: Equatable {
   }
 
   var used: Int {
-    return levels.values.reduce(0, +)
+    return ShipSystem.allCases.reduce(0) { $0 + PowerGrid.cost($1, level: level($1)) }
   }
 
   var free: Int {
@@ -55,23 +69,27 @@ struct PowerGrid: Equatable {
   }
 
 
-  // One more unit to a system. Uses a free unit if there is one, otherwise
-  // takes one from the system with the most. False if nothing changed.
+  // One level more for a system. Uses free units first, then takes levels
+  // from the system with the highest level until there's enough. False,
+  // with nothing changed, if it can't be done.
   @discardableResult
   mutating func raise(_ system: ShipSystem) -> Bool {
     guard level(system) < maxLevel else { return false }
+    let need = PowerGrid.stepCost(system, toLevel: level(system) + 1)
 
-    if free <= 0 {
-      let donors = ShipSystem.allCases.filter { $0 != system && level($0) > 0 }
-      guard let donor = donors.max(by: { level($0) < level($1) }) else { return false }
-      levels[donor] = level(donor) - 1
+    var grid = self
+    while grid.free < need {
+      let donors = ShipSystem.allCases.filter { $0 != system && grid.level($0) > 0 }
+      guard let donor = donors.max(by: { grid.level($0) < grid.level($1) }) else { return false }
+      grid.levels[donor] = grid.level(donor) - 1
     }
-    levels[system] = level(system) + 1
+    grid.levels[system] = grid.level(system) + 1
+    self = grid
     return true
   }
 
 
-  // One less unit to a system; the unit goes back to the reactor
+  // One level less for a system; its units go back to the reactor
   @discardableResult
   mutating func lower(_ system: ShipSystem) -> Bool {
     guard level(system) > 0 else { return false }

@@ -38,9 +38,19 @@ enum Tuning {
 
     // Engines: tilt steering force and drift damping, and how fast the
     // ship can follow a dragging finger, in points per second
-    static let engineTilt: [CGFloat] = [0.05, 0.12, 0.25, 0.42, 0.65]
+    // High engine power maneuvers much faster, so it can dodge turret fire
+    static let engineTilt: [CGFloat] = [0.05, 0.12, 0.25, 0.5, 0.85]
     static let engineDamping: [CGFloat] = [0.25, 0.35, 0.5, 0.75, 1]
-    static let engineDragSpeed: [CGFloat] = [100, 170, 280, 420, 620]
+    static let engineDragSpeed: [CGFloat] = [100, 180, 300, 500, 800]
+
+    // Reactor units used to reach each level. The top two weapons levels
+    // cost 2 units each, so maxing weapons takes the whole reactor.
+    static func levelCost(_ system: ShipSystem) -> [Int] {
+      switch system {
+      case .weapons: return [0, 1, 2, 4, 6]
+      default: return [0, 1, 2, 3, 4]
+      }
+    }
 
     // Weapons: seconds between shots, damage per hit, and missile mass
     // (how hard a shot pushes an asteroid). Level 0 is the Command
@@ -247,8 +257,8 @@ enum Tuning {
     static let clearCheckInterval: TimeInterval = 0.5
     static let maxClearWait: TimeInterval = 10
 
-    // How long the scanner briefing shows before a wave
-    static let briefingTime: TimeInterval = 6
+    // How long the scanner briefing shows before a wave; tap it to start sooner
+    static let briefingTime: TimeInterval = 9
     static let stageClearPause: TimeInterval = 1.5
     static let bonusPerStage = 50
     static let gameOverDelay: TimeInterval = 3
@@ -316,8 +326,9 @@ enum Tuning {
     static let elasticBounces = 3
 
     static let enemyShotSpeed: CGFloat = 160
-    static let turretFireInterval: TimeInterval = 2.0
-    static let baseFireInterval: TimeInterval = 2.6
+    // Seconds between shots (were 2.0 and 2.6; too much fire to dodge)
+    static let turretFireInterval: TimeInterval = 2.8
+    static let baseFireInterval: TimeInterval = 3.4
     // Radians between the shots of an enemy base's spread
     static let baseSpread: CGFloat = 0.3
     // Enemy bases never move faster than this speed multiplier

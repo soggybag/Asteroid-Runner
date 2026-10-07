@@ -38,6 +38,7 @@ class NextLevelState: GKState {
     let panel = ScannerPanel(wave: scene.wave, stationAhead: stationAhead, width: screen.width - 32)
     panel.position = CGPoint(x: 16, y: screen.height - screen.hudScoreHeight - 44 - ScannerPanel.height)
     panel.alpha = 0
+    panel.onTap = { [weak self] in self?.startWave() }
     scene.addChild(panel)
     panel.run(.fadeIn(withDuration: 0.3))
     scanner = panel
@@ -55,6 +56,14 @@ class NextLevelState: GKState {
     return false
   }
   
+  // Tapping the scanner skips the rest of the briefing
+
+  func startWave() {
+    guard scene.gameState.currentState === self else { return }
+    scene.removeAction(forKey: GameScene.FLOW)
+    scene.gameState.enter(PlayingState.self)
+  }
+
   // The briefing fades as the wave begins
   override func willExit(to nextState: GKState) {
     scanner?.run(.sequence([.fadeOut(withDuration: 0.6), .removeFromParent()]))

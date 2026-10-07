@@ -22,17 +22,49 @@ struct PowerGridTests {
 
   @Test func raisingTakesFromTheSystemWithTheMost() {
     var grid = PowerGrid(reactor: 6, maxLevel: 4, startingLevel: 2)
+    grid.raise(.engines)
+    #expect(grid.level(.engines) == 3)
+    #expect(grid.used == 6)
+    // Shields and weapons were both at 2; one of them gave a level
+    #expect(grid.level(.shields) + grid.level(.weapons) == 3)
+  }
+
+  @Test func topWeaponsLevelsCostTwoUnits() {
+    #expect(PowerGrid.stepCost(.weapons, toLevel: 2) == 1)
+    #expect(PowerGrid.stepCost(.weapons, toLevel: 3) == 2)
+    #expect(PowerGrid.stepCost(.weapons, toLevel: 4) == 2)
+    #expect(PowerGrid.stepCost(.engines, toLevel: 4) == 1)
+  }
+
+  @Test func maxWeaponsTakeTheWholeReactor() {
+    var grid = PowerGrid(reactor: 6, maxLevel: 4, startingLevel: 2)
     grid.raise(.weapons)
     #expect(grid.level(.weapons) == 3)
-    #expect(grid.used == 6)
-
-    // Engines and shields are both at 2; one gave a unit
-    #expect(grid.level(.engines) + grid.level(.shields) == 3)
-
-    grid.raise(.weapons)
-    #expect(grid.level(.weapons) == 4)
     #expect(grid.level(.engines) == 1)
     #expect(grid.level(.shields) == 1)
+    grid.raise(.weapons)
+    #expect(grid.level(.weapons) == 4)
+    #expect(grid.level(.engines) == 0)
+    #expect(grid.level(.shields) == 0)
+    #expect(grid.used == 6)
+  }
+
+  @Test func maxEnginesStillLeaveRoom() {
+    var grid = PowerGrid(reactor: 6, maxLevel: 4, startingLevel: 2)
+    grid.raise(.engines)
+    grid.raise(.engines)
+    #expect(grid.level(.engines) == 4)
+    #expect(grid.level(.shields) + grid.level(.weapons) == 2)
+  }
+
+  @Test func aFailedRaiseChangesNothing() {
+    var grid = PowerGrid(reactor: 2, maxLevel: 4, startingLevel: 0)
+    grid.raise(.weapons)
+    grid.raise(.weapons)
+    let before = grid
+    let raised = grid.raise(.weapons)
+    #expect(!raised)
+    #expect(grid == before)
   }
 
   @Test func cantGoPastTheMax() {

@@ -12,6 +12,9 @@ import SpriteKit
 
 class ScannerPanel: SKNode {
 
+  // Tapping the scanner starts the wave
+  var onTap: () -> Void = {}
+
   static let height: CGFloat = 156
   private static let radarRadius: CGFloat = 48
 
@@ -56,6 +59,19 @@ class ScannerPanel: SKNode {
     if let station = stationAhead {
       addLabel("Station ahead: \(station)", size: 13, color: Colors.station, at: CGPoint(x: x, y: y))
     }
+
+    let hint = SKLabelNode(text: "Tap to begin")
+    hint.fontName = Fonts.fontName
+    hint.fontSize = 10
+    hint.fontColor = Colors.buttonColorActive
+    hint.horizontalAlignmentMode = .right
+    hint.position = CGPoint(x: size.width - 10, y: 8)
+    addChild(hint)
+
+    // A clear touch area over the panel, so a tap reaches it
+    let touchArea = ScannerTouchArea(size: size)
+    touchArea.tapped = { [weak self] in self?.onTap() }
+    addChild(touchArea)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -124,5 +140,28 @@ class ScannerPanel: SKNode {
     label.verticalAlignmentMode = .baseline
     label.position = point
     addChild(label)
+  }
+}
+
+
+// Catches taps on the scanner without letting them steer or fire
+
+class ScannerTouchArea: SKSpriteNode {
+
+  var tapped = {}
+
+  init(size: CGSize) {
+    super.init(texture: nil, color: .clear, size: size)
+    anchorPoint = .zero
+    zPosition = 10
+    isUserInteractionEnabled = true
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    tapped()
   }
 }
