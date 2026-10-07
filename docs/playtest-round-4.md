@@ -138,7 +138,7 @@ Five games on build 48: stages 13–18, no lives left; the power HUD opened in 4
 
 **Done after round 4 (build 51):** station screen with Buy, Sell and Repair tabs and its own look; top weapons levels cost 2 units; faster maneuvering at high engine power; turrets and bases fire less often (2.8 s and 3.4 s, were 2.0 and 2.6); the scanner stays up 9 s and a tap starts the wave.
 
-Changes are in [design-notes.md](design-notes.md#playtest-round-4-findings-2026-10-07).
+Changes are in [design-notes.md](design-notes.md#playtest-round-4-findings-2026-10-07). Round 5 is [playtest-round-5.md](playtest-round-5.md).
 
 ## General notes
 

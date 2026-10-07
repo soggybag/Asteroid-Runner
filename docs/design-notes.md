@@ -439,7 +439,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Hold to fire replaces tap to fire: with auto fire off, a held finger fires at the weapon's rate, so rapid fire counts
 - [x] Playtest round 4 ([playtest-round-4.md](playtest-round-4.md)): stages 13–18; waves varied; weapons at max dominates. Gate not met
 - [x] Station screen rework and power balance (2026-10-07): tabs; weapons levels 3–4 cost 2 units; engines faster at the top; slower turret fire; scanner 9 s and tappable
-- [ ] Playtest round 5
+- [ ] Playtest round 5 in [playtest-round-5.md](playtest-round-5.md)
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
