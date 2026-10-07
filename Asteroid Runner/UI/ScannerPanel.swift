@@ -48,8 +48,9 @@ class ScannerPanel: SKNode {
       y -= 20
     }
 
-    let adviceColor = wave.recipe.adviceSystem.map { PowerPanel.color($0) } ?? Colors.buttonLabelColor
-    addLabel("Suggest: \(wave.recipe.advice)", size: 13, color: adviceColor, at: CGPoint(x: x, y: y))
+    let advice = wave.advice
+    let adviceColor = advice.system.map { PowerPanel.color($0) } ?? Colors.buttonLabelColor
+    addLabel("Suggest: \(advice.text)", size: 13, color: adviceColor, at: CGPoint(x: x, y: y))
     y -= 20
 
     if let station = stationAhead {
@@ -86,23 +87,31 @@ class ScannerPanel: SKNode {
     radar.addChild(sweep)
     sweep.run(.repeatForever(.rotate(byAngle: -.pi * 2, duration: 2)))
 
+    // Blips stream across the radar the way the wave will come: down
+    // from the top, in from a side, in columns for lanes, in rows for a maze
     let blips: Int
     switch wave.recipe {
     case .swarm, .bosstroidField: blips = 9
-    case .maze, .lanes: blips = 7
+    case .maze, .lanes: blips = 8
     case .heavy: blips = 3
     default: blips = 5
     }
+    let travel = WavePlan.scannerHeading(wave)
     for i in 0 ..< blips {
       let big = wave.recipe == .bosstroidField && i == 0
       let blip = SKShapeNode(circleOfRadius: big ? 6 : 2)
       blip.fillColor = big ? Colors.highScore : Colors.buttonLabelColor
       blip.strokeColor = .clear
-      let angle = CGFloat.random(in: 0 ..< .pi * 2)
-      let distance = CGFloat.random(in: r * 0.2 ... r * 0.9)
-      blip.position = CGPoint(x: cos(angle) * distance, y: sin(angle) * distance)
+      let start = WavePlan.scannerStart(wave, index: i, count: blips, radius: r)
+      blip.position = start
       radar.addChild(blip)
-      blip.run(.repeatForever(.sequence([.fadeAlpha(to: 0.2, duration: 0.8), .fadeAlpha(to: 1, duration: 0.4)])))
+      let cross = SKAction.sequence([
+        .moveBy(x: travel.dx * r * 1.6, y: travel.dy * r * 1.6, duration: 2.4),
+        .move(to: start, duration: 0)
+      ])
+      let fade = SKAction.sequence([.fadeAlpha(to: 1, duration: 0.3), .wait(forDuration: 1.7), .fadeAlpha(to: 0, duration: 0.4)])
+      blip.alpha = 0
+      blip.run(.sequence([.wait(forDuration: Double(i) * 2.4 / Double(blips)), .repeatForever(.group([cross, fade]))]))
     }
   }
 

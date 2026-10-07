@@ -50,6 +50,22 @@ enum AsteroidType {
     }
   }
 
+  // The most of a wave the featured type can make up, however late the
+  // stage. Shooters are capped low: a screen of turrets is too many.
+  var maxWaveShare: Double {
+    switch self {
+    case .turret: return 0.2
+    case .base: return 0.08
+    default: return 0.8
+    }
+  }
+
+  // Shooters come in from the top and cross the screen, so they can be
+  // fought; from the side they drift back off before the player reaches them
+  var entersFromTop: Bool {
+    return self == .turret || self == .base
+  }
+
   // Some types force a size
   func adjust(size: AsteroidSize) -> AsteroidSize {
     switch self {

@@ -458,6 +458,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func planWave() {
     wave = WavePlan.make(stage: level, progress: stationRoute.legProgress, previous: wave.recipe)
+    stats.wavesSeen[wave.recipe, default: 0] += 1
   }
 
 
@@ -613,7 +614,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let type = wave.randomType()
     // Bosstroids always come from the top: from the side they drift in so
     // slowly they can stay off screen for the whole wave
-    let direction = rockSize == .bosstroid ? .top : wave.direction
+    let direction = rockSize == .bosstroid || type.entersFromTop ? .top : wave.direction
     let asteroid = Asteroid(asteroidSize: rockSize, speed: wave.speed, direction: direction, type: type)
     if let velocity = asteroid.physicsBody?.velocity {
       let scale = wave.speedScale
@@ -644,9 +645,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func makeMazeRow() {
     mazeGapCenter = WavePlan.nextMazeGap(after: mazeGapCenter, width: size.width)
+    // Same layout every row, but each rock is nudged, turned and sized a
+    // little differently so the walls look natural
+    let jitter = Tuning.Waves.mazeJitter
+    let lift = Tuning.Waves.mazeVerticalJitter
+    let turn = Tuning.Waves.mazeTurn
     for x in WavePlan.mazeRow(gapCenter: mazeGapCenter, width: size.width) {
-      let rock = Asteroid(asteroidSize: .large)
-      rock.position = CGPoint(x: x, y: size.height + rock.size.height)
+      let rock = Asteroid(asteroidSize: Bool.random() ? .large : .average)
+      rock.position = CGPoint(x: x + CGFloat.random(in: -jitter ... jitter),
+                              y: size.height + rock.size.height + CGFloat.random(in: -lift ... lift))
+      rock.zRotation = CGFloat.random(in: -turn ... turn)
       addChild(rock)
       rock.makeWall(speed: Tuning.Waves.mazeSpeed)
     }

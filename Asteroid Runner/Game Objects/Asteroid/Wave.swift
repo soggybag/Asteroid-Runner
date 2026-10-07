@@ -92,7 +92,7 @@ enum WaveRecipe: CaseIterable {
     case .swarm: return 0.45
     case .fastMovers: return 1.1
     case .heavy: return 1.3
-    case .bouncers: return 1.2
+    case .bouncers: return 2.2
     case .bosstroidField: return 0.7
     case .lanes, .maze: return 1  // set by their own layout
     }
@@ -102,7 +102,7 @@ enum WaveRecipe: CaseIterable {
   var durationScale: Double {
     switch self {
     case .maze: return 1.2
-    case .bosstroidField: return 0.8
+    case .bosstroidField, .bouncers: return 0.8
     default: return 1
     }
   }
@@ -237,12 +237,68 @@ struct WavePlan {
       return .elastic
     }
     guard recipe.usesFeatured else { return .normal }
+    return Double.random(in: 0 ..< 1) < featuredShare ? featured : .normal
+  }
+
+  // Share of rocks that are the featured type: grows in later stages, up
+  // to a cap per type
+  var featuredShare: Double {
     let share = featured.waveShare * Tuning.Stages.featuredScale(level: difficulty)
-    return Double.random(in: 0 ..< 1) < share ? featured : .normal
+    return min(share, featured.maxWaveShare)
+  }
+
+
+  // MARK: Scanner advice
+
+  // What to set in the power HUD for this wave. Shooters call for
+  // shields; a fast rock field for weapons; otherwise the recipe's own.
+  var advice: (text: String, system: ShipSystem?) {
+    if recipe.usesFeatured && featured.entersFromTop {
+      return ("Shields up, take out the shooters", .shields)
+    }
+    if recipe == .field && (speed == .fast || speed == .veryFast) {
+      return ("Weapons or shields up", .weapons)
+    }
+    return (recipe.advice, recipe.adviceSystem)
   }
 
   var pairChance: Double {
     return recipe.layout == .scatter ? Tuning.Stages.pairChance(level: difficulty) : 0
+  }
+
+
+  // MARK: Scanner
+
+  // Which way blips cross the scanner: the way the wave's rocks travel
+  static func scannerHeading(_ wave: WavePlan) -> CGVector {
+    guard wave.recipe.layout == .scatter else { return CGVector(dx: 0, dy: -1) }
+    switch wave.direction {
+    case .left: return CGVector(dx: 0.8, dy: -0.6)
+    case .right: return CGVector(dx: -0.8, dy: -0.6)
+    default: return CGVector(dx: 0, dy: -1)
+    }
+  }
+
+  // Where a blip starts: on the edge the wave comes from. Lanes start in
+  // columns, maze rows in a line with a gap.
+  static func scannerStart(_ wave: WavePlan, index: Int, count: Int, radius r: CGFloat) -> CGPoint {
+    let spread = CGFloat(index) / CGFloat(max(count - 1, 1))
+    switch wave.recipe.layout {
+    case .lanes:
+      let lane = CGFloat(index % Tuning.Waves.laneCount)
+      let x = -r * 0.6 + lane * (r * 1.2 / CGFloat(Tuning.Waves.laneCount - 1))
+      return CGPoint(x: x, y: r * 0.75)
+    case .maze:
+      // Leave a gap in the middle of the row
+      let x = -r * 0.8 + spread * r * 1.6
+      return CGPoint(x: abs(x) < r * 0.2 ? x + r * 0.4 : x, y: r * 0.55)
+    case .scatter:
+      switch wave.direction {
+      case .left: return CGPoint(x: -r * 0.85, y: -r * 0.4 + spread * r * 0.8)
+      case .right: return CGPoint(x: r * 0.85, y: -r * 0.4 + spread * r * 0.8)
+      default: return CGPoint(x: -r * 0.6 + spread * r * 1.2, y: r * 0.75)
+      }
+    }
   }
 
 
@@ -272,16 +328,19 @@ struct WavePlan {
     return min(max(next, half), width - half)
   }
 
-  // X positions for one maze row's rocks, leaving the gap clear
+  // X positions for one maze row's rocks, leaving the gap clear. The
+  // rocks are nudged and turned a little when placed (see GameScene), so
+  // they keep `mazeClearance` extra room from the gap.
   static func mazeRow(gapCenter: CGFloat, width: CGFloat) -> [CGFloat] {
     let rock = AsteroidSize.large.rawValue * 2
     let step = rock + 4
+    let margin = Tuning.Waves.mazeClearance
     let gapLeft = gapCenter - Tuning.Waves.mazeGap / 2
     let gapRight = gapCenter + Tuning.Waves.mazeGap / 2
     var xs = [CGFloat]()
     var x = rock / 2
     while x - rock / 2 < width {
-      if x + rock / 2 < gapLeft || x - rock / 2 > gapRight {
+      if x + rock / 2 + margin <= gapLeft || x - rock / 2 - margin >= gapRight {
         xs.append(x)
       }
       x += step

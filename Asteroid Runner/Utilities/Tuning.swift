@@ -198,6 +198,12 @@ enum Tuning {
     static let mazeGap: CGFloat = 120
     static let mazeGapStep: CGFloat = 70
     static let mazeSpeed: CGFloat = 80
+    // Maze rocks vary: up to this much nudge sideways and up and down, a
+    // slight turn, and a mix of sizes. The gap keeps this much extra room.
+    static let mazeJitter: CGFloat = 5
+    static let mazeVerticalJitter: CGFloat = 12
+    static let mazeTurn: CGFloat = 0.3
+    static let mazeClearance: CGFloat = 12
   }
 
 

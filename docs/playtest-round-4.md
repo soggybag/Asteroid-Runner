@@ -48,11 +48,11 @@ is the kinds you remember from the scanner.
 
 | # | Date | Version | Stage | Distance | Asteroids | Turrets | Opened power HUD? | Waves seen | What felt off |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | | | | | | | | | |
-| 2 | | | | | | | | | |
-| 3 | | | | | | | | | |
-| 4 | | | | | | | | | |
-| 5 | | | | | | | | | |
+| 1   | 10 6 26 | 2.0 (48) | 13 | 1.5 | 441 | 5 | Yes | Can we summarize waves seen in the game over screen. Its hard to remember all of these by the end of the game | Stage 12 |
+| 2   | | | 18 | 2.01 | 556 | 9 | No |  | The last level had a large number of turrest which seemed a little too much too soon. Score: 15835 |
+| 3   | | | 16 | 1.91 | 566 | 4 | Yes, I followed all of the suggestions in the pre stage message. | | The suggestion of balanced against fast rocks moving down the screen seems like a bad suggestions, I think i would have done better with shields, or weapons up. |
+| 4   | 10 7 26 |  | 16 | 1.81 | 600 | 4 | Yes | | Noticed that turrest often drifted off the screen to the left or right. Sometimes turrest fire a lot. This make it challengeing, the maneuverability of the ship is low making it hard to dodge many bullets. Seems like Weapons on max is generally a better strategy than other settings. |
+| 5   | | | 18 | 2.1 | 657 | 1 | Yes |  | Finally got a maze level. This looks good but the blocks are too regularlly spaced. keep the general arrangement but add some variation. Accidentially sold something I meant to buy, station UI needs some work. Does rapid and multi stack? Lanes feels good and is an interesting change. Bouncers just crsuhed me, even with shields full. The screen was filled with objects. |
 
 ## Questions
 
@@ -114,8 +114,31 @@ is the kinds you remember from the scanner.
 
     Answer:
 
+## Summary (2026-10-07)
+
+Five games on build 48: stages 13–18, no lives left; the power HUD opened in 4 of 5. **Waves feel more varied: lanes are a good change, the maze looks good, the scanner adds to play.** Still no run past stage 20, and **weapons at max looks like the best strategy** in general.
+
+**Fixed in build 49:**
+
+- Turrets drifted off the left and right edges, and late waves had too many. Turrets and bases now come in from the top and cross the screen, and their share of a wave is capped (turrets 20%, bases 8%) however late the stage.
+- The scanner suggested "Balanced" for a fast rock field. Advice now depends on the wave: shooters call for shields, a fast rock field for weapons or shields.
+- Bouncers filled the screen and crushed the ship even with full shields. Bouncer waves now spawn about half as often (2.2× spacing, was 1.2×) and are 20% shorter.
+- Maze blocks were too regular. Rocks now mix sizes, are nudged and turned a little, and keep extra room around the gap.
+- Game over now lists the kinds of wave met, most common first.
+- The scanner's blips now cross the radar the way the wave will come: down from the top, in from a side, in columns for lanes, in a row with a gap for a maze.
+
+**Answered:** rapid fire and multi-shot do stack. Multi-shot sets how many missiles each shot fires; rapid fire halves the time between shots.
+
+**Still open:**
+
+- Weapons at max beats other settings, and the ship is hard to maneuver around turret fire.
+- Accidentally sold something meant to be bought (second time): the station screen needs rework.
+
+Changes are in [design-notes.md](design-notes.md#playtest-round-4-findings-2026-10-07).
+
 ## General notes
 
 Anything else: ideas, bugs, what was fun.
 
--
+- Radar/scanner lools good adds to game play. Would be better if what was shown on the scanner matched the trajectory of the coming asteroid swarm. 
+- 

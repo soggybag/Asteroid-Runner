@@ -413,7 +413,9 @@ struct WaveLayoutTests {
       let xs = WavePlan.mazeRow(gapCenter: center, width: width)
       #expect(!xs.isEmpty)
       for x in xs {
-        let clear = x + rock <= center - Tuning.Waves.mazeGap / 2 || x - rock >= center + Tuning.Waves.mazeGap / 2
+        // Room for the nudge and turn each rock gets when placed
+        let edge = rock + Tuning.Waves.mazeClearance
+        let clear = x + edge <= center - Tuning.Waves.mazeGap / 2 || x - edge >= center + Tuning.Waves.mazeGap / 2
         #expect(clear)
       }
     }
@@ -421,5 +423,61 @@ struct WaveLayoutTests {
 
   @Test func theMazeGapFitsTheShip() {
     #expect(Tuning.Waves.mazeGap > Ship.shipSize.width * 2.5)
+  }
+}
+
+
+struct RoundFourTests {
+
+  private func plan(_ recipe: WaveRecipe, featured: AsteroidType = .normal, speed: AsteroidSpeed = .average,
+                    direction: AsteroidDirection = .top, difficulty: Int = 20) -> WavePlan {
+    return WavePlan(recipe: recipe, stage: difficulty, difficulty: difficulty, featured: featured, speed: speed,
+                    direction: direction, sizes: recipe.sizes(difficulty: difficulty))
+  }
+
+  @Test func shootersCallForShields() {
+    #expect(plan(.field, featured: .turret).advice.system == .shields)
+    #expect(plan(.heavy, featured: .base).advice.system == .shields)
+  }
+
+  @Test func aFastRockFieldIsNotBalanced() {
+    #expect(plan(.field, speed: .veryFast).advice.system != nil)
+    #expect(plan(.field, speed: .slow).advice.system == nil)
+  }
+
+  @Test func turretsAreCappedHoweverLate() {
+    #expect(plan(.field, featured: .turret, difficulty: 200).featuredShare <= AsteroidType.turret.maxWaveShare)
+    #expect(plan(.field, featured: .base, difficulty: 200).featuredShare <= AsteroidType.base.maxWaveShare)
+  }
+
+  @Test func shootersEnterFromTheTop() {
+    #expect(AsteroidType.turret.entersFromTop)
+    #expect(AsteroidType.base.entersFromTop)
+    #expect(!AsteroidType.normal.entersFromTop)
+  }
+
+  @Test func scannerBlipsStartOnTheRadar() {
+    let r: CGFloat = 48
+    for recipe in WaveRecipe.allCases {
+      for direction in [AsteroidDirection.top, .left, .right] {
+        let wave = plan(recipe, direction: direction)
+        for i in 0 ..< 9 {
+          let p = WavePlan.scannerStart(wave, index: i, count: 9, radius: r)
+          #expect(hypot(p.x, p.y) <= r * 1.01)
+        }
+      }
+    }
+  }
+
+  @Test func scannerBlipsFollowSideWaves() {
+    #expect(WavePlan.scannerHeading(plan(.field, direction: .left)).dx > 0)
+    #expect(WavePlan.scannerHeading(plan(.field, direction: .right)).dx < 0)
+    #expect(WavePlan.scannerHeading(plan(.lanes, direction: .left)).dx == 0)
+  }
+
+  @Test func gameOverListsWavesMostCommonFirst() {
+    var stats = RunStats()
+    stats.wavesSeen = [.swarm: 2, .field: 5, .maze: 1]
+    #expect(stats.wavesText == "Rock field 5  ·  Swarm 2  ·  Asteroid maze 1")
   }
 }

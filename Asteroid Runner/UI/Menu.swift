@@ -14,6 +14,7 @@ class Menu: SKSpriteNode {
   var bestLabel: SKLabelNode!
   var stageLabel: SKLabelNode!
   var killsLabel: SKLabelNode!
+  var wavesLabel: SKLabelNode!
 
   var message = "" {
     didSet {
@@ -55,6 +56,13 @@ class Menu: SKSpriteNode {
     // How far the run got
     stageLabel = statLabel(y: bestLabel.position.y - 44)
     killsLabel = statLabel(y: stageLabel.position.y - 26)
+
+    // The kinds of wave met, wrapping onto a second line if needed
+    wavesLabel = statLabel(y: killsLabel.position.y - 24)
+    wavesLabel.fontSize = 13
+    wavesLabel.numberOfLines = 3
+    wavesLabel.preferredMaxLayoutWidth = Screen.sharedInstance.width - 40
+    wavesLabel.verticalAlignmentMode = .top
   }
 
   private func statLabel(y: CGFloat) -> SKLabelNode {
@@ -89,6 +97,7 @@ class Menu: SKSpriteNode {
   func show(stage: Int, stats: RunStats) {
     stageLabel.text = "Stage \(stage)  ·  \(stats.distanceText)"
     killsLabel.text = "Asteroids \(stats.asteroidsDestroyed)  ·  Turrets \(stats.turretsDestroyed)"
+    wavesLabel.text = stats.wavesText
   }
 
   // Show the best score, highlighted when it was just beaten
