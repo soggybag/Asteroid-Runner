@@ -74,7 +74,7 @@ class StationState: GKState {
   }
 
   private var stationY: CGFloat {
-    return Screen.sharedInstance.height * 0.72
+    return Screen.sharedInstance.height * 0.75
   }
 
   private var dockingPoint: CGPoint {

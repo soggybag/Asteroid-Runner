@@ -3,14 +3,28 @@
 //  Asteroid Runner
 //
 
-// The station screen shown while docked: the keeper's greeting, coins and
-// hull, a shop to buy items and repairs, the tray's items to sell, and a
-// Launch button. The panel only draws and reports taps; StationState
-// does the buying and selling and calls refresh.
+// The station screen shown while docked. It has its own look, navy and
+// station blue, so it doesn't read as the ship's green HUD. The keeper's
+// greeting sits on top; below it Buy, Sell and Repair tabs show one list
+// at a time, so buying and selling can't be mixed up; each row has its
+// own clearly labeled button. The panel only draws and reports taps;
+// StationState does the buying and selling and calls refresh.
 
 import SpriteKit
 
 class StationPanel: SKNode {
+
+  enum Tab: CaseIterable {
+    case buy, sell, repair
+
+    var title: String {
+      switch self {
+      case .buy: return "BUY"
+      case .sell: return "SELL"
+      case .repair: return "REPAIR"
+      }
+    }
+  }
 
   var onBuy: (ItemType) -> Void = { _ in }
   var onRepair: () -> Void = {}
@@ -20,11 +34,17 @@ class StationPanel: SKNode {
   let station: Station
   let size: CGSize
 
+  private(set) var tab = Tab.buy
+
   // Rebuilt by refresh
-  private let shopNode = SKNode()
+  private let content = SKNode()
+  private var tabButtons = [Tab: TabButton]()
+
+  // The last state shown, so a tab change can redraw without the scene
+  private var last: (coins: Int, lives: Int, maxLives: Int, inventory: Inventory)?
 
   private let pad: CGFloat = 16
-  private let rowHeight: CGFloat = 44
+  private let rowHeight: CGFloat = 40
 
   init(station: Station, greeting: String, size: CGSize) {
     self.station = station
@@ -33,121 +53,147 @@ class StationPanel: SKNode {
 
     zPosition = 2000
 
-    let back = SKShapeNode(rect: CGRect(origin: .zero, size: size), cornerRadius: 12)
-    back.fillColor = Colors.backgroundBlack.withAlphaComponent(0.92)
+    let back = SKShapeNode(rect: CGRect(origin: .zero, size: size), cornerRadius: 14)
+    back.fillColor = Colors.stationPanel
     back.strokeColor = Colors.station
     back.lineWidth = 2
     addChild(back)
 
-    let keeper = label("\(station.keeper.name) · \(station.keeper.title)", size: 14, color: Colors.station)
+    // A header band with the keeper and their greeting
+    let headerHeight: CGFloat = 78
+    let header = SKShapeNode(rect: CGRect(x: 2, y: size.height - headerHeight - 2, width: size.width - 4, height: headerHeight),
+                             cornerRadius: 12)
+    header.fillColor = Colors.station.withAlphaComponent(0.12)
+    header.strokeColor = .clear
+    addChild(header)
+
+    let keeper = label("\(station.keeper.name.uppercased())  ·  \(station.keeper.title)", size: 13, color: Colors.station)
     keeper.position = CGPoint(x: pad, y: size.height - pad)
     keeper.verticalAlignmentMode = .top
     addChild(keeper)
 
-    let words = label("\u{201C}\(greeting)\u{201D}", size: 16, color: Colors.buttonLabelColor)
-    words.numberOfLines = 3
+    let words = label("\u{201C}\(greeting)\u{201D}", size: 15, color: Colors.stationText)
+    words.numberOfLines = 2
     words.preferredMaxLayoutWidth = size.width - pad * 2
     words.lineBreakMode = .byWordWrapping
     words.verticalAlignmentMode = .top
-    words.position = CGPoint(x: pad, y: size.height - pad - 24)
+    words.position = CGPoint(x: pad, y: size.height - pad - 20)
     addChild(words)
 
-    addChild(shopNode)
+    // Tabs under the header
+    let tabY = size.height - headerHeight - 54
+    let tabWidth = (size.width - pad * 2 - 16) / 3
+    for (i, t) in Tab.allCases.enumerated() {
+      let button = TabButton(title: t.title, width: tabWidth)
+      button.position = CGPoint(x: pad + tabWidth / 2 + CGFloat(i) * (tabWidth + 8), y: tabY)
+      button.tapped = { self.select(t) }
+      addChild(button)
+      tabButtons[t] = button
+    }
 
-    let launch = Button()
-    launch.title = "Launch"
-    launch.select()
+    addChild(content)
+
+    let launch = TabButton(title: "LAUNCH", width: 160)
+    launch.isSelected = true
     launch.position = CGPoint(x: size.width / 2, y: pad + 20)
-    launch.buttonAction = { self.onLaunch() }
+    launch.tapped = { self.onLaunch() }
     addChild(launch)
+
+    select(.buy)
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
+  private var tabY: CGFloat {
+    return size.height - 78 - 54
+  }
 
-  // Redraw coins, hull, what's for sale and what can be sold
+  func select(_ tab: Tab) {
+    self.tab = tab
+    for (t, button) in tabButtons {
+      button.isSelected = t == tab
+    }
+    if let last = last {
+      refresh(coins: last.coins, lives: last.lives, maxLives: last.maxLives, inventory: last.inventory, message: nil)
+    }
+  }
+
+
+  // Redraw the wallet line and the open tab's list
 
   func refresh(coins: Int, lives: Int, maxLives: Int, inventory: Inventory, message: String?) {
-    shopNode.removeAllChildren()
+    last = (coins, lives, maxLives, inventory)
+    content.removeAllChildren()
 
-    var y = size.height - pad - 104
+    let wallet = label("Coins \(coins)     Hull \(lives)/\(maxLives)     Tray \(inventory.items.count)/\(inventory.capacity)",
+                       size: 14, color: Colors.coin)
+    wallet.position = CGPoint(x: pad, y: tabY + 30)
+    content.addChild(wallet)
 
-    let status = label("Coins \(coins)     Hull \(lives)/\(maxLives)     Tray \(inventory.items.count)/\(inventory.capacity)", size: 15, color: Colors.coin)
-    status.position = CGPoint(x: pad, y: y)
-    shopNode.addChild(status)
-    y -= 26
-
-    // Buy: items for sale, then repairs
-    shopNode.addChild(header("BUY", y: y))
-    y -= 12
-    var cells = [ShopButton]()
-    for item in station.itemsForSale {
-      let price = station.buyPrice(item)
-      let cell = ShopButton(title: "\(item.name) · \(price)", color: item.color)
-      cell.isEnabled = coins >= price && !inventory.isFull
-      cell.tapped = { self.onBuy(item) }
-      cells.append(cell)
-    }
-    if lives < maxLives {
-      let cell = ShopButton(title: "Repair · \(station.repairPrice)", color: Colors.station)
-      cell.isEnabled = coins >= station.repairPrice
-      cell.tapped = { self.onRepair() }
-      cells.append(cell)
-    }
-    y = layout(cells, top: y)
-
-    // Sell: what's in the tray
-    shopNode.addChild(header("SELL", y: y))
-    y -= 12
-    if inventory.items.isEmpty {
-      let none = label("Tray is empty", size: 13, color: Colors.buttonColorActive)
-      none.position = CGPoint(x: pad, y: y - 10)
-      shopNode.addChild(none)
-      y -= rowHeight
-    } else {
-      var sells = [ShopButton]()
-      for (slot, item) in inventory.items.enumerated() {
-        let cell = ShopButton(title: "\(item.type.name) · \(station.sellPrice(item.type))", color: item.type.color)
-        cell.tapped = { self.onSell(slot) }
-        sells.append(cell)
+    var y = tabY - 40
+    func row(_ name: String, detail: String?, action: ShopButton) {
+      let nameLabel = label(name, size: 15, color: Colors.stationText)
+      nameLabel.position = CGPoint(x: pad, y: y - 5)
+      content.addChild(nameLabel)
+      if let detail = detail {
+        let detailLabel = label(detail, size: 12, color: Colors.station)
+        detailLabel.position = CGPoint(x: pad + 110, y: y - 5)
+        content.addChild(detailLabel)
       }
-      y = layout(sells, top: y)
+      action.position = CGPoint(x: size.width - pad - ShopButton.size.width / 2, y: y)
+      content.addChild(action)
+      y -= rowHeight
+    }
+
+    switch tab {
+    case .buy:
+      let items = station.itemsForSale
+      if items.isEmpty {
+        addNote("Nothing for sale here", y: y)
+      }
+      for item in items {
+        let price = station.buyPrice(item)
+        let button = ShopButton(title: "Buy  ·  \(price)", color: Colors.buy)
+        button.isEnabled = coins >= price && !inventory.isFull
+        button.tapped = { self.onBuy(item) }
+        row(item.name, detail: nil, action: button)
+      }
+
+    case .sell:
+      if inventory.items.isEmpty {
+        addNote("Your tray is empty", y: y)
+      }
+      for (slot, item) in inventory.items.enumerated() {
+        let button = ShopButton(title: "Sell  +\(station.sellPrice(item.type))", color: Colors.sell)
+        button.tapped = { self.onSell(slot) }
+        row(item.type.name, detail: "in your tray", action: button)
+      }
+
+    case .repair:
+      if lives < maxLives {
+        let button = ShopButton(title: "Repair  ·  \(station.repairPrice)", color: Colors.station)
+        button.isEnabled = coins >= station.repairPrice
+        button.tapped = { self.onRepair() }
+        row("Hull", detail: "\(lives)/\(maxLives)", action: button)
+      } else {
+        addNote("Hull is in one piece", y: y)
+      }
     }
 
     if let message = message {
       let note = label(message, size: 14, color: Colors.highScore)
       note.horizontalAlignmentMode = .center
-      note.position = CGPoint(x: size.width / 2, y: y - 8)
-      shopNode.addChild(note)
+      note.position = CGPoint(x: size.width / 2, y: pad + 52)
+      content.addChild(note)
     }
   }
 
-
-  // Lay cells out three to a row, top down. Returns where the next
-  // heading's baseline goes, a little below the last row.
-
-  private func layout(_ cells: [ShopButton], top: CGFloat) -> CGFloat {
-    let columns = 3
-    let gap: CGFloat = 8
-    let step = ShopButton.size.width + gap
-    let firstX = size.width / 2 - step
-    var y = top
-    for (i, cell) in cells.enumerated() {
-      if i > 0 && i % columns == 0 {
-        y -= rowHeight
-      }
-      cell.position = CGPoint(x: firstX + step * CGFloat(i % columns), y: y - ShopButton.size.height / 2)
-      shopNode.addChild(cell)
-    }
-    return y - rowHeight - 16
-  }
-
-  private func header(_ text: String, y: CGFloat) -> SKLabelNode {
-    let node = label(text, size: 12, color: Colors.buttonColorActive)
-    node.position = CGPoint(x: pad, y: y)
-    return node
+  private func addNote(_ text: String, y: CGFloat) {
+    let note = label(text, size: 14, color: Colors.station)
+    note.position = CGPoint(x: pad, y: y - 5)
+    content.addChild(note)
   }
 
   private func label(_ text: String, size: CGFloat, color: UIColor) -> SKLabelNode {
@@ -158,6 +204,51 @@ class StationPanel: SKNode {
     node.horizontalAlignmentMode = .left
     node.verticalAlignmentMode = .baseline
     return node
+  }
+}
+
+
+// A tab at the top of the shop. The selected one is filled.
+
+class TabButton: SKSpriteNode {
+
+  var tapped = {}
+
+  private let shape: SKShapeNode
+  private let label = SKLabelNode()
+
+  var isSelected = false {
+    didSet {
+      shape.fillColor = isSelected ? Colors.station : .clear
+      label.fontColor = isSelected ? Colors.stationPanel : Colors.station
+    }
+  }
+
+  init(title: String, width: CGFloat) {
+    let s = CGSize(width: width, height: 34)
+    shape = SKShapeNode(rect: CGRect(x: -s.width / 2, y: -s.height / 2, width: s.width, height: s.height), cornerRadius: 17)
+    super.init(texture: nil, color: .clear, size: s)
+    isUserInteractionEnabled = true
+
+    shape.strokeColor = Colors.station
+    shape.lineWidth = 2
+    addChild(shape)
+
+    label.text = title
+    label.fontName = Fonts.fontName
+    label.fontSize = 14
+    label.verticalAlignmentMode = .center
+    addChild(label)
+
+    isSelected = false
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    tapped()
   }
 }
 

@@ -60,59 +60,59 @@ is the kinds you remember from the scanner.
 
 1. Do stages feel different from each other now? Which kinds of wave stood out?
 
-   Answer:
+   Answer: Yes stages are starting to feel varied. Could use more variation. 
 
 2. Any wave that's no fun, too hard, or too easy? (Maze, lanes, bouncers, bosstroid field?)
 
-   Answer:
+   Answer: Many small turrets or one or two larger turrets might be fun. Turrets firing too many shots makes things very difficult or impossible. 
 
 3. In the maze, is the gap wide enough and does it move at a fair pace?
 
-   Answer:
+   Answer: Maze felt fair, would be good to vary the blocks to make them feel more organic. 
 
 4. In lanes, can you see which lanes are safe and get there in time?
 
-   Answer:
+   Answer: Not always. I think this good. Might be good to do a variation on this theme with comets? 
 
 ### Pacing
 
 5. Does the first wave after a station feel like a breather? Does it build up before the next station?
 
-   Answer:
+   Answer: Mostly
 
 6. Where does it start to feel hard now? Any sudden jumps?
 
-   Answer:
+   Answer: Seems to get hard around level 18. Might good to back off then ramp up the difficulty and reapeat. 
 
 7. What usually ended your run?
 
-   Answer:
+   Answer: Getting caught in a crush of rocks with no space to maneuver. 
 
 ### Scanner briefing
 
 8. Do you read the scanner? Does it stay up long enough?
 
-   Answer:
+   Answer: Mostly, could stay a little longer, maybe I'm paying closer attention because I need infor for play test. Maybe this could stay longer and also be dismissed. This might give players a chance to work with the HUD between stages? 
 
 9. Did the suggested power setting make you change power in the HUD?
 
-   Answer:
+   Answer: mostly but I think some stages would have been better handled with different options. 
 
 ### Fire control
 
 10. Hold to fire (auto fire off in the HUD): does it feel better than tapping? Does rapid fire matter now?
 
-    Answer:
+    Answer: Didn't try that. 
 
 11. Any more accidental app switches, pull-downs or HUD openings?
 
-    Answer:
+    Answer: None. 
 
 ### Gate
 
 12. Did you need the power HUD to get past stage 20?
 
-    Answer:
+    Answer: Didn't make it past 20. 
 
 ## Summary (2026-10-07)
 

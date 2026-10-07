@@ -33,6 +33,12 @@ struct Colors {
   static let station = UIColor(r: 120, g: 200, b: 255)
   static let mazeWall = UIColor(r: 90, g: 95, b: 110)
   static let engines = UIColor(r: 120, g: 255, b: 140)
+
+  // Station screens: navy and station blue, unlike the ship's green HUD
+  static let stationPanel = UIColor(r: 14, g: 20, b: 52, alpha: 0.96)
+  static let stationText = UIColor(r: 225, g: 235, b: 255)
+  static let buy = UIColor(r: 255, g: 205, b: 70)
+  static let sell = UIColor(r: 255, g: 130, b: 90)
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   
