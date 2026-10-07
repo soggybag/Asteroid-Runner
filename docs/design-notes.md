@@ -47,6 +47,11 @@ Five games on build 48 after waves and pacing; details in [playtest-round-4.md](
 | Weapons at max is the best strategy; the ship can't maneuver around turret fire | Needs a balance decision (open question) |
 | Bought vs sold by mistake again | Station screen rework moves up |
 | Do rapid fire and multi-shot stack? | Yes; the HUD rework should show active effects |
+| Turrets fire too much; many small turrets or one or two big ones might be fun | Fixed: slower turret and base fire. Turret variants go on the ideas list |
+| Lanes good; a comet version could be a variation | Idea: comet lanes |
+| Hard around stage 18; should back off, then ramp up again | Pacing already eases after stations; consider bigger relief or a longer cycle |
+| The scanner could stay longer and be dismissable, to use the HUD between stages | Fixed: up 9 s, tap to start |
+| No accidental gestures this round | The edge-swipe fix worked |
 
 ## Playtest round 3 findings (2026-10-06)
 
@@ -400,8 +405,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
-6. **Station screen rework** (Phase 4, moved up after two accidental sales): clear buy vs sell, its own look.
-7. **Power balance:** make engines and shields worth as much as weapons at max (see open question).
+6. ~~**Station screen rework**~~ Done 2026-10-07: Buy, Sell and Repair tabs, explicit buttons, navy and station-blue look.
+7. ~~**Power balance**~~ Done 2026-10-07: top weapons levels cost 2 units; faster maneuvering at high engine power; slower turret fire. Scanner up 9 s and tappable.
 8. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts; show active effects like rapid fire and multi-shot. Fix accidental opening.
 9. **Thrust and maneuver** (Phase 2), then fine-tune drag lag.
 10. **Weapon variety and loot** (Phase 3): weapons in the spirit of multi-shot, turret-only items, rocks that carry pickups.
@@ -433,6 +438,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Scanner briefing replaces the scrolling text: radar, wave name, sizes and speed, featured type, suggested power, station ahead; up for 6 s
     - Hold to fire replaces tap to fire: with auto fire off, a held finger fires at the weapon's rate, so rapid fire counts
 - [x] Playtest round 4 ([playtest-round-4.md](playtest-round-4.md)): stages 13–18; waves varied; weapons at max dominates. Gate not met
+- [x] Station screen rework and power balance (2026-10-07): tabs; weapons levels 3–4 cost 2 units; engines faster at the top; slower turret fire; scanner 9 s and tappable
+- [ ] Playtest round 5
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
@@ -483,6 +490,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - **iPad layout, game controllers, Mac**
 - **Procedural rock art** for each asteroid type (cracked glass, glowing gas, metallic brass)
 - **Maze and lane waves:** see "More kinds of waves" above
+- **Turret variants:** many small turrets, or one or two big ones
+- **Comet lanes:** a lanes wave made of comets
 - **Docking mini-game:** line up with the station's port; only if it stays fun on repeat
 - **Station reputation:** keepers remember you, give better prices to regulars
 
@@ -509,7 +518,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
 - [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
 - [x] Tap-to-fire: replaced by hold to fire at the weapon's rate (2026-10-06)
-- [ ] Weapons at max beats every other setting. Options: weapons cost more power per level near the top; heat that forces weapons to cool down; enemy shots that only engines or shields can answer; faster maneuvering at high engine power
+- [x] Weapons at max beats every other setting. Chosen 2026-10-07: weapons cost more power per level near the top, and faster maneuvering at high engine power. Other options were: weapons cost more power per level near the top; heat that forces weapons to cool down; enemy shots that only engines or shields can answer; faster maneuvering at high engine power
 - [ ] Distance: give it meaning (system map, voyage goals) or drop it?
 - [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
@@ -520,6 +529,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-07 | Station screen reworked with Buy, Sell and Repair tabs and its own look. Power balance: top weapons levels cost 2 units, engines maneuver faster at the top, turrets fire less. Scanner up 9 s, tap to start |
 | 2026-10-07 | Round 4 playtest: stages 13–18; waves varied, scanner liked; weapons at max dominates. Fixed turrets drifting off and crowding, scanner advice, dense bouncers, regular mazes; added waves seen at game over and scanner trajectories. Station screen rework moved up |
 | 2026-10-06 | Waves and pacing built: eight wave recipes, difficulty easing after each station, a scanner briefing, hold to fire. Bosstroids now only in bosstroid field waves |
 | 2026-10-06 | Round 3 playtest: stages 12–18, steep after 10, flat after a while. Fixed brasstroid splitting, missing bosstroids, edge swipes. Next: waves and pacing (wave recipes, difficulty in waves, scanner briefing) |

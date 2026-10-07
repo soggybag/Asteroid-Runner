@@ -22,8 +22,9 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
   full, new pickups are lost.
 - Every 1 to 5 stages you dock at a space station. The stage announcement
   warns you a wave ahead ("Station ahead: Bastion Seven"). Tap to skip the
-  docking. At the station, buy items, sell what's in your tray, repair lost
-  hull (lives), then tap Launch.
+  docking. At the station, the Buy, Sell and Repair tabs show one list at a
+  time: buy items, sell what's in your tray, repair lost hull (lives), then
+  tap Launch.
 - Coins (shown under the score) pay for it: 5 per gold coin picked up, 3 per
   stage cleared. Pickups still on screen when a station arrives are pulled
   into the ship.
@@ -38,10 +39,13 @@ Swipe up mid-flight to open the power HUD; swipe down to close it. Time slows
 to a quarter speed and steering locks while it's open.
 
 The reactor makes 6 units of power, shared between three systems, each from
-0 to 4. Tap + to give a system a unit. If the reactor is maxed out, the unit
-comes from the system with the most. Tap − to free a unit.
+0 to 4. Each level costs a unit, except the top two weapons levels, which
+cost 2 each (marked ×2): maxing weapons takes the whole reactor. Tap + to
+raise a system; if the reactor is maxed out, levels come from the system
+with the most. Tap − to free its units.
 
-- **Engines:** how fast the ship follows your finger, and how hard tilt pushes it.
+- **Engines:** how fast the ship follows your finger, and how hard tilt pushes
+  it. High engine power maneuvers much faster, for dodging turret fire.
 - **Shields:** charges that each block one hit, shown as a ring around the
   ship: 1 charge at levels 1–2, 2 at levels 3–4. The shield starts each game
   empty and rebuilds over time, faster with more power. The shield item in
@@ -73,7 +77,8 @@ features a random one.
 
 ## Waves
 
-Before each wave the scanner shows what's coming: the kind of wave, rock
+Before each wave the scanner shows what's coming for 9 seconds (tap it to
+start sooner): the kind of wave, rock
 sizes and speed, any special asteroid type, a suggested power setting, and
 whether a station is next. Waves come in kinds, unlocked as stages go by:
 

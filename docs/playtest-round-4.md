@@ -134,6 +134,10 @@ Five games on build 48: stages 13–18, no lives left; the power HUD opened in 4
 - Weapons at max beats other settings, and the ship is hard to maneuver around turret fire.
 - Accidentally sold something meant to be bought (second time): the station screen needs rework.
 
+**From the answers (added 2026-10-07):** stages feel more varied but could use more; turrets fire too much, and many small turrets or one or two big ones might be fun; the maze felt fair; lanes are good, and a comet version could be a variation; it gets hard around stage 18, and difficulty should back off and ramp up again; runs end crushed by rocks with no room; the scanner could stay up longer and be dismissable, giving time to use the HUD between stages; no accidental gestures this round.
+
+**Done after round 4 (build 51):** station screen with Buy, Sell and Repair tabs and its own look; top weapons levels cost 2 units; faster maneuvering at high engine power; turrets and bases fire less often (2.8 s and 3.4 s, were 2.0 and 2.6); the scanner stays up 9 s and a tap starts the wave.
+
 Changes are in [design-notes.md](design-notes.md#playtest-round-4-findings-2026-10-07).
 
 ## General notes
