@@ -326,9 +326,16 @@ enum Tuning {
     static let elasticBounces = 3
 
     static let enemyShotSpeed: CGFloat = 160
-    // Seconds between shots (were 2.0 and 2.6; too much fire to dodge)
+    // Seconds between shots at full strength (bases were 3.4; their
+    // three-shot spread laid down too much fire)
     static let turretFireInterval: TimeInterval = 2.8
-    static let baseFireInterval: TimeInterval = 3.4
+    static let baseFireInterval: TimeInterval = 4.2
+
+    // Shooters fire more slowly in early stages: 1.5x the interval at
+    // stage 1, easing to normal by stage 21
+    static func fireScale(level: Int) -> TimeInterval {
+      return max(1, 1.5 - 0.025 * TimeInterval(level - 1))
+    }
     // Radians between the shots of an enemy base's spread
     static let baseSpread: CGFloat = 0.3
     // Enemy bases never move faster than this speed multiplier

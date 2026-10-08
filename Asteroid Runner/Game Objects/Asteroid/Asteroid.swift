@@ -214,10 +214,13 @@ class Asteroid: SKSpriteNode {
       trail = tail
 
     case .turret:
+      // Missiles damage turrets and bases but don't push them away
+      physicsBody.collisionBitMask &= ~PhysicsCategory.Missile
       addGun(at: .zero)
       startFiring(interval: Tuning.Hazards.turretFireInterval, spread: [0])
 
     case .base:
+      physicsBody.collisionBitMask &= ~PhysicsCategory.Missile
       let r = asteroidSize.rawValue * 0.5
       addGun(at: CGPoint(x: -r, y: -r))
       addGun(at: CGPoint(x: r, y: -r))
@@ -244,12 +247,24 @@ class Asteroid: SKSpriteNode {
 
   // Fire at the ship every interval. Spread is a list of angle offsets.
 
+  static let FIRING = "FIRING"
+
   func startFiring(interval: TimeInterval, spread: [CGFloat]) {
+    firingSpread = spread
     let firstWait = SKAction.wait(forDuration: interval, withRange: interval * 0.5)
     let fire = SKAction.run { [weak self] in
       self?.fire(spread: spread)
     }
-    run(.sequence([firstWait, .repeatForever(.sequence([fire, .wait(forDuration: interval)]))]))
+    run(.sequence([firstWait, .repeatForever(.sequence([fire, .wait(forDuration: interval)]))]), withKey: Asteroid.FIRING)
+  }
+
+  private var firingSpread: [CGFloat] = []
+
+  // Shooters fire more slowly in early stages (Tuning.Hazards.fireScale)
+  func setFireStage(_ stage: Int) {
+    guard type == .turret || type == .base, action(forKey: Asteroid.FIRING) != nil else { return }
+    let base = type == .turret ? Tuning.Hazards.turretFireInterval : Tuning.Hazards.baseFireInterval
+    startFiring(interval: base * Tuning.Hazards.fireScale(level: stage), spread: firingSpread)
   }
 
   func fire(spread: [CGFloat]) {

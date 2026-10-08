@@ -481,3 +481,21 @@ struct RoundFourTests {
     #expect(stats.wavesText == "Rock field 5  ·  Swarm 2  ·  Asteroid maze 1")
   }
 }
+
+
+struct RoundFiveTests {
+
+  @Test func missilesDontPushShooters() {
+    for type in [AsteroidType.turret, .base, .brass] {
+      let rock = Asteroid(asteroidSize: .large, type: type)
+      #expect(rock.physicsBody!.collisionBitMask & PhysicsCategory.Missile == 0)
+    }
+  }
+
+  @Test func shootersFireSlowerEarly() {
+    #expect(Tuning.Hazards.fireScale(level: 1) == 1.5)
+    #expect(Tuning.Hazards.fireScale(level: 10) > 1)
+    #expect(Tuning.Hazards.fireScale(level: 21) == 1)
+    #expect(Tuning.Hazards.fireScale(level: 100) == 1)
+  }
+}

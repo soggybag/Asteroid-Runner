@@ -31,6 +31,28 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
 
+## Playtest round 5 findings (2026-10-08)
+
+Five games on build 53 after the station screen and power balance; details in [playtest-round-5.md](playtest-round-5.md). **Best run yet: stage 20.** Power feels more balanced, no accidental station sales, the scanner works. Very hard at stages 18–20.
+
+| Finding | What it means |
+| --- | --- |
+| Weapons at max no longer always wins; engines better on some levels | The power balance works; keep it |
+| Low engine power makes drag steering slow | Intended trade-off; keep watching |
+| A turret pushed off the top with a couple of shots; anticlimactic | Fixed: missiles don't push turrets or bases |
+| Scanner warned of shooters, none came | Fixed: shooter waves start with a shooter |
+| Bases fire too much, especially early | Fixed: slower base fire; all shooters slower in early stages |
+| Pickups could tumble | Done |
+| Very hard at stages 18–20; back off, then harder later | Ship upgrades should carry players further; pacing may need a longer cycle |
+| Couldn't afford upgrades that might have got past stage 20 | Stations need real upgrades to spend on |
+| Station screen feels different but needs work | Keep improving with the art update |
+
+**Direction from the general notes (2026-10-08):** the game needs another dimension:
+
+- **Commerce and a system map:** choose destinations, take on missions, trade between stations.
+- **Elaborate ship upgrades:** players design their own ship for different kinds of missions: **combat, cargo, exploration or balanced**. Builds appeal to different players and give a reason to keep playing.
+- **Turret and comet ideas:** a comet swarm wave (alongside comet lanes).
+
 ## Playtest round 4 findings (2026-10-07)
 
 Five games on build 48 after waves and pacing; details in [playtest-round-4.md](playtest-round-4.md). Stages 13–18, no lives left; the power HUD opened in 4 of 5 games. **Waves feel more varied and the scanner adds to play, but no run passed stage 20, and weapons at max looks like the best strategy.**
@@ -439,7 +461,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
     - Hold to fire replaces tap to fire: with auto fire off, a held finger fires at the weapon's rate, so rapid fire counts
 - [x] Playtest round 4 ([playtest-round-4.md](playtest-round-4.md)): stages 13–18; waves varied; weapons at max dominates. Gate not met
 - [x] Station screen rework and power balance (2026-10-07): tabs; weapons levels 3–4 cost 2 units; engines faster at the top; slower turret fire; scanner 9 s and tappable
-- [ ] Playtest round 5 in [playtest-round-5.md](playtest-round-5.md)
+- [x] Playtest round 5 ([playtest-round-5.md](playtest-round-5.md)): best run stage 20; power more balanced; hard at 18–20
+- [x] Round 5 fixes (2026-10-08): turrets and bases not pushed by missiles; shooter waves start with a shooter; slower base fire and slower early shooters; pickups tumble
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction
 - [ ] Maze and lane waves
 - [ ] More enemies that shoot back
@@ -492,6 +515,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - **Maze and lane waves:** see "More kinds of waves" above
 - **Turret variants:** many small turrets, or one or two big ones
 - **Comet lanes:** a lanes wave made of comets
+- **Comet swarm:** a swarm wave made of comets
+- **Ship roles:** combat, cargo, exploration and balanced builds
 - **Docking mini-game:** line up with the station's port; only if it stays fun on repeat
 - **Station reputation:** keepers remember you, give better prices to regulars
 
@@ -529,6 +554,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-08 | Round 5 playtest: best run stage 20; power more balanced. Fixed turrets being pushed off screen, empty shooter warnings, heavy base fire; pickups tumble. Direction: commerce, a system map with missions, and ship upgrades for different roles |
 | 2026-10-07 | Station screen reworked with Buy, Sell and Repair tabs and its own look. Power balance: top weapons levels cost 2 units, engines maneuver faster at the top, turrets fire less. Scanner up 9 s, tap to start |
 | 2026-10-07 | Round 4 playtest: stages 13–18; waves varied, scanner liked; weapons at max dominates. Fixed turrets drifting off and crowding, scanner advice, dense bouncers, regular mazes; added waves seen at game over and scanner trajectories. Station screen rework moved up |
 | 2026-10-06 | Waves and pacing built: eight wave recipes, difficulty easing after each station, a scanner briefing, hold to fire. Bosstroids now only in bosstroid field waves |

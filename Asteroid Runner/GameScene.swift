@@ -474,6 +474,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // The centerpiece arrives first
         makeRock(size: .bosstroid)
         scheduleSpawn(after: wave.baseInterval * Tuning.Stages.sizeSpacing(.bosstroid))
+      } else if wave.recipe.usesFeatured && wave.featured.entersFromTop {
+        // The scanner warned of shooters, so one comes first
+        makeRock(size: wave.randomSize(), type: wave.featured)
+        scheduleSpawn(after: wave.baseInterval)
       } else {
         scheduleSpawn(after: wave.baseInterval)
       }
@@ -610,8 +614,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // A rock from the wave's direction, sometimes of its featured type,
   // faster in later stages
 
-  func makeRock(size rockSize: AsteroidSize) {
-    let type = wave.randomType()
+  func makeRock(size rockSize: AsteroidSize, type forcedType: AsteroidType? = nil) {
+    let type = forcedType ?? wave.randomType()
     // Bosstroids always come from the top: from the side they drift in so
     // slowly they can stay off screen for the whole wave
     let direction = rockSize == .bosstroid || type.entersFromTop ? .top : wave.direction
@@ -620,6 +624,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       let scale = wave.speedScale
       asteroid.physicsBody?.velocity = CGVector(dx: velocity.dx * scale, dy: velocity.dy * scale)
     }
+    asteroid.setFireStage(wave.difficulty)
     addChild(asteroid)
     asteroid.trail?.targetNode = self
   }

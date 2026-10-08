@@ -27,6 +27,13 @@ class PowerUp: SKSpriteNode {
     name = PowerUp.PU_POINTS
     
     setupPhysics()
+    tumble()
+  }
+
+  // A slow spin as it drifts down, so it reads as something floating in space
+  func tumble() {
+    let turn = CGFloat.random(in: 0.6 ... 1.4) * (Bool.random() ? 1 : -1)
+    run(.repeatForever(.rotate(byAngle: turn, duration: 1)))
   }
   
   required init?(coder aDecoder: NSCoder) {
