@@ -89,6 +89,13 @@ struct PowerGrid: Equatable {
   }
 
 
+  // The same levels on a bigger reactor; the new units start free
+  func withReactor(_ units: Int) -> PowerGrid {
+    var grid = PowerGrid(reactor: units, maxLevel: maxLevel, startingLevel: 0)
+    grid.levels = levels
+    return grid
+  }
+
   // One level less for a system; its units go back to the reactor
   @discardableResult
   mutating func lower(_ system: ShipSystem) -> Bool {
@@ -109,24 +116,26 @@ struct ShieldCharge: Equatable {
   private(set) var capacity = 0
   private var timer: TimeInterval = 0
 
-  // Starts empty unless `full`
-  init(level: Int = 0, full: Bool = false) {
-    capacity = ShieldCharge.capacity(level: level)
+  // Starts empty unless `full`. `bonus` is extra charges from a shield
+  // capacitor upgrade, added whenever shields have power.
+  init(level: Int = 0, bonus: Int = 0, full: Bool = false) {
+    capacity = ShieldCharge.capacity(level: level, bonus: bonus)
     charge = full ? capacity : 0
     self.level = level
   }
 
   private var level = 0
 
-  static func capacity(level: Int) -> Int {
-    return Tuning.Power.value(Tuning.Power.shieldCapacity, level: level)
+  static func capacity(level: Int, bonus: Int = 0) -> Int {
+    let base = Tuning.Power.value(Tuning.Power.shieldCapacity, level: level)
+    return base > 0 ? base + bonus : 0
   }
 
-  // Call when the shield's power level changes. Charge above the new
-  // capacity is lost; new capacity has to recharge.
-  mutating func setLevel(_ level: Int) {
+  // Call when the shield's power level or bonus changes. Charge above the
+  // new capacity is lost; new capacity has to recharge.
+  mutating func setLevel(_ level: Int, bonus: Int = 0) {
     self.level = level
-    capacity = ShieldCharge.capacity(level: level)
+    capacity = ShieldCharge.capacity(level: level, bonus: bonus)
     charge = min(charge, capacity)
     if capacity == 0 {
       timer = 0

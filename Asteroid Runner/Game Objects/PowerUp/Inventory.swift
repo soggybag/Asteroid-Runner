@@ -81,13 +81,18 @@ enum TrayAction: Equatable {
 
 struct Inventory {
 
-  let capacity: Int
+  private(set) var capacity: Int
   private(set) var items: [Item] = []
   // Index of the shield that's up, if any
   private(set) var activeShield: Int?
 
   init(capacity: Int = Tuning.Items.slots) {
     self.capacity = capacity
+  }
+
+  // More slots from a cargo rack upgrade. Never fewer than it holds.
+  mutating func setCapacity(_ slots: Int) {
+    capacity = max(slots, items.count)
   }
 
   var isFull: Bool {

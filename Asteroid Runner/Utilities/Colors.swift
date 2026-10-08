@@ -39,6 +39,7 @@ struct Colors {
   static let stationText = UIColor(r: 225, g: 235, b: 255)
   static let buy = UIColor(r: 255, g: 205, b: 70)
   static let sell = UIColor(r: 255, g: 130, b: 90)
+  static let upgrade = UIColor(r: 180, g: 150, b: 255)
   
   static let shipBlue = UIColor(red: 46 / 255, green: 153 / 255, blue: 252 / 255, alpha: 0.5)
   

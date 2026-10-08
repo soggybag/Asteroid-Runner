@@ -22,9 +22,19 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
   full, new pickups are lost.
 - Every 1 to 5 stages you dock at a space station. The stage announcement
   warns you a wave ahead ("Station ahead: Bastion Seven"). Tap to skip the
-  docking. At the station, the Buy, Sell and Repair tabs show one list at a
-  time: buy items, sell what's in your tray, repair lost hull (lives), then
-  tap Launch.
+  docking. At the station, the Buy, Sell, Repair and Upgrade tabs show one
+  list at a time: buy items, sell what's in your tray, repair lost hull
+  (lives), fit ship upgrades, then tap Launch.
+- Ship upgrades last for the rest of the run. Each station fits its own set:
+
+  | Upgrade | Each tier | Tiers |
+  |---|---|---|
+  | Reactor | +1 power unit | 3 |
+  | Cargo rack | +1 tray slot | 2 |
+  | Hull plating | +1 hull (life), fitted with it | 2 |
+  | Thrusters | +15% maneuvering | 2 |
+  | Weapon focus | +20% damage | 2 |
+  | Shield capacitor | +1 shield charge while shields have power | 2 |
 - Coins (shown under the score) pay for it: 5 per gold coin picked up, 3 per
   stage cleared. Pickups still on screen when a station arrives are pulled
   into the ship.

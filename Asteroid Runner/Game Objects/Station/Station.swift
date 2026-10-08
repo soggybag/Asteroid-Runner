@@ -24,6 +24,9 @@ struct Station: Decodable, Equatable {
     let buyMultiplier: Double
     // Multiplies what the player is paid. Above 1 pays well.
     let sellMultiplier: Double
+    // Upgrade ids from the file: "reactor", "cargoRack", "hullPlating",
+    // "thrusters", "weaponFocus", "shieldCapacitor"
+    var upgrades: [String]? = nil
   }
 
   let id: String
@@ -40,6 +43,17 @@ struct Station: Decodable, Equatable {
     return shop.sells.compactMap { ItemType(id: $0) }
   }
 
+
+  // Ship upgrades this station can fit
+  var upgradesForSale: [ShipUpgrade] {
+    return (shop.upgrades ?? []).compactMap { ShipUpgrade(id: $0) }
+  }
+
+  // Price of an upgrade's next tier here, or nil when it's maxed
+  func upgradePrice(_ upgrade: ShipUpgrade, tier: Int) -> Int? {
+    guard let base = upgrade.basePrice(forTier: tier) else { return nil }
+    return Int((Double(base) * shop.buyMultiplier).rounded(.up))
+  }
 
   // A line for the situation, falling back to the first-visit lines
   func greeting(for situation: StationSituation) -> String {

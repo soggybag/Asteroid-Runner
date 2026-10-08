@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000071 /* Upgrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000070 /* Upgrades.swift */; };
 		A1B2C3D4E5F6000000000063 /* ScannerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */; };
 		A1B2C3D4E5F6000000000061 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000060 /* Wave.swift */; };
 		A1B2C3D4E5F6000000000051 /* RunStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000050 /* RunStats.swift */; };
@@ -90,6 +91,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000070 /* Upgrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrades.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000060 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000050 /* RunStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunStats.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				D84E3730205CD3B500512E12 /* Ship.swift */,
 				D8955B8720706360000102F5 /* ShipShield.swift */,
 				A1B2C3D4E5F6000000000040 /* Power.swift */,
+				A1B2C3D4E5F6000000000070 /* Upgrades.swift */,
 			);
 			path = Ship;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				D82D19E3205E34DF00807C85 /* Fonts.swift in Sources */,
 				A1B2C3D4E5F6000000000002 /* HighScore.swift in Sources */,
 				A1B2C3D4E5F600000000000A /* Tuning.swift in Sources */,
+				A1B2C3D4E5F6000000000071 /* Upgrades.swift in Sources */,
 				A1B2C3D4E5F6000000000063 /* ScannerPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000061 /* Wave.swift in Sources */,
 				A1B2C3D4E5F6000000000051 /* RunStats.swift in Sources */,

@@ -19,7 +19,7 @@ class Hud: SKSpriteNode {
   let coinLabel = SKLabelNode()
   let distanceLabel = SKLabelNode()
   let livesNode = SKNode()
-  let tray = ItemTray(capacity: Tuning.Items.slots)
+  private(set) var tray = ItemTray(capacity: Tuning.Items.slots)
 
   init() {
     let color = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2)
@@ -89,6 +89,15 @@ class Hud: SKSpriteNode {
     tray.position = CGPoint(x: Screen.sharedInstance.centerX, y: 20)
   }
 
+  // Rebuild the tray with more or fewer slots, keeping its tap handler
+  func setTrayCapacity(_ capacity: Int) {
+    let handler = tray.slotTapped
+    tray.removeFromParent()
+    tray = ItemTray(capacity: capacity)
+    tray.slotTapped = handler
+    setupTray()
+  }
+
   func update(score: Int) {
     scoreLabel.text = "\(score)"
   }
@@ -103,14 +112,27 @@ class Hud: SKSpriteNode {
 
   // Draw one small ship for each remaining life
 
+  // One small ship per life, up to three. With more (from hull plating),
+  // one ship and a count, so the strip has room for the tray.
   func update(lives: Int) {
     livesNode.removeAllChildren()
     let texture = SKTexture(imageNamed: "Satellite_4_1.png")
-    for i in 0 ..< max(lives, 0) {
+    let icons = lives > 3 ? 1 : max(lives, 0)
+    for i in 0 ..< icons {
       let icon = SKSpriteNode(texture: texture)
       icon.size = CGSize(width: 22, height: 22)
       icon.position.x = CGFloat(i) * 26
       livesNode.addChild(icon)
+    }
+    if lives > 3 {
+      let count = SKLabelNode(text: "×\(lives)")
+      count.fontName = Fonts.fontName
+      count.fontSize = 16
+      count.fontColor = Colors.buttonLabelColor
+      count.horizontalAlignmentMode = .left
+      count.verticalAlignmentMode = .center
+      count.position.x = 16
+      livesNode.addChild(count)
     }
   }
 }

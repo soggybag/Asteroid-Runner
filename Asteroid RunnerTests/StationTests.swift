@@ -143,3 +143,90 @@ struct RunStatsTests {
     #expect(stats.distanceText == "1.23 AU")
   }
 }
+
+
+// Ship upgrades: tiers, what they add, prices at each station, and how
+// the reactor, tray and shields take them
+
+struct UpgradeTests {
+
+  @Test func tiersStopAtTheMax() {
+    var upgrades = ShipUpgrades()
+    for _ in 0 ..< ShipUpgrade.reactor.maxTier {
+      let installed = upgrades.install(.reactor)
+      #expect(installed)
+    }
+    let extra = upgrades.install(.reactor)
+    #expect(!extra)
+    #expect(upgrades.tier(.reactor) == ShipUpgrade.reactor.maxTier)
+  }
+
+  @Test func upgradesAddUp() {
+    var upgrades = ShipUpgrades()
+    #expect(upgrades.reactorUnits == Tuning.Power.reactorUnits)
+    upgrades.install(.reactor)
+    upgrades.install(.cargoRack)
+    upgrades.install(.hullPlating)
+    upgrades.install(.thrusters)
+    upgrades.install(.weaponFocus)
+    upgrades.install(.shieldCapacitor)
+    #expect(upgrades.reactorUnits == Tuning.Power.reactorUnits + 1)
+    #expect(upgrades.traySlots == Tuning.Items.slots + 1)
+    #expect(upgrades.maxLives == Tuning.Player.startingLives + 1)
+    #expect(upgrades.maneuverScale > 1)
+    #expect(upgrades.damageScale > 1)
+    #expect(upgrades.extraShieldCharges == 1)
+  }
+
+  @Test func eachTierCostsMore() {
+    for upgrade in ShipUpgrade.allCases {
+      let prices = Tuning.Upgrades.prices(upgrade)
+      #expect(!prices.isEmpty)
+      for (cheaper, dearer) in zip(prices, prices.dropFirst()) {
+        #expect(dearer > cheaper)
+      }
+    }
+  }
+
+  @Test func stationPricesFollowTheMultiplier() {
+    let cheap = makeStation(buy: 1)
+    let dear = makeStation(buy: 2)
+    let base = ShipUpgrade.reactor.basePrice(forTier: 1)!
+    #expect(cheap.upgradePrice(.reactor, tier: 1) == base)
+    #expect(dear.upgradePrice(.reactor, tier: 1) == base * 2)
+    #expect(cheap.upgradePrice(.reactor, tier: ShipUpgrade.reactor.maxTier + 1) == nil)
+  }
+
+  @Test func everyStationFitsSomething() {
+    for station in StationList.load() {
+      #expect(!station.upgradesForSale.isEmpty)
+      #expect(station.upgradesForSale.count == station.shop.upgrades?.count)
+    }
+  }
+
+  @Test func aBiggerReactorKeepsLevelsAndFreesUnits() {
+    let grid = PowerGrid(reactor: 6, maxLevel: 4, startingLevel: 2)
+    let bigger = grid.withReactor(7)
+    #expect(bigger.reactor == 7)
+    #expect(bigger.free == 1)
+    for system in ShipSystem.allCases {
+      #expect(bigger.level(system) == grid.level(system))
+    }
+  }
+
+  @Test func aCargoRackAddsTraySlots() {
+    var inventory = Inventory(capacity: 3)
+    inventory.add(.bomb)
+    inventory.add(.bomb)
+    inventory.add(.bomb)
+    #expect(inventory.isFull)
+    inventory.setCapacity(4)
+    #expect(!inventory.isFull)
+    #expect(inventory.items.count == 3)
+  }
+
+  @Test func shieldCapacitorNeedsShieldPower() {
+    #expect(ShieldCharge.capacity(level: 0, bonus: 2) == 0)
+    #expect(ShieldCharge.capacity(level: 1, bonus: 2) == Tuning.Power.shieldCapacity[1] + 2)
+  }
+}

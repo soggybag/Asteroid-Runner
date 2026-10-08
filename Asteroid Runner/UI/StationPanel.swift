@@ -5,8 +5,8 @@
 
 // The station screen shown while docked. It has its own look, navy and
 // station blue, so it doesn't read as the ship's green HUD. The keeper's
-// greeting sits on top; below it Buy, Sell and Repair tabs show one list
-// at a time, so buying and selling can't be mixed up; each row has its
+// greeting sits on top; below it Buy, Sell, Repair and Upgrade tabs show
+// one list at a time, so buying and selling can't be mixed up; each row has its
 // own clearly labeled button. The panel only draws and reports taps;
 // StationState does the buying and selling and calls refresh.
 
@@ -15,13 +15,14 @@ import SpriteKit
 class StationPanel: SKNode {
 
   enum Tab: CaseIterable {
-    case buy, sell, repair
+    case buy, sell, repair, upgrade
 
     var title: String {
       switch self {
       case .buy: return "BUY"
       case .sell: return "SELL"
       case .repair: return "REPAIR"
+      case .upgrade: return "UPGRADE"
       }
     }
   }
@@ -29,6 +30,7 @@ class StationPanel: SKNode {
   var onBuy: (ItemType) -> Void = { _ in }
   var onRepair: () -> Void = {}
   var onSell: (Int) -> Void = { _ in }
+  var onUpgrade: (ShipUpgrade) -> Void = { _ in }
   var onLaunch: () -> Void = {}
 
   let station: Station
@@ -41,7 +43,7 @@ class StationPanel: SKNode {
   private var tabButtons = [Tab: TabButton]()
 
   // The last state shown, so a tab change can redraw without the scene
-  private var last: (coins: Int, lives: Int, maxLives: Int, inventory: Inventory)?
+  private var last: (coins: Int, lives: Int, maxLives: Int, upgrades: ShipUpgrades, inventory: Inventory)?
 
   private let pad: CGFloat = 16
   private let rowHeight: CGFloat = 40
@@ -82,7 +84,8 @@ class StationPanel: SKNode {
 
     // Tabs under the header
     let tabY = size.height - headerHeight - 54
-    let tabWidth = (size.width - pad * 2 - 16) / 3
+    let tabCount = CGFloat(Tab.allCases.count)
+    let tabWidth = (size.width - pad * 2 - 8 * (tabCount - 1)) / tabCount
     for (i, t) in Tab.allCases.enumerated() {
       let button = TabButton(title: t.title, width: tabWidth)
       button.position = CGPoint(x: pad + tabWidth / 2 + CGFloat(i) * (tabWidth + 8), y: tabY)
@@ -116,15 +119,16 @@ class StationPanel: SKNode {
       button.isSelected = t == tab
     }
     if let last = last {
-      refresh(coins: last.coins, lives: last.lives, maxLives: last.maxLives, inventory: last.inventory, message: nil)
+      refresh(coins: last.coins, lives: last.lives, maxLives: last.maxLives, upgrades: last.upgrades,
+              inventory: last.inventory, message: nil)
     }
   }
 
 
   // Redraw the wallet line and the open tab's list
 
-  func refresh(coins: Int, lives: Int, maxLives: Int, inventory: Inventory, message: String?) {
-    last = (coins, lives, maxLives, inventory)
+  func refresh(coins: Int, lives: Int, maxLives: Int, upgrades: ShipUpgrades, inventory: Inventory, message: String?) {
+    last = (coins, lives, maxLives, upgrades, inventory)
     content.removeAllChildren()
 
     let wallet = label("Coins \(coins)     Hull \(lives)/\(maxLives)     Tray \(inventory.items.count)/\(inventory.capacity)",
@@ -133,13 +137,13 @@ class StationPanel: SKNode {
     content.addChild(wallet)
 
     var y = tabY - 40
-    func row(_ name: String, detail: String?, action: ShopButton) {
+    func row(_ name: String, detail: String?, action: ShopButton, detailOnNewLine: Bool = false) {
       let nameLabel = label(name, size: 15, color: Colors.stationText)
-      nameLabel.position = CGPoint(x: pad, y: y - 5)
+      nameLabel.position = CGPoint(x: pad, y: detailOnNewLine ? y + 1 : y - 5)
       content.addChild(nameLabel)
       if let detail = detail {
         let detailLabel = label(detail, size: 12, color: Colors.station)
-        detailLabel.position = CGPoint(x: pad + 110, y: y - 5)
+        detailLabel.position = detailOnNewLine ? CGPoint(x: pad, y: y - 14) : CGPoint(x: pad + 110, y: y - 5)
         content.addChild(detailLabel)
       }
       action.position = CGPoint(x: size.width - pad - ShopButton.size.width / 2, y: y)
@@ -169,6 +173,26 @@ class StationPanel: SKNode {
         let button = ShopButton(title: "Sell  +\(station.sellPrice(item.type))", color: Colors.sell)
         button.tapped = { self.onSell(slot) }
         row(item.type.name, detail: "in your tray", action: button)
+      }
+
+    case .upgrade:
+      let upgradesHere = station.upgradesForSale
+      if upgradesHere.isEmpty {
+        addNote("No upgrades fitted here", y: y)
+      }
+      for upgrade in upgradesHere {
+        let tier = upgrades.tier(upgrade)
+        let detail = "\(upgrade.effect)  ·  \(tier)/\(upgrade.maxTier)"
+        let button: ShopButton
+        if let price = station.upgradePrice(upgrade, tier: tier + 1) {
+          button = ShopButton(title: "Fit  ·  \(price)", color: Colors.upgrade)
+          button.isEnabled = coins >= price
+          button.tapped = { self.onUpgrade(upgrade) }
+        } else {
+          button = ShopButton(title: "Maxed", color: Colors.upgrade)
+          button.isEnabled = false
+        }
+        row(upgrade.name, detail: detail, action: button, detailOnNewLine: true)
       }
 
     case .repair:
@@ -236,7 +260,7 @@ class TabButton: SKSpriteNode {
 
     label.text = title
     label.fontName = Fonts.fontName
-    label.fontSize = 14
+    label.fontSize = 13
     label.verticalAlignmentMode = .center
     addChild(label)
 

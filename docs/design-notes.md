@@ -427,6 +427,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
+**Up next (revised 2026-10-08, after round 5):** ~~ship upgrades~~ (done), then the **system map** (choose the next station, route hints), then **trade and missions**. Modules replace upgrades once the module art and design are ready.
+
 6. ~~**Station screen rework**~~ Done 2026-10-07: Buy, Sell and Repair tabs, explicit buttons, navy and station-blue look.
 7. ~~**Power balance**~~ Done 2026-10-07: top weapons levels cost 2 units; faster maneuvering at high engine power; slower turret fire. Scanner up 9 s and tappable.
 8. **HUD rework** (Phase 2): slides down from the top, sits higher, transparent; items move into it with counts; show active effects like rapid fire and multi-shot. Fix accidental opening.
@@ -462,6 +464,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Playtest round 4 ([playtest-round-4.md](playtest-round-4.md)): stages 13–18; waves varied; weapons at max dominates. Gate not met
 - [x] Station screen rework and power balance (2026-10-07): tabs; weapons levels 3–4 cost 2 units; engines faster at the top; slower turret fire; scanner 9 s and tappable
 - [x] Playtest round 5 ([playtest-round-5.md](playtest-round-5.md)): best run stage 20; power more balanced; hard at 18–20
+- [x] Ship upgrades (2026-10-08): six upgrades with tiers bought at stations, kept for the run: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor. Each station fits its own set (`stations.json`); prices in `Tuning.Upgrades`. Upgrade tab on the station screen
+- [ ] Playtest round 6
 - [x] Round 5 fixes (2026-10-08): turrets and bases not pushed by missiles; shooter waves start with a shooter; slower base fire and slower early shooters; pickups tumble
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction
 - [ ] Maze and lane waves
@@ -554,6 +558,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-08 | Ship upgrades built: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor; each station fits its own set. A first step toward modules and ship roles. Next: system map, then trade and missions |
 | 2026-10-08 | Round 5 playtest: best run stage 20; power more balanced. Fixed turrets being pushed off screen, empty shooter warnings, heavy base fire; pickups tumble. Direction: commerce, a system map with missions, and ship upgrades for different roles |
 | 2026-10-07 | Station screen reworked with Buy, Sell and Repair tabs and its own look. Power balance: top weapons levels cost 2 units, engines maneuver faster at the top, turrets fire less. Scanner up 9 s, tap to start |
 | 2026-10-07 | Round 4 playtest: stages 13–18; waves varied, scanner liked; weapons at max dominates. Fixed turrets drifting off and crowding, scanner advice, dense bouncers, regular mazes; added waves seen at game over and scanner trajectories. Station screen rework moved up |

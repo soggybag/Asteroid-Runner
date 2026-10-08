@@ -106,7 +106,7 @@ class StationState: GKState {
     scene.ship.position = dockingPoint
 
     let situation = StationSituation.pick(
-      damaged: scene.lives < Tuning.Player.startingLives,
+      damaged: scene.lives < scene.maxLives,
       carryingWanted: !scene.inventory.items.isEmpty && station.shop.sellMultiplier > 1,
       visitedBefore: scene.stationRoute.hasVisited(station))
     scene.stationRoute.docked(at: station)
@@ -120,6 +120,7 @@ class StationState: GKState {
     panel.onBuy = { item in self.buy(item) }
     panel.onRepair = { self.repair() }
     panel.onSell = { slot in self.sell(slot: slot) }
+    panel.onUpgrade = { upgrade in self.buy(upgrade) }
     panel.onLaunch = { self.launch() }
     scene.addChild(panel)
     self.panel = panel
@@ -156,7 +157,7 @@ class StationState: GKState {
   }
 
   private func repair() {
-    guard let station = station, scene.lives < Tuning.Player.startingLives else { return }
+    guard let station = station, scene.lives < scene.maxLives else { return }
     if scene.coins < station.repairPrice {
       refresh(message: "Not enough coins")
     } else {
@@ -167,8 +168,25 @@ class StationState: GKState {
     }
   }
 
+  private func buy(_ upgrade: ShipUpgrade) {
+    guard let station = station else { return }
+    let tier = scene.upgrades.tier(upgrade) + 1
+    guard let price = station.upgradePrice(upgrade, tier: tier) else {
+      refresh(message: "\(upgrade.name) is fully upgraded")
+      return
+    }
+    if scene.coins < price {
+      refresh(message: "Not enough coins")
+    } else {
+      scene.coins -= price
+      scene.install(upgrade)
+      scene.impact.impactOccurred()
+      refresh(message: "\(upgrade.name) installed")
+    }
+  }
+
   private func refresh(message: String?) {
-    panel?.refresh(coins: scene.coins, lives: scene.lives, maxLives: Tuning.Player.startingLives,
+    panel?.refresh(coins: scene.coins, lives: scene.lives, maxLives: scene.maxLives, upgrades: scene.upgrades,
                    inventory: scene.inventory, message: message)
   }
 

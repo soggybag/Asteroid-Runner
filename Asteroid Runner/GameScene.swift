@@ -121,6 +121,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
 
+  // Upgrades bought at stations this run
+  var upgrades = ShipUpgrades()
+
+  var maxLives: Int {
+    return upgrades.maxLives
+  }
+
   // Reactor power shared between engines, shields and weapons
   var power = PowerGrid() {
     didSet {
@@ -313,6 +320,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func setupPowerPanel() {
     let screen = Screen.sharedInstance
+    let wasOpen = powerPanelOpen
+    closePowerPanel()
     powerPanel = PowerPanel(width: screen.width - 16, maxLevel: power.maxLevel, reactor: power.reactor)
     powerPanel.position = CGPoint(x: 8, y: screen.shipY + 40)
     powerPanel.onRaise = { system in
@@ -325,6 +334,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       self.autoFireOn.toggle()
     }
     powerPanel.update(grid: power, autoFire: autoFireOn)
+    if wasOpen {
+      openPowerPanel()
+    }
+  }
+
+
+  // ---------------------------------
+  // Install a ship upgrade, then make the
+  // ship match: reactor, tray, hull, and
+  // the boosts power levels pick up
+  // ---------------------------------
+
+  func install(_ upgrade: ShipUpgrade) {
+    guard upgrades.install(upgrade) else { return }
+    if upgrade == .hullPlating {
+      // New plating comes fitted
+      lives += 1
+    }
+    applyUpgrades()
+  }
+
+  func applyUpgrades() {
+    if power.reactor != upgrades.reactorUnits {
+      power = power.withReactor(upgrades.reactorUnits)
+      setupPowerPanel()
+    }
+    if inventory.capacity != upgrades.traySlots {
+      inventory.setCapacity(upgrades.traySlots)
+      hud.setTrayCapacity(upgrades.traySlots)
+      hud.tray.update(with: inventory)
+    }
+    applyPower()
   }
 
 
@@ -362,8 +403,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // ---------------------------------
 
   func applyPower() {
-    ship.setEngine(level: power.level(.engines))
-    shieldCharge.setLevel(power.level(.shields))
+    ship.setEngine(level: power.level(.engines), boost: upgrades.maneuverScale)
+    shieldCharge.setLevel(power.level(.shields), bonus: upgrades.extraShieldCharges)
     ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
     powerPanel?.update(grid: power, autoFire: autoFireOn)
   }
@@ -432,7 +473,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     missileMode = .normal
     rapidFireOn = false
     closePowerPanel()
+    upgrades = ShipUpgrades()
+    inventory = Inventory()
+    hud.setTrayCapacity(upgrades.traySlots)
     power = PowerGrid()
+    setupPowerPanel()
     shieldCharge = ShieldCharge(level: power.level(.shields))
     ship.showBarrier(charge: shieldCharge.charge, capacity: shieldCharge.capacity)
     level = 0
@@ -712,7 +757,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let points = missileMode.getPoints()
 
     for point in points {
-      let missile = Missile(level: power.level(.weapons))
+      let missile = Missile(level: power.level(.weapons), damageScale: upgrades.damageScale)
       addChild(missile)
       missile.position = ship.position + point
     }

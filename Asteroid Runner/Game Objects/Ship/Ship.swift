@@ -159,9 +159,10 @@ class Ship: SKSpriteNode {
   // Engine power level
   // ---------------------------
 
-  func setEngine(level: Int) {
-    shipSpeed = Tuning.Power.value(Tuning.Power.engineTilt, level: level)
-    dragSpeed = Tuning.Power.value(Tuning.Power.engineDragSpeed, level: level)
+  // `boost` multiplies maneuvering, from thruster upgrades
+  func setEngine(level: Int, boost: CGFloat = 1) {
+    shipSpeed = Tuning.Power.value(Tuning.Power.engineTilt, level: level) * boost
+    dragSpeed = Tuning.Power.value(Tuning.Power.engineDragSpeed, level: level) * boost
     physicsBody?.linearDamping = Tuning.Power.value(Tuning.Power.engineDamping, level: level)
   }
 

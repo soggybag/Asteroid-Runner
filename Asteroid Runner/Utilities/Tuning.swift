@@ -237,6 +237,30 @@ enum Tuning {
   }
 
 
+  // MARK: Ship upgrades
+  //
+  // Bought at stations, kept for the run. The number of prices is the
+  // number of tiers; each station's buyMultiplier adjusts them.
+
+  enum Upgrades {
+    static func prices(_ upgrade: ShipUpgrade) -> [Int] {
+      switch upgrade {
+      case .reactor: return [25, 45, 70]
+      case .cargoRack: return [15, 30]
+      case .hullPlating: return [20, 40]
+      case .thrusters: return [15, 30]
+      case .weaponFocus: return [20, 40]
+      case .shieldCapacitor: return [20, 40]
+      }
+    }
+
+    // Each tier of thrusters adds this share to maneuvering, and each
+    // tier of weapon focus this share to damage
+    static let thrusterBoost: CGFloat = 0.15
+    static let damageBoost: CGFloat = 0.2
+  }
+
+
   // MARK: Travel
 
   enum Travel {

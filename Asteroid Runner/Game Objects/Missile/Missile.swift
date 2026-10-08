@@ -40,9 +40,10 @@ class Missile: SKSpriteNode {
   // MARK: Initializers
   // --------------------------------
 
-  init(level: Int) {
+  // `damageScale` multiplies damage, from weapon focus upgrades
+  init(level: Int, damageScale: CGFloat = 1) {
     self.level = level
-    damage = Tuning.Power.value(Tuning.Power.weaponDamage, level: level)
+    damage = Tuning.Power.value(Tuning.Power.weaponDamage, level: level) * damageScale
     let color = Tuning.Power.value(Missile.colors, level: level)
     super.init(texture: nil, color: color, size: Tuning.Power.value(Missile.sizes, level: level))
 
