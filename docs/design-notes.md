@@ -305,7 +305,7 @@ What stays our own: the moment-to-moment game is flying and shooting through ast
 
 ### System map (2026-10-05)
 
-An abstract map of the solar system, shown at a station when the player is ready to launch. The player chooses the next destination; the map hints at what lies between here and there.
+Full design draft (2026-10-09): [system-map.md](system-map.md). An abstract map of the solar system, shown at a station when the player is ready to launch. The player chooses the next destination; the map hints at what lies between here and there.
 
 ```
    SUN ·  ◉ Halden's Rock ──── ◉ Bastion Seven ──── ◉ The Lucky Drift ···· outer planets
@@ -462,7 +462,7 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
-**Up next (revised 2026-10-08, after round 5):** ~~ship upgrades~~ (done), then the **system map** (choose the next station, route hints), then **trade and missions**. Modules replace upgrades once the module art and design are ready.
+**Up next (revised 2026-10-09, after round 7):** ~~ship upgrades~~ (done), playtest round 8, then the **system map**: choose the next station; safe or risky routes set the difficulty. Design draft in [system-map.md](system-map.md). Then **trade and missions**. Modules replace upgrades once the module art and design are ready.
 
 6. ~~**Station screen rework**~~ Done 2026-10-07: Buy, Sell and Repair tabs, explicit buttons, navy and station-blue look.
 7. ~~**Power balance**~~ Done 2026-10-07: top weapons levels cost 2 units; faster maneuvering at high engine power; slower turret fire. Scanner up 9 s and tappable.
@@ -500,10 +500,12 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Station screen rework and power balance (2026-10-07): tabs; weapons levels 3–4 cost 2 units; engines faster at the top; slower turret fire; scanner 9 s and tappable
 - [x] Playtest round 5 ([playtest-round-5.md](playtest-round-5.md)): best run stage 20; power more balanced; hard at 18–20
 - [x] Ship upgrades (2026-10-08): six upgrades with tiers bought at stations, kept for the run: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor. Each station fits its own set (`stations.json`); prices in `Tuning.Upgrades`. Upgrade tab on the station screen
-- [ ] Playtest round 6
+- [x] Playtest round 6 ([playtest-round-6.md](playtest-round-6.md)): stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row (2026-10-09)
+- [x] Playtest round 7 ([playtest-round-7.md](playtest-round-7.md)): four runs lost at the stage 9 swarm, one reached stage 24. Fixed swarm spacing for brass, gentler swarms, more maze stagger (2026-10-09)
+- [ ] Playtest round 8: check the swarm fixes, and whether the gate is met
 - [x] Round 5 fixes (2026-10-08): turrets and bases not pushed by missiles; shooter waves start with a shooter; slower base fire and slower early shooters; pickups tumble
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction
-- [ ] Maze and lane waves
+- [x] Maze and lane waves (built with waves and pacing, 2026-10-06)
 - [ ] More enemies that shoot back
 - [ ] Weapon variety
 
@@ -594,6 +596,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-09 | System map design drafted ([system-map.md](system-map.md)): regions from Earth to Neptune, 2–3 routes per station, safe or risky routes set difficulty and loot, reaching Neptune wins (proposed). Next after playtest round 8 |
 | 2026-10-09 | Round 7 playtest: four runs lost at the stage 9 swarm, best stage 24. Fixed swarm spacing for brass (spacing by real size), gentler swarms, more maze stagger. Ideas: slow the whole game down, a lightweight asteroid wave |
 | 2026-10-09 | Round 6 playtest: stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row under the strip. Ideas: ores that replace coins, distance instead of score, a map with easier and harder regions |
 | 2026-10-08 | Ship upgrades built: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor; each station fits its own set. A first step toward modules and ship roles. Next: system map, then trade and missions |

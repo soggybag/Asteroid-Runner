@@ -10,6 +10,8 @@ Requires Xcode 15+ and iOS 17+.
 
 Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
 
+System map design (draft): [docs/system-map.md](docs/system-map.md)
+
 ## Controls
 
 - Drag anywhere to steer, or tilt the phone. The ship follows your finger as
