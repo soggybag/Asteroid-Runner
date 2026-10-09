@@ -596,6 +596,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-09 | After Neptune: a surprise return mission to the inner system, carrying something fragile (dodge more, shoot less) through a system that has changed since the way out. Shorter than the way out. Replaces endless play for now; a pursuer may come later |
+| 2026-10-09 | System map decisions: reaching Neptune wins the run; same regions every run, new stations and routes; made-up station names |
 | 2026-10-09 | System map design drafted ([system-map.md](system-map.md)): regions from Earth to Neptune, 2–3 routes per station, safe or risky routes set difficulty and loot, reaching Neptune wins (proposed). Next after playtest round 8 |
 | 2026-10-09 | Round 7 playtest: four runs lost at the stage 9 swarm, best stage 24. Fixed swarm spacing for brass (spacing by real size), gentler swarms, more maze stagger. Ideas: slow the whole game down, a lightweight asteroid wave |
 | 2026-10-09 | Round 6 playtest: stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row under the strip. Ideas: ores that replace coins, distance instead of score, a map with easier and harder regions |
