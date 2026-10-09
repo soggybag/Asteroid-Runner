@@ -190,7 +190,12 @@ struct WavePlan {
   let sizes: [(size: AsteroidSize, weight: Int)]
 
   static func make(stage: Int, progress: Double, previous: WaveRecipe?) -> WavePlan {
-    let difficulty = Tuning.Pacing.difficulty(stage: stage, progress: progress)
+    return make(stage: stage, difficulty: Tuning.Pacing.difficulty(stage: stage, progress: progress),
+                progress: progress, previous: previous)
+  }
+
+  // A wave at a given difficulty, as the system map sets it
+  static func make(stage: Int, difficulty: Int, progress: Double, previous: WaveRecipe?) -> WavePlan {
     let recipe = WaveRecipe.choose(stage: stage, progress: progress, previous: previous)
     return WavePlan(recipe: recipe, stage: stage, difficulty: difficulty,
                     featured: AsteroidType.featured(forLevel: stage),

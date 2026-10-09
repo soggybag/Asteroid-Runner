@@ -170,9 +170,15 @@ Each step can be played on its own:
    leg's waves (`legWaves`) when it picks the next station, not as each
    wave starts. No visible change; tests check the plans follow today's
    rules.
-2. **Regions and routes.** A map model: regions, stations placed in them,
-   2–3 routes per station with length and danger. Generated per run.
-   Difficulty from region and danger. Tests.
+2. ~~**Regions and routes.**~~ Done 2026-10-09. `SystemMap.swift`: seven
+   regions, 2–3 stations in each (a station kind under a made-up name from
+   `mapNames` in `stations.json`), 2–3 routes per station, each with a
+   danger and length. A new map each run. Difficulty ramps from the region
+   a leg leaves to the one it reaches, eased after a station and shifted
+   by danger; numbers in `Tuning.Map`. Past Neptune, legs stay at Neptune
+   and get harder until the win screen exists. **Until the map screen, the
+   game takes the normal route,** so danger can't be seen in play yet.
+   Every station of a kind shares its keeper and greetings for now.
 3. **The map screen** after Launch, with route cards and Set course. Scanner
    briefing shows "Stage 2 of 4 to …".
 4. **Loot by danger:** coins and pickup chance scaled by route danger.

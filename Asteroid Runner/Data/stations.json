@@ -4,7 +4,34 @@
     "greetings: lines picked by situation when the ship docks. The game uses the first situation that applies, in this order: shipDamaged, lowFuel, carryingWanted, returnVisit, firstVisit. Each situation can list several lines; one is picked at random.",
     "conversation: optional, for later. A decision tree like Star Control: each node has the keeper's text and the player's options. An option points to the next node, or to null to end the talk. An effect is a hint for later code, such as a discount, a gift or opening the shop.",
     "shop: what the station sells and how it prices things. Multipliers are against a base price; 1.0 is normal.",
-    "shop.upgrades: ship upgrades the station can fit: reactor, cargoRack, hullPlating, thrusters, weaponFocus, shieldCapacitor. Prices are in Tuning.Upgrades, times the station's buyMultiplier."
+    "shop.upgrades: ship upgrades the station can fit: reactor, cargoRack, hullPlating, thrusters, weaponFocus, shieldCapacitor. Prices are in Tuning.Upgrades, times the station's buyMultiplier.",
+    "mapNames: made-up names for the system map's stations, placeholders until real ones are written. Each map station takes one, and is one of the stations below (its kind: shop, keeper, greetings) under that name. A run uses up to 21."
+  ],
+  "mapNames": [
+    "Gannet Yard",
+    "Kestrel Station",
+    "Tamsin's Reach",
+    "Coldwater",
+    "Ostrander Ring",
+    "Port Lanyard",
+    "Sable Hollow",
+    "Wicker Point",
+    "Dunmore Spire",
+    "Halyard Rest",
+    "Fennick Deep",
+    "Corvo Exchange",
+    "The Brass Lantern",
+    "Marrow Gate",
+    "Quillon Dock",
+    "Ashby Moor",
+    "Ferro Nine",
+    "Little Abeyance",
+    "Calder Rise",
+    "Penhallow",
+    "Thistle Drift",
+    "Vantage Twelve",
+    "Orrin's Folly",
+    "Lowmarket"
   ],
   "stations": [
     {

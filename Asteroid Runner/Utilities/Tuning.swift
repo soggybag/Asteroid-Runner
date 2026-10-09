@@ -237,6 +237,43 @@ enum Tuning {
   }
 
 
+  // MARK: System map
+  //
+  // Regions from Earth to Neptune, stations in each, routes between.
+  // See docs/system-map.md.
+
+  enum Map {
+    static let stationsPerRegion = 2 ... 3
+    static let routesPerStation = 2 ... 3
+    // The first leg, from launch to a station near Earth
+    static let firstLegLength = 3
+    static let startDifficulty = 1
+    // Difficulty on arriving in each region, Earth to Neptune. A leg
+    // ramps from the region it leaves to the one it reaches, eased just
+    // after a station by Pacing.relief.
+    static let regionDifficulty = [3, 7, 11, 15, 19, 22, 25]
+    // Past Neptune, until reaching it wins the run, each leg this much harder
+    static let pastLastRegionStep = 3
+
+    // Waves on a route, and how much harder it is, by danger
+    static func legLengths(_ danger: RouteDanger) -> ClosedRange<Int> {
+      switch danger {
+      case .safe: return 4 ... 5
+      case .normal: return 3 ... 4
+      case .risky: return 2 ... 3
+      }
+    }
+
+    static func dangerOffset(_ danger: RouteDanger) -> Int {
+      switch danger {
+      case .safe: return -2
+      case .normal: return 0
+      case .risky: return 2
+      }
+    }
+  }
+
+
   // MARK: Ship upgrades
   //
   // Bought at stations, kept for the run. The number of prices is the

@@ -146,10 +146,11 @@ struct StationRouteTests {
   @Test func plannedLegFollowsTheWaveRules() {
     for _ in 0 ..< 200 {
       let length = Int.random(in: Tuning.Stations.minWaves ... Tuning.Stations.maxWaves)
-      let waves = StationRoute.planLeg(from: 12, length: length, previous: .swarm)
+      let difficulty = LegDifficulty(start: 7, end: 11, offset: 2)
+      let waves = StationRoute.planLeg(from: 12, length: length, difficulty: difficulty, previous: .swarm)
       for (index, wave) in waves.enumerated() {
         let progress = length > 1 ? Double(index) / Double(length - 1) : 1
-        #expect(wave.difficulty == Tuning.Pacing.difficulty(stage: wave.stage, progress: progress))
+        #expect(wave.difficulty == difficulty.at(progress: progress))
         if wave.recipe.isHard {
           #expect(progress >= Tuning.Pacing.hardFrom)
         }
@@ -268,5 +269,114 @@ struct UpgradeTests {
   @Test func shieldCapacitorNeedsShieldPower() {
     #expect(ShieldCharge.capacity(level: 0, bonus: 2) == 0)
     #expect(ShieldCharge.capacity(level: 1, bonus: 2) == Tuning.Power.shieldCapacity[1] + 2)
+  }
+}
+
+
+struct SystemMapTests {
+
+  private let kinds = [makeStation(id: "outpost"), makeStation(id: "depot"), makeStation(id: "trader")]
+  private let names = (1 ... 24).map { "Station \($0)" }
+
+  @Test func everyRegionHasStationsWithTheirOwnNames() {
+    for _ in 0 ..< 50 {
+      let map = SystemMap.generate(kinds: kinds, names: names)!
+      for region in Region.allCases {
+        #expect(Tuning.Map.stationsPerRegion.contains(map.stations(in: region).count))
+      }
+      #expect(Set(map.stations.map(\.id)).count == map.stations.count)
+      #expect(Set(map.stations.map(\.station.name)).count == map.stations.count)
+    }
+  }
+
+  @Test func routesLeadToTheNextRegionOut() {
+    for _ in 0 ..< 50 {
+      let map = SystemMap.generate(kinds: kinds, names: names)!
+      for from in map.stations {
+        let routes = map.routes(from: from.id)
+        #expect(!routes.isEmpty)
+        #expect(routes.count <= Tuning.Map.routesPerStation.upperBound)
+        #expect(Set(routes.map(\.to)).count == routes.count)
+        #expect(Set(routes.map(\.danger)).count == routes.count)
+        for route in routes {
+          let to = map.station(route.to)!
+          #expect(to.region == (from.region.next ?? from.region))
+          #expect(to.id != from.id)
+          #expect(route.danger.lengths.contains(route.length))
+        }
+      }
+    }
+  }
+
+  @Test func runStartsWithANormalLegToEarth() {
+    let map = SystemMap.generate(kinds: kinds, names: names)!
+    #expect(map.station(map.start.to)?.region == .earth)
+    #expect(map.start.danger == .normal)
+    #expect(map.start.length == Tuning.Map.firstLegLength)
+  }
+
+  @Test func noKindsMeansNoMap() {
+    #expect(SystemMap.generate(kinds: [], names: names) == nil)
+  }
+
+  @Test func outOfNamesStillNamesEveryStation() {
+    let map = SystemMap.generate(kinds: kinds, names: [])!
+    #expect(map.stations.allSatisfy { !$0.station.name.isEmpty })
+  }
+
+  @Test func eachLegFliesOneRegionOut() {
+    var route = StationRoute(stations: kinds, names: names)
+    var stage = 1
+    for region in Region.allCases {
+      let next = route.next!
+      #expect(route.map?.station(next.id)?.region == region)
+      stage += route.legLength
+      route.docked(at: next, nextStage: stage)
+    }
+    // Past Neptune, legs stay at Neptune and keep getting harder
+    let past = route.legDifficulty.start
+    #expect(past >= Region.neptune.difficulty)
+    route.docked(at: route.next!, nextStage: stage + route.legLength)
+    #expect(route.legDifficulty.start > past)
+  }
+
+  @Test func takesTheNormalRouteUntilThereIsAMapScreen() {
+    for _ in 0 ..< 50 {
+      var route = StationRoute(stations: kinds, names: names)
+      route.docked(at: route.next!, nextStage: 4)
+      if route.routesOut.contains(where: { $0.danger == .normal }) {
+        #expect(route.route?.danger == .normal)
+      }
+    }
+  }
+
+  @Test func legDifficultyRampsAndDangerShiftsIt() {
+    let normal = LegDifficulty(start: 7, end: 11, offset: 0)
+    #expect(normal.at(progress: 1) == 11)
+    #expect(normal.at(progress: 0) == 7 - Tuning.Pacing.relief)
+    var last = 0
+    for step in 0 ... 10 {
+      let value = normal.at(progress: Double(step) / 10)
+      #expect(value >= last)
+      last = value
+    }
+    let safe = LegDifficulty(start: 7, end: 11, offset: RouteDanger.safe.difficultyOffset)
+    let risky = LegDifficulty(start: 7, end: 11, offset: RouteDanger.risky.difficultyOffset)
+    #expect(safe.at(progress: 0.5) < normal.at(progress: 0.5))
+    #expect(risky.at(progress: 0.5) > normal.at(progress: 0.5))
+    #expect(LegDifficulty(start: 1, end: 1, offset: -2).at(progress: 0) == 1)
+  }
+
+  @Test func harderRegionsFurtherOut() {
+    let values = Region.allCases.map(\.difficulty)
+    #expect(values == values.sorted())
+    #expect(Set(values).count == values.count)
+  }
+
+  @Test func stationsFileHasEnoughMapNames() {
+    let names = StationList.loadMapNames()
+    let most = Region.allCases.count * Tuning.Map.stationsPerRegion.upperBound
+    #expect(names.count >= most)
+    #expect(Set(names).count == names.count)
   }
 }

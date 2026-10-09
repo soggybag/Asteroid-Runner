@@ -503,6 +503,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Playtest round 6 ([playtest-round-6.md](playtest-round-6.md)): stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row (2026-10-09)
 - [x] Playtest round 7 ([playtest-round-7.md](playtest-round-7.md)): four runs lost at the stage 9 swarm, one reached stage 24. Fixed swarm spacing for brass, gentler swarms, more maze stagger (2026-10-09)
 - [ ] Playtest round 8: check the swarm fixes, and whether the gate is met
+- [x] System map step 2 (2026-10-09): regions, map stations with made-up names, routes with danger and length; difficulty from the region and route (`SystemMap.swift`, `Tuning.Map`). The game takes the normal route until the map screen
 - [x] System map step 1 (2026-10-09): each leg's waves are planned when its station is picked (`StationRoute.legWaves`); no visible change. See [system-map.md](system-map.md#building-it)
 - [x] Round 5 fixes (2026-10-08): turrets and bases not pushed by missiles; shooter waves start with a shooter; slower base fire and slower early shooters; pickups tumble
 - [x] Round 4 fixes (2026-10-07): shooters from the top and capped; scanner advice by wave; bouncers thinned; maze varied; waves seen at game over; scanner blips follow the wave's direction

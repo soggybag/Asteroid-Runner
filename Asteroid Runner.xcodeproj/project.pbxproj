@@ -18,6 +18,7 @@
 		A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000037 /* StationState.swift */; };
 		A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000035 /* StationPanel.swift */; };
 		A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000033 /* StationNode.swift */; };
+		A1B2C3D4E5F6000000000073 /* SystemMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000072 /* SystemMap.swift */; };
 		A1B2C3D4E5F6000000000032 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000031 /* Station.swift */; };
 		A1B2C3D4E5F600000000002A /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000029 /* GameData.swift */; };
 		A1B2C3D4E5F600000000002C /* intro.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002B /* intro.json */; };
@@ -102,6 +103,7 @@
 		A1B2C3D4E5F6000000000037 /* StationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationState.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000035 /* StationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000033 /* StationNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationNode.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000072 /* SystemMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMap.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000031 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000029 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000002B /* intro.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = intro.json; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			children = (
 				A1B2C3D4E5F6000000000031 /* Station.swift */,
 				A1B2C3D4E5F6000000000033 /* StationNode.swift */,
+				A1B2C3D4E5F6000000000072 /* SystemMap.swift */,
 			);
 			path = Station;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */,
 				A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */,
+				A1B2C3D4E5F6000000000073 /* SystemMap.swift in Sources */,
 				A1B2C3D4E5F6000000000032 /* Station.swift in Sources */,
 				A1B2C3D4E5F600000000002A /* GameData.swift in Sources */,
 				D84E3737205CDC1300512E12 /* Missile.swift in Sources */,

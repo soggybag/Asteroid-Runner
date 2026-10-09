@@ -112,7 +112,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   // Every station from Data/stations.json, and this run's route between them
   let allStations = StationList.load()
-  lazy var stationRoute = StationRoute(stations: allStations)
+  let mapNames = StationList.loadMapNames()
+  lazy var stationRoute = StationRoute(stations: allStations, names: mapNames)
 
   // Items the player is carrying, shown in the HUD tray
   var inventory = Inventory() {

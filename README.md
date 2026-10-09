@@ -22,7 +22,9 @@ System map design (draft): [docs/system-map.md](docs/system-map.md)
   it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
   lower it; it only drains while it's up. The tray holds three; when it's
   full, new pickups are lost.
-- Every 1 to 5 stages you dock at a space station. The stage announcement
+- Every 2 to 5 stages you dock at a space station, one region further out
+  each time, from Earth toward Neptune (the system map; see
+  [docs/system-map.md](docs/system-map.md)). The stage announcement
   warns you a wave ahead ("Station ahead: Bastion Seven"). Tap to skip the
   docking. At the station, the Buy, Sell, Repair and Upgrade tabs show one
   list at a time: buy items, sell what's in your tray, repair lost hull
