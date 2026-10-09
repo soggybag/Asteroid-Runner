@@ -646,12 +646,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       }
     }
 
-    // Later stages sometimes send smaller rocks in pairs
-    let rockSize = wave.randomSize()
+    // Later stages sometimes send smaller rocks in pairs. Spacing goes by
+    // the rock's real size: brass in a swarm is large, not tiny.
+    let type = wave.randomType()
+    let rockSize = type.adjust(size: wave.randomSize())
     let pairsAllowed = rockSize.rawValue < Tuning.Stages.noPairsFrom.rawValue
     let count = pairsAllowed && Double.random(in: 0 ..< 1) < wave.pairChance ? 2 : 1
     for i in 0 ..< count {
-      makeRock(size: i == 0 ? rockSize : wave.randomSize())
+      if i == 0 {
+        makeRock(size: rockSize, type: type)
+      } else {
+        makeRock(size: wave.randomSize())
+      }
     }
     return wave.baseInterval * Tuning.Stages.sizeSpacing(rockSize)
   }

@@ -138,7 +138,8 @@ spawn further apart. A smart bomb can break bosstroids. The shield blocks enemy 
   round 3 (balance pass 2) is [docs/playtest-round-3.md](docs/playtest-round-3.md);
   round 4 (waves and pacing) is [docs/playtest-round-4.md](docs/playtest-round-4.md);
   round 5 (station screen and power balance) is [docs/playtest-round-5.md](docs/playtest-round-5.md);
-  round 6 (ship upgrades) is [docs/playtest-round-6.md](docs/playtest-round-6.md).
+  round 6 (ship upgrades) is [docs/playtest-round-6.md](docs/playtest-round-6.md);
+  round 7 (tray row) is [docs/playtest-round-7.md](docs/playtest-round-7.md).
   Note the version from the corner with each game.
 
 ## Todo

@@ -89,7 +89,7 @@ enum WaveRecipe: CaseIterable {
   var spacing: TimeInterval {
     switch self {
     case .field: return 1
-    case .swarm: return 0.45
+    case .swarm: return 0.6
     case .fastMovers: return 1.1
     case .heavy: return 1.3
     case .bouncers: return 2.2
@@ -113,7 +113,7 @@ enum WaveRecipe: CaseIterable {
     case .field:
       return AsteroidSize.pool(forLevel: difficulty).map { ($0, 1) }
     case .swarm:
-      return [(.tiny, 5), (.small, 4), (.average, 1)] + (difficulty >= 6 ? [(.large, 1)] : [])
+      return [(.tiny, 5), (.small, 4), (.average, 1)] + (difficulty >= 10 ? [(.large, 1)] : [])
     case .fastMovers:
       return [(.tiny, 2), (.small, 3), (.average, 2)]
     case .heavy:
@@ -132,6 +132,8 @@ enum WaveRecipe: CaseIterable {
   func speed(difficulty: Int) -> AsteroidSpeed {
     switch self {
     case .fastMovers: return difficulty >= 5 ? .veryFast : .fast
+    // So many rocks at once can't also be very fast
+    case .swarm: return [.slow, .average, .fast].randomElement()!
     case .heavy: return difficulty >= 6 ? .fast : .average
     case .bouncers: return .average
     default: return AsteroidSpeed.random(forLevel: difficulty)

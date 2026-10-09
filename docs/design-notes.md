@@ -1,6 +1,6 @@
 # Asteroid Runner — Design Notes & Roadmap
 
-Last updated: 2026-10-05 · Shared copy:[Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
+Last updated: 2026-10-09 · Shared copy:[Claude Doc](https://claude.ai/code/artifact/da71df5d-26d1-4b6d-b3a7-aa7c934369c5)
 
 ## Vision
 
@@ -30,6 +30,23 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Drag steering is fun but doesn't feel like piloting, and overrides engine speed | Keep it, but the ship lags behind the finger based on engine power |
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
+
+## Playtest round 7 findings (2026-10-09)
+
+Five games on build 56; details in [playtest-round-7.md](playtest-round-7.md). Four runs ended at the stage 9 swarm; one reached stage 24, changing the HUD power settings every stage. **The stage 9 swarm was a wall,** caused by a spacing bug: stage 9 introduces brasserteroids (always large, three times the hits), but a swarm spaced them as if they were tiny.
+
+| Finding | What it means |
+| --- | --- |
+| Four of five runs lost at the stage 9 swarm | Fixed: spawn spacing goes by a rock's real size, so brass in a swarm comes at the rate of large rocks |
+| Swarm at stage ~6 very hard | Fixed: swarms 33% sparser, never very fast, large rocks only from stage 10 |
+| Changing HUD power for each stage helped (stage 24) | The power HUD is doing its job once a player uses it |
+| Maze staggered blocks look better | Fixed: rows stagger up and down more (30 points, was 12) |
+| Last swarm at stage 24 overwhelming, maybe fast bouncers | Watch elastroids as a swarm's featured type |
+
+**Direction from the notes (2026-10-09):**
+
+- **Slow the whole game down?** It would give players time to use upgrades and work the HUD and ship systems, and stretch out the game so tougher stages come later. The risk is early stages feeling slow. Ways to try it: a global game speed in `Tuning`, a slower ramp (spawn interval and rock speed per stage), or slower early stages only. Play the swarm fixes first, since they're a small step this way.
+- **A lightweight asteroid wave:** a recipe of low-mass rocks, whose physics feels different when shot.
 
 ## Playtest round 6 findings (2026-10-09)
 
@@ -571,11 +588,13 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
 - [ ] How slow should time run while the HUD is open, and is the slow-time budget needed?
+- [ ] Should the whole game play slower, so there's time for upgrades and the HUD? Raised in round 7 (2026-10-09)
 
 **Decisions log**
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-09 | Round 7 playtest: four runs lost at the stage 9 swarm, best stage 24. Fixed swarm spacing for brass (spacing by real size), gentler swarms, more maze stagger. Ideas: slow the whole game down, a lightweight asteroid wave |
 | 2026-10-09 | Round 6 playtest: stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row under the strip. Ideas: ores that replace coins, distance instead of score, a map with easier and harder regions |
 | 2026-10-08 | Ship upgrades built: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor; each station fits its own set. A first step toward modules and ship roles. Next: system map, then trade and missions |
 | 2026-10-08 | Round 5 playtest: best run stage 20; power more balanced. Fixed turrets being pushed off screen, empty shooter warnings, heavy base fire; pickups tumble. Direction: commerce, a system map with missions, and ship upgrades for different roles |
