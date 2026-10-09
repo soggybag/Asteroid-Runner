@@ -497,12 +497,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 
   // ------------------------------------------------------------
-  // Plan the next wave. Difficulty eases after a station and builds
-  // toward the next one.
+  // The next wave, planned with its leg when the station was picked.
+  // Difficulty eases after a station and builds toward the next one.
   // ------------------------------------------------------------
 
   func planWave() {
-    wave = WavePlan.make(stage: level, progress: stationRoute.legProgress, previous: wave.recipe)
+    wave = stationRoute.wave(forStage: level)
+      ?? WavePlan.make(stage: level, progress: stationRoute.legProgress, previous: wave.recipe)
     stats.wavesSeen[wave.recipe, default: 0] += 1
   }
 

@@ -111,7 +111,9 @@ struct StationList: Decodable {
 }
 
 
-// Plans the trip: which station is next and how many waves until it.
+// Plans the trip: which station is next, how many waves until it, and
+// what each of those waves holds. A leg's waves are planned when its
+// station is picked, so the system map can show what's on a route.
 // One run of the game keeps one route.
 
 struct StationRoute {
@@ -122,10 +124,13 @@ struct StationRoute {
   // Waves from the last station to the next
   private(set) var legLength = 0
   private(set) var visited = Set<String>()
+  // The leg's waves, in order, and the stage number of the first one
+  private(set) var legWaves: [WavePlan] = []
+  private(set) var legStartStage = 1
 
-  init(stations: [Station]) {
+  init(stations: [Station], firstStage: Int = 1) {
     self.stations = stations
-    planNext()
+    planNext(fromStage: firstStage)
   }
 
   // How far along the run to the next station the coming wave is: 0 for
@@ -148,21 +153,44 @@ struct StationRoute {
     return wavesLeft <= 0 ? station : nil
   }
 
-  // Remember the visit and plan the next stop
-  mutating func docked(at station: Station) {
+  // Remember the visit and plan the next stop. `nextStage` is the
+  // stage number of the first wave after this station.
+  mutating func docked(at station: Station, nextStage: Int) {
     visited.insert(station.id)
-    planNext()
+    planNext(fromStage: nextStage)
+  }
+
+  // The planned wave for a stage, if it's on this leg
+  func wave(forStage stage: Int) -> WavePlan? {
+    let index = stage - legStartStage
+    return legWaves.indices.contains(index) ? legWaves[index] : nil
   }
 
   func hasVisited(_ station: Station) -> Bool {
     return visited.contains(station.id)
   }
 
-  // A different station from the last one, when there's a choice
-  private mutating func planNext() {
+  // A different station from the last one, when there's a choice, and
+  // the waves on the way. With no stations there's no leg to plan.
+  private mutating func planNext(fromStage firstStage: Int) {
     let others = stations.filter { $0.id != next?.id }
     next = (others.isEmpty ? stations : others).randomElement()
     wavesLeft = Int.random(in: Tuning.Stations.minWaves ... Tuning.Stations.maxWaves)
     legLength = wavesLeft
+    legStartStage = firstStage
+    legWaves = next == nil ? [] : StationRoute.planLeg(from: firstStage, length: legLength,
+                                                       previous: legWaves.last?.recipe)
+  }
+
+  // Waves for a leg: the first right after a station (progress 0), the
+  // last just before the next (progress 1)
+  static func planLeg(from firstStage: Int, length: Int, previous: WaveRecipe?) -> [WavePlan] {
+    var waves: [WavePlan] = []
+    for index in 0 ..< length {
+      let progress = length > 1 ? Double(index) / Double(length - 1) : 1
+      waves.append(WavePlan.make(stage: firstStage + index, progress: progress,
+                                 previous: waves.last?.recipe ?? previous))
+    }
+    return waves
   }
 }

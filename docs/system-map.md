@@ -166,9 +166,10 @@ run); and whether the Kuiper belt as endless play still has a place.
 
 Each step can be played on its own:
 
-1. **Plan legs in advance.** `StationRoute` holds a leg's waves planned at
-   launch, not chosen as each wave starts. No visible change; tests check
-   the plans match today's rules.
+1. ~~**Plan legs in advance.**~~ Done 2026-10-09. `StationRoute` plans a
+   leg's waves (`legWaves`) when it picks the next station, not as each
+   wave starts. No visible change; tests check the plans follow today's
+   rules.
 2. **Regions and routes.** A map model: regions, stations placed in them,
    2–3 routes per station with length and danger. Generated per run.
    Difficulty from region and danger. Tests.

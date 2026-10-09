@@ -109,7 +109,7 @@ class StationState: GKState {
       damaged: scene.lives < scene.maxLives,
       carryingWanted: !scene.inventory.items.isEmpty && station.shop.sellMultiplier > 1,
       visitedBefore: scene.stationRoute.hasVisited(station))
-    scene.stationRoute.docked(at: station)
+    scene.stationRoute.docked(at: station, nextStage: scene.level + 1)
 
     let screen = Screen.sharedInstance
     // Clear of the version label in the bottom corner

@@ -119,10 +119,50 @@ struct StationRouteTests {
     var route = StationRoute(stations: [makeStation(id: "a"), makeStation(id: "b")])
     for _ in 0 ..< 20 {
       let current = route.next!
-      route.docked(at: current)
+      route.docked(at: current, nextStage: 1)
       #expect(route.next != current)
       #expect(route.hasVisited(current))
     }
+  }
+
+  @Test func plansEveryWaveOfTheLeg() {
+    for _ in 0 ..< 50 {
+      var route = StationRoute(stations: [makeStation(id: "a"), makeStation(id: "b")])
+      #expect(route.legStartStage == 1)
+      #expect(route.legWaves.count == route.legLength)
+      #expect(route.legWaves.map(\.stage) == Array(1 ... route.legLength))
+
+      route.docked(at: route.next!, nextStage: 7)
+      #expect(route.legStartStage == 7)
+      #expect(route.legWaves.count == route.legLength)
+      #expect(route.wave(forStage: 7)?.stage == 7)
+      #expect(route.wave(forStage: 6) == nil)
+      #expect(route.wave(forStage: 7 + route.legLength) == nil)
+    }
+  }
+
+  // The planned waves follow the same rules as choosing each wave as it
+  // comes: eased after a station, no recipe twice in a row but rock fields
+  @Test func plannedLegFollowsTheWaveRules() {
+    for _ in 0 ..< 200 {
+      let length = Int.random(in: Tuning.Stations.minWaves ... Tuning.Stations.maxWaves)
+      let waves = StationRoute.planLeg(from: 12, length: length, previous: .swarm)
+      for (index, wave) in waves.enumerated() {
+        let progress = length > 1 ? Double(index) / Double(length - 1) : 1
+        #expect(wave.difficulty == Tuning.Pacing.difficulty(stage: wave.stage, progress: progress))
+        if wave.recipe.isHard {
+          #expect(progress >= Tuning.Pacing.hardFrom)
+        }
+        let previous = index == 0 ? WaveRecipe.swarm : waves[index - 1].recipe
+        #expect(wave.recipe == .field || wave.recipe != previous)
+      }
+    }
+  }
+
+  @Test func noStationsPlansNoLeg() {
+    let route = StationRoute(stations: [])
+    #expect(route.legWaves.isEmpty)
+    #expect(route.wave(forStage: 1) == nil)
   }
 
   @Test func noStationsMeansNoDocking() {
