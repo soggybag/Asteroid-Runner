@@ -16,7 +16,7 @@ Design notes and roadmap: [docs/design-notes.md](docs/design-notes.md)
   fast as its engines allow.
 - The ship fires automatically. Turn Auto Fire off in the power HUD (swipe
   up) to fire only while a finger is held down, at the weapon's rate.
-- Pickups go into the item tray at the top of the screen. Tap a slot to use
+- Pickups go into the item tray just under the top strip. Tap a slot to use
   it: bomb, multi-shot or rapid fire. Tap a shield to raise it and again to
   lower it; it only drains while it's up. The tray holds three; when it's
   full, new pickups are lost.
@@ -137,7 +137,8 @@ spawn further apart. A smart bomb can break bosstroids. The shield blocks enemy 
   round 2 (balance pass) is [docs/playtest-round-2.md](docs/playtest-round-2.md);
   round 3 (balance pass 2) is [docs/playtest-round-3.md](docs/playtest-round-3.md);
   round 4 (waves and pacing) is [docs/playtest-round-4.md](docs/playtest-round-4.md);
-  round 5 (station screen and power balance) is [docs/playtest-round-5.md](docs/playtest-round-5.md).
+  round 5 (station screen and power balance) is [docs/playtest-round-5.md](docs/playtest-round-5.md);
+  round 6 (ship upgrades) is [docs/playtest-round-6.md](docs/playtest-round-6.md).
   Note the version from the corner with each game.
 
 ## Todo

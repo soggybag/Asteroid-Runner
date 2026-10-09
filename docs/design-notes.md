@@ -31,6 +31,24 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
 
+## Playtest round 6 findings (2026-10-09)
+
+Five games on build 56 after ship upgrades; details in [playtest-round-6.md](playtest-round-6.md). Stages 10–14. **Upgrades didn't carry anyone further, and the game felt harder.** The difficulty tuning is the same as in round 5, so the likely cause is money: upgrades compete with items and repairs for the same few coins.
+
+| Finding | What it means |
+| --- | --- |
+| Tray too small with a cargo rack | Fixed: the tray has its own row under the strip, full-size slots |
+| Bought an upgrade, didn't notice it | One tier is too small a step, or not visible. Make upgrades felt |
+| Harder now; ramps faster than you can buy upgrades | Same ramp as round 5; coins are now split three ways |
+| Only power upgrades: effective, still stage 13 | Upgrades alone don't move the wall yet |
+| Bouncer swarm at stage 14 very hard | Watch bouncers as a swarm's featured type |
+
+**Direction from the notes (2026-10-09):**
+
+- **Ores instead of coins:** some asteroids drop valuable ores to pick up and trade at stations. Different types hold different resources, and not every asteroid has any: you destroy them to find out. That gives destroying asteroids a point, and ties into trade.
+- **Distance in place of score:** score only shows how far you got, and distance can do that. (Answers part of "Distance: give it meaning or drop it?")
+- **A map with regions of different danger:** explore easier regions first and collect upgrades before dangerous ones. This fits the system map idea.
+
 ## Playtest round 5 findings (2026-10-08)
 
 Five games on build 53 after the station screen and power balance; details in [playtest-round-5.md](playtest-round-5.md). **Best run yet: stage 20.** Power feels more balanced, no accidental station sales, the scanner works. Very hard at stages 18–20.
@@ -536,7 +554,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [x] Does fuel exist? Yes (2026-10-04): it boosts the reactor and depletes; empty means reactor power only.
 - [ ] Does fuel use tray slots, its own tank, or cargo bay space?
 - [ ] HUD: ship view, bars, or both? Bars built first (2026-10-05); ship view once module art exists
-- [ ] Does the item tray stay on screen, or move into the HUD so using items means opening it?
+- [ ] Does the item tray stay on screen, or move into the HUD so using items means opening it? For now it stays on screen in its own row under the strip (2026-10-09)
 - [ ] Which module does a hit knock off: the side that was hit (proposed), armor first, or random?
 - [ ] How far ahead does the game announce a station: one wave, two, or a scanner reading?
 - [ ] Tray full: lose the pickup (built), replace the oldest, or convert to coins?
@@ -548,7 +566,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
 - [x] Tap-to-fire: replaced by hold to fire at the weapon's rate (2026-10-06)
 - [x] Weapons at max beats every other setting. Chosen 2026-10-07: weapons cost more power per level near the top, and faster maneuvering at high engine power. Other options were: weapons cost more power per level near the top; heat that forces weapons to cool down; enemy shots that only engines or shields can answer; faster maneuvering at high engine power
-- [ ] Distance: give it meaning (system map, voyage goals) or drop it?
+- [ ] Distance: give it meaning (system map, voyage goals) or drop it? Round 6 suggests distance replaces score (2026-10-09)
 - [ ] Is a screen full of bosstroids a designed challenge (announced, survivable with shields and a bomb) or something to remove?
 - [x] Should weapons only fire while powered? No: level 0 is a weak trickle shot from the Command module (2026-10-05)
 - [x] How many power units to start with? 6 units, max 4 per system, starting 2/2/2 (2026-10-05); per-level effects in `Tuning.Power`
@@ -558,6 +576,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-09 | Round 6 playtest: stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row under the strip. Ideas: ores that replace coins, distance instead of score, a map with easier and harder regions |
 | 2026-10-08 | Ship upgrades built: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor; each station fits its own set. A first step toward modules and ship roles. Next: system map, then trade and missions |
 | 2026-10-08 | Round 5 playtest: best run stage 20; power more balanced. Fixed turrets being pushed off screen, empty shooter warnings, heavy base fire; pickups tumble. Direction: commerce, a system map with missions, and ship upgrades for different roles |
 | 2026-10-07 | Station screen reworked with Buy, Sell and Repair tabs and its own look. Power balance: top weapons levels cost 2 units, engines maneuver faster at the top, turrets fire less. Scanner up 9 s, tap to start |

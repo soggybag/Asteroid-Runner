@@ -8,8 +8,9 @@
 
 // TODO: Add a scanline fill to background
 
-// The HUD is the strip at the top of the screen: lives, the item tray and
-// score, with coins just below. The power controls are in PowerPanel.
+// The HUD is the strip at the top of the screen with lives and score. Just
+// below it, the item tray has its own row on the left, with coins and
+// distance on the right. The power controls are in PowerPanel.
 
 import SpriteKit
 
@@ -82,11 +83,12 @@ class Hud: SKSpriteNode {
     livesNode.position = CGPoint(x: 18, y: 18)
   }
 
-  // Items sit in the middle of the score strip, between lives and score
+  // Items get their own row under the strip, so a cargo rack's extra
+  // slots stay full size
 
   func setupTray() {
     addChild(tray)
-    tray.position = CGPoint(x: Screen.sharedInstance.centerX, y: 20)
+    tray.position = CGPoint(x: 10, y: -4 - ItemTray.slotSize.height / 2)
   }
 
   // Rebuild the tray with more or fewer slots, keeping its tap handler
@@ -113,7 +115,7 @@ class Hud: SKSpriteNode {
   // Draw one small ship for each remaining life
 
   // One small ship per life, up to three. With more (from hull plating),
-  // one ship and a count, so the strip has room for the tray.
+  // one ship and a count.
   func update(lives: Int) {
     livesNode.removeAllChildren()
     let texture = SKTexture(imageNamed: "Satellite_4_1.png")
