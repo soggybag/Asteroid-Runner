@@ -29,6 +29,11 @@ System map design (draft): [docs/system-map.md](docs/system-map.md)
   docking. At the station, the Buy, Sell, Repair and Upgrade tabs show one
   list at a time: buy items, sell what's in your tray, repair lost hull
   (lives), fit ship upgrades, then tap Launch.
+- Launch opens the system map, from Earth at the bottom to Neptune at the
+  top. Choose the next station: a safe route is longer and easier, a risky
+  one shorter and harder. Tap a station or a route tab to see how many
+  stages, the kinds of wave on the way, and what the station sells, then
+  tap Set course.
 - Ship upgrades last for the rest of the run. Each station fits its own set:
 
   | Upgrade | Each tier | Tiers |

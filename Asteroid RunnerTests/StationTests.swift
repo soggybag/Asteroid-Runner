@@ -340,14 +340,62 @@ struct SystemMapTests {
     #expect(route.legDifficulty.start > past)
   }
 
-  @Test func takesTheNormalRouteUntilThereIsAMapScreen() {
+  @Test func defaultsToTheNormalRoute() {
     for _ in 0 ..< 50 {
       var route = StationRoute(stations: kinds, names: names)
       route.docked(at: route.next!, nextStage: 4)
-      if route.routesOut.contains(where: { $0.danger == .normal }) {
+      if route.offers.contains(where: { $0.route.danger == .normal }) {
         #expect(route.route?.danger == .normal)
       }
     }
+  }
+
+  @Test func offersEveryRouteOutWithItsWaves() {
+    for _ in 0 ..< 50 {
+      var route = StationRoute(stations: kinds, names: names)
+      route.docked(at: route.next!, nextStage: 4)
+      #expect(route.offers.map(\.route) == route.routesOut)
+      for offer in route.offers {
+        #expect(offer.waves.count == offer.route.length)
+        #expect(offer.waves.map(\.stage) == Array(4 ..< 4 + offer.route.length))
+        #expect(offer.station.id == offer.route.to)
+        #expect(offer.difficulty == route.difficulty(of: offer.route))
+      }
+    }
+  }
+
+  @Test func choosingARouteFliesItsPlannedWaves() {
+    for _ in 0 ..< 50 {
+      var route = StationRoute(stations: kinds, names: names)
+      route.docked(at: route.next!, nextStage: 4)
+      let offer = route.offers.randomElement()!
+      route.choose(offer)
+      #expect(route.route == offer.route)
+      #expect(route.next == offer.station.station)
+      #expect(route.legLength == offer.route.length)
+      #expect(route.legWaveNumber == 1)
+      #expect(route.legWaves.map(\.recipe) == offer.waves.map(\.recipe))
+      #expect(route.wave(forStage: 4)?.recipe == offer.waves.first?.recipe)
+      _ = route.waveCleared()
+      #expect(route.legWaveNumber == 2 || route.legLength == 1)
+    }
+  }
+
+  @Test func offerListsEachKindOfWaveOnce() {
+    var route = StationRoute(stations: kinds, names: names)
+    route.docked(at: route.next!, nextStage: 10)
+    for offer in route.offers {
+      #expect(Set(offer.recipes).count == offer.recipes.count)
+      #expect(Set(offer.recipes) == Set(offer.waves.map(\.recipe)))
+    }
+  }
+
+  @Test func kindNameIsTheFirstPartOfTheSpecialty() {
+    var station = makeStation()
+    station.specialty = "Mining outpost. Pays well for salvage."
+    #expect(station.kindName == "Mining outpost")
+    #expect(station.renamed(id: "x", name: "X").kindName == "Mining outpost")
+    #expect(makeStation().kindName == "")
   }
 
   @Test func legDifficultyRampsAndDangerShiftsIt() {

@@ -176,11 +176,17 @@ Each step can be played on its own:
    danger and length. A new map each run. Difficulty ramps from the region
    a leg leaves to the one it reaches, eased after a station and shifted
    by danger; numbers in `Tuning.Map`. Past Neptune, legs stay at Neptune
-   and get harder until the win screen exists. **Until the map screen, the
-   game takes the normal route,** so danger can't be seen in play yet.
-   Every station of a kind shares its keeper and greetings for now.
-3. **The map screen** after Launch, with route cards and Set course. Scanner
-   briefing shows "Stage 2 of 4 to …".
+   and get harder until the win screen exists. Every station of a kind
+   shares its keeper and greetings for now.
+3. ~~**The map screen**~~ Done 2026-10-09. `MapPanel.swift`: Launch at a
+   station opens the map. Tap a station or a route tab (Safe, Normal,
+   Risky) to see its card: destination and kind, stages, danger, region,
+   the kinds of wave on the way, and what it sells and fits. Set course
+   launches; Back returns to the shop. The normal route is picked to
+   start with. When docking, every route out has its waves planned
+   (`StationRoute.offers`), so the card shows what will really come. The
+   scanner briefing shows "Stage 2 of 4 to …", and "Station ahead" on the
+   last wave.
 4. **Loot by danger:** coins and pickup chance scaled by route danger.
 5. **Reaching Neptune** wins the run: a win screen with distance, stages
    and stations visited. The return mission comes later (see After

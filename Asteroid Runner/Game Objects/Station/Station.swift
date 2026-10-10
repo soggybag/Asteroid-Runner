@@ -35,6 +35,14 @@ struct Station: Decodable, Equatable {
   let greetings: [String: [String]]
   let farewell: [String]?
   let shop: Shop
+  // What kind of place it is, from the file: "Mining outpost. Pays well..."
+  var specialty: String? = nil
+
+  // The kind in a few words, for the system map: "Mining outpost"
+  var kindName: String {
+    let first = specialty?.split(separator: ".").first.map(String.init) ?? ""
+    return first.trimmingCharacters(in: .whitespaces)
+  }
 
 
   // Items this station sells that exist in the game. Fuel is skipped
@@ -58,7 +66,7 @@ struct Station: Decodable, Equatable {
   // The same kind of station under another name, for the system map
   func renamed(id: String, name: String) -> Station {
     return Station(id: id, name: name, keeper: keeper, greetings: greetings,
-                   farewell: farewell, shop: shop)
+                   farewell: farewell, shop: shop, specialty: specialty)
   }
 
   // A line for the situation, falling back to the first-visit lines
@@ -148,6 +156,9 @@ struct StationRoute {
   private(set) var legDifficulty = LegDifficulty(start: 1, end: 1, offset: 0)
   // Legs flown past Neptune, until reaching it wins the run
   private(set) var legsPastLastRegion = 0
+  // The routes out of the station last docked at, each with its waves
+  // planned, for the map screen to show and choose from
+  private(set) var offers: [LegOffer] = []
 
   init(stations: [Station], names: [String] = [], firstStage: Int = 1) {
     map = SystemMap.generate(kinds: stations, names: names)
@@ -182,23 +193,39 @@ struct StationRoute {
     return wavesLeft <= 0 ? station : nil
   }
 
-  // Remember the visit and set off on a route out. `nextStage` is the
-  // stage number of the first wave after this station. Until the map
-  // screen lets the player choose, take the normal route.
+  // Remember the visit and plan every route out. `nextStage` is the
+  // stage number of the first wave after this station. The normal route
+  // is set as the default; the map screen can choose another.
   mutating func docked(at station: Station, nextStage: Int) {
     visited.insert(station.id)
-    current = map?.station(station.id)
-    let routes = routesOut
-    guard let route = routes.first(where: { $0.danger == .normal }) ?? routes.randomElement() else {
+    let arrived = map?.station(station.id)
+    if current?.region == .neptune && arrived?.region == .neptune {
+      legsPastLastRegion += 1
+    }
+    current = arrived
+    let previous = legWaves.last?.recipe
+    offers = routesOut.compactMap { route in
+      guard let to = map?.station(route.to) else { return nil }
+      let difficulty = self.difficulty(of: route)
+      return LegOffer(route: route, station: to, difficulty: difficulty,
+                      waves: StationRoute.planLeg(from: nextStage, length: route.length,
+                                                  difficulty: difficulty, previous: previous))
+    }
+    guard let offer = defaultOffer else {
       next = nil
       return
     }
-    choose(route, nextStage: nextStage)
+    choose(offer)
   }
 
-  // Fly a route out of the current station
-  mutating func choose(_ route: MapRoute, nextStage: Int) {
-    fly(route, fromStage: nextStage)
+  // The route taken unless the player picks another: the normal one
+  var defaultOffer: LegOffer? {
+    return offers.first { $0.route.danger == .normal } ?? offers.first
+  }
+
+  // Set off on one of the routes out
+  mutating func choose(_ offer: LegOffer) {
+    fly(offer.route, fromStage: offer.waves.first?.stage ?? legStartStage, waves: offer.waves)
   }
 
   // The planned wave for a stage, if it's on this leg
@@ -227,19 +254,21 @@ struct StationRoute {
     return LegDifficulty(start: current.region.difficulty, end: arriving.difficulty, offset: offset)
   }
 
-  // Set off on a route and plan its waves
-  private mutating func fly(_ route: MapRoute, fromStage firstStage: Int) {
+  // Set off on a route, with its waves planned already or planned now
+  private mutating func fly(_ route: MapRoute, fromStage firstStage: Int, waves: [WavePlan]? = nil) {
     legDifficulty = difficulty(of: route)
-    if let current = current, map?.station(route.to)?.region == current.region {
-      legsPastLastRegion += 1
-    }
     self.route = route
     next = map?.station(route.to)?.station
     wavesLeft = route.length
     legLength = route.length
     legStartStage = firstStage
-    legWaves = StationRoute.planLeg(from: firstStage, length: legLength,
-                                    difficulty: legDifficulty, previous: legWaves.last?.recipe)
+    legWaves = waves ?? StationRoute.planLeg(from: firstStage, length: legLength,
+                                             difficulty: legDifficulty, previous: legWaves.last?.recipe)
+  }
+
+  // Which wave of the leg the coming one is, counting from 1
+  var legWaveNumber: Int {
+    return legLength - wavesLeft + 1
   }
 
   // Waves for a leg: the first right after a station (progress 0), the

@@ -32,10 +32,15 @@ class NextLevelState: GKState {
     scene.planWave()
 
     let route = scene.stationRoute
-    let stationAhead = route.stationAfterThisWave ? route.next?.name : nil
+    var routeLine: String?
+    if let next = route.next {
+      routeLine = route.stationAfterThisWave
+        ? "Station ahead: \(next.name)"
+        : "Stage \(route.legWaveNumber) of \(route.legLength) to \(next.name)"
+    }
 
     let screen = Screen.sharedInstance
-    let panel = ScannerPanel(wave: scene.wave, stationAhead: stationAhead, width: screen.width - 32)
+    let panel = ScannerPanel(wave: scene.wave, routeLine: routeLine, width: screen.width - 32)
     panel.position = CGPoint(x: 16, y: screen.height - screen.hudScoreHeight - 44 - ScannerPanel.height)
     panel.alpha = 0
     panel.onTap = { [weak self] in self?.startWave() }

@@ -17,6 +17,7 @@
 		A1B2C3D4E5F600000000003A /* StationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000039 /* StationTests.swift */; };
 		A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000037 /* StationState.swift */; };
 		A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000035 /* StationPanel.swift */; };
+		A1B2C3D4E5F6000000000075 /* MapPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000074 /* MapPanel.swift */; };
 		A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000033 /* StationNode.swift */; };
 		A1B2C3D4E5F6000000000073 /* SystemMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000072 /* SystemMap.swift */; };
 		A1B2C3D4E5F6000000000032 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000031 /* Station.swift */; };
@@ -102,6 +103,7 @@
 		A1B2C3D4E5F6000000000039 /* StationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000037 /* StationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationState.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000035 /* StationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationPanel.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000074 /* MapPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000033 /* StationNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationNode.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000072 /* SystemMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMap.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000031 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */,
 				A1B2C3D4E5F6000000000042 /* PowerPanel.swift */,
 				A1B2C3D4E5F6000000000035 /* StationPanel.swift */,
+				A1B2C3D4E5F6000000000074 /* MapPanel.swift */,
 				A1B2C3D4E5F6000000000022 /* ItemTray.swift */,
 				D84E3742205CFF2100512E12 /* Button.swift */,
 				D8AFDFFE2060CCB200BC11D8 /* Shapes.swift */,
@@ -552,6 +555,7 @@
 				A1B2C3D4E5F6000000000041 /* Power.swift in Sources */,
 				A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */,
 				A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */,
+				A1B2C3D4E5F6000000000075 /* MapPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */,
 				A1B2C3D4E5F6000000000073 /* SystemMap.swift in Sources */,
 				A1B2C3D4E5F6000000000032 /* Station.swift in Sources */,

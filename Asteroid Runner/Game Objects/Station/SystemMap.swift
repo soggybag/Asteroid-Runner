@@ -85,6 +85,26 @@ struct MapRoute: Equatable {
 }
 
 
+// A route out of the station the ship is docked at, ready to fly: where
+// it goes, how hard it is, and the waves on the way
+
+struct LegOffer {
+  let route: MapRoute
+  let station: MapStation
+  let difficulty: LegDifficulty
+  let waves: [WavePlan]
+
+  // The kinds of wave on the way, each once, in the order they come
+  var recipes: [WaveRecipe] {
+    var seen: [WaveRecipe] = []
+    for wave in waves where !seen.contains(wave.recipe) {
+      seen.append(wave.recipe)
+    }
+    return seen
+  }
+}
+
+
 // How hard a leg is along the way: from where it starts to where it
 // arrives, eased just after a station as before, shifted by danger
 

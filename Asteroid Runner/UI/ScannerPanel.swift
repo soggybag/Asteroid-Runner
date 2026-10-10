@@ -18,7 +18,9 @@ class ScannerPanel: SKNode {
   static let height: CGFloat = 156
   private static let radarRadius: CGFloat = 48
 
-  init(wave: WavePlan, stationAhead: String?, width: CGFloat) {
+  // `routeLine` is where the leg is going: "Stage 2 of 4 to Gannet Yard",
+  // or "Station ahead: Gannet Yard" on its last wave
+  init(wave: WavePlan, routeLine: String?, width: CGFloat) {
     super.init()
     zPosition = 1200
 
@@ -56,8 +58,8 @@ class ScannerPanel: SKNode {
     addLabel("Suggest: \(advice.text)", size: 13, color: adviceColor, at: CGPoint(x: x, y: y))
     y -= 20
 
-    if let station = stationAhead {
-      addLabel("Station ahead: \(station)", size: 13, color: Colors.station, at: CGPoint(x: x, y: y))
+    if let line = routeLine {
+      addLabel(line, size: 13, color: Colors.station, at: CGPoint(x: x, y: y))
     }
 
     let hint = SKLabelNode(text: "Tap to begin")

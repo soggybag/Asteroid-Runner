@@ -5,8 +5,9 @@
 
 // Docked at a space station. The station slides in and the ship flies up
 // to its port (tap to skip), the keeper says hello, and the player shops
-// until they tap Launch. Then the station drifts away and the next wave
-// begins. Set `station` before entering.
+// until they tap Launch. Launch opens the system map to choose the next
+// route; Set course sends the ship off, the station drifts away and the
+// next wave begins. Set `station` before entering.
 
 import GameplayKit
 import SpriteKit
@@ -19,6 +20,7 @@ class StationState: GKState {
 
   private var stationNode: StationNode?
   private var panel: StationPanel?
+  private var mapPanel: MapPanel?
   private var docked = false
 
   static let DOCK = "DOCK"
@@ -121,7 +123,7 @@ class StationState: GKState {
     panel.onRepair = { self.repair() }
     panel.onSell = { slot in self.sell(slot: slot) }
     panel.onUpgrade = { upgrade in self.buy(upgrade) }
-    panel.onLaunch = { self.launch() }
+    panel.onLaunch = { self.openMap() }
     scene.addChild(panel)
     self.panel = panel
 
@@ -192,6 +194,43 @@ class StationState: GKState {
 
 
   // ---------------------------------
+  // System map: choose the next route. With no map or no routes, launch
+  // straight away.
+  // ---------------------------------
+
+  private func openMap() {
+    let route = scene.stationRoute
+    guard let map = route.map, let current = route.current, !route.offers.isEmpty else {
+      launch()
+      return
+    }
+    panel?.isHidden = true
+
+    let screen = Screen.sharedInstance
+    let bottom = screen.safeArea.bottom + 24
+    let top = screen.height - screen.hudScoreHeight - 44
+    let selected = route.offers.firstIndex { $0.route == route.route } ?? 0
+    let mapPanel = MapPanel(map: map, current: current, offers: route.offers, visited: route.visited,
+                            selected: selected, size: CGSize(width: screen.width - 16, height: top - bottom))
+    mapPanel.position = CGPoint(x: 8, y: bottom)
+    mapPanel.onBack = { self.closeMap() }
+    mapPanel.onSetCourse = { offer in
+      self.scene.stationRoute.choose(offer)
+      self.closeMap()
+      self.launch()
+    }
+    scene.addChild(mapPanel)
+    self.mapPanel = mapPanel
+  }
+
+  private func closeMap() {
+    mapPanel?.removeFromParent()
+    mapPanel = nil
+    panel?.isHidden = false
+  }
+
+
+  // ---------------------------------
   // Launch: station drifts off, ship returns, next wave
   // ---------------------------------
 
@@ -225,6 +264,8 @@ class StationState: GKState {
   override func willExit(to nextState: GKState) {
     panel?.removeFromParent()
     panel = nil
+    mapPanel?.removeFromParent()
+    mapPanel = nil
     stationNode?.removeFromParent()
     stationNode = nil
     scene.ship.removeAction(forKey: StationState.DOCK)
