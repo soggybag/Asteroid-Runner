@@ -5,7 +5,8 @@
 
 // Reaching Neptune wins the run. The Neptune station slides in and the
 // ship flies up to it, as when docking (tap to skip), then the win screen
-// shows the run: score, distance, stages and stations visited. Play Again
+// shows the bonus for winning and the run: score, distance, stages and
+// stations visited. Play Again
 // starts a new run. Set `station` before entering. The return mission
 // will start from here later; see docs/system-map.md.
 
@@ -99,8 +100,12 @@ class RunWonState: GKState {
       scene.stationRoute.arrived(at: station)
     }
 
+    // The win bonus, more for hull left
+    let bonus = Tuning.Map.winBonus(hullLeft: scene.lives)
+    scene.score += bonus
+
     let menu = scene.menu!
-    menu.show(title: "NEPTUNE REACHED")
+    menu.show(title: "NEPTUNE REACHED", subtitle: "Bonus +\(bonus)  ·  \(scene.lives) hull left")
     menu.message = "Your score is: \(scene.score)"
     let isNewBest = HighScore.submit(scene.score)
     menu.show(best: HighScore.best, isNew: isNewBest)

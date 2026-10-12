@@ -339,6 +339,12 @@ struct SystemMapTests {
     #expect(route.offers.isEmpty)
   }
 
+  @Test func winBonusGrowsWithHullLeft() {
+    #expect(Tuning.Map.winBonus(hullLeft: 0) == Tuning.Map.neptuneBonus)
+    #expect(Tuning.Map.winBonus(hullLeft: 3) > Tuning.Map.winBonus(hullLeft: 1))
+    #expect(Tuning.Map.winBonus(hullLeft: -1) == Tuning.Map.neptuneBonus)
+  }
+
   @Test func onlyTheLegToNeptuneWinsTheRun() {
     var route = StationRoute(stations: kinds, names: names)
     var stage = 1

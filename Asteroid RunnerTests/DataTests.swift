@@ -19,15 +19,32 @@ struct IntroDataTests {
   }
 }
 
-struct RouteDataTests {
+struct MapDataTests {
 
-  @Test func routesFileLoads() {
-    let file = GameData.load(RouteTable.self, from: "routes")
+  @Test func mapFileLoads() {
+    let file = GameData.load(MapSettings.self, from: "map")
     #expect(file != nil)
-    #expect(Tuning.Map.routes == file)
+    #expect(Tuning.Map.settings == file)
   }
 
-  @Test func routesFileNumbersMakeSense() {
+  @Test func mapFileNumbersMakeSense() {
+    let map = Tuning.Map.settings
+    #expect(map.stationsPerRegion.min >= 1)
+    #expect(map.stationsPerRegion.min <= map.stationsPerRegion.max)
+    #expect(map.routesPerStation.min >= 1)
+    #expect(map.routesPerStation.min <= map.routesPerStation.max)
+    #expect(map.firstLegStages >= 1)
+    #expect(map.winBonus >= 0)
+    // Every region is in the file, and none is left over from a typo
+    #expect(Set(map.regionDifficulty.keys) == Set(Region.allCases.map(\.key)))
+  }
+
+  @Test func countRangeKeepsItselfInRange() {
+    #expect(CountRange(min: 3, max: 2).range == 2 ... 3)
+    #expect(CountRange(min: 0, max: -1).range == 1 ... 1)
+  }
+
+  @Test func routeNumbersMakeSense() {
     let table = Tuning.Map.routes
     for danger in RouteDanger.allCases {
       let route = table[danger]

@@ -8,7 +8,7 @@ then build and run.
 | --- | --- |
 | `intro.json` | The opening story lines, and how fast they show |
 | `stations.json` | Station kinds: keepers, greetings and farewells, shops, upgrades; the made-up names for map stations |
-| `routes.json` | Safe, normal and risky routes: stages, difficulty and loot |
+| `map.json` | The system map: stations per region, routes per station, the first leg, each region's difficulty, the win bonus, and safe, normal and risky routes (stages, difficulty, loot) |
 
 Each file explains its entries in comments at the top and next to them.
 
@@ -23,10 +23,12 @@ The files are JSON, read as **JSON5**: plain JSON plus a few conveniences.
 
 ```json5
 {
-  // Shorter and harder, pays more
-  "risky": {
-    "minStages": 2,
-    "maxStages": 3,
+  "routes": {
+    // Shorter and harder, pays more
+    "risky": {
+      "minStages": 2,
+      "maxStages": 3,
+    },
   },
 }
 ```
@@ -45,12 +47,15 @@ marked as errors. GitHub may show comments in red; that's only display.
 
 - **A broken file** (a missing comma or quote) doesn't crash the game.
   `intro.json` falls back to one line, a broken `stations.json` means no
-  stations, and a broken `routes.json` falls back to numbers built into
-  the code (`Tuning.Map.builtInRoutes`). Xcode's console prints the file
+  stations, and a broken `map.json` falls back to numbers built into the
+  code (`Tuning.Map.builtIn`), a copy of the file as first written. It's
+  only a safety net: you don't need to update it when you change the file. Xcode's console prints the file
   and where it broke.
 - **Run the tests** (⌘U) after an edit. `DataTests` and `StationTests` load
   every file and check its numbers make sense: stage ranges at least 1,
-  chances from 0 to 1, risky paying more than safe, enough map names.
+  chances from 0 to 1, risky paying more than safe, every region named
+  (a misspelt region is caught), regions harder further out, enough map
+  names.
 - **Out-of-range numbers** are kept in range by the game: a pickup chance
   over 1 counts as 1, and a stage range below 1 becomes 1.
 

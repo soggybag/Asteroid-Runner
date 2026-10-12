@@ -33,7 +33,12 @@ enum Region: Int, CaseIterable {
 
   // Difficulty on arriving here
   var difficulty: Int {
-    return Tuning.Map.regionDifficulty[rawValue]
+    return Tuning.Map.regionDifficulty(self)
+  }
+
+  // Its name in Data/map.json: "earth", "mainBelt"
+  var key: String {
+    return String(describing: self)
   }
 }
 
@@ -81,7 +86,7 @@ struct RouteLoot: Equatable {
 }
 
 
-// One kind of route's numbers, as written in Data/routes.json. The file
+// One kind of route's numbers, as written in Data/map.json. The file
 // explains each one.
 
 struct RouteSettings: Decodable, Equatable {
@@ -95,8 +100,7 @@ struct RouteSettings: Decodable, Equatable {
 
   // At least one stage, even if min and max are swapped or below 1
   var stages: ClosedRange<Int> {
-    let low = max(1, min(minStages, maxStages))
-    return low ... max(low, maxStages, minStages)
+    return CountRange(min: minStages, max: maxStages).range
   }
 
   // Kept in range: a chance from 0 to 1, no negative counts
@@ -109,7 +113,7 @@ struct RouteSettings: Decodable, Equatable {
 }
 
 
-// Data/routes.json: settings for each danger
+// The routes in Data/map.json: settings for each danger
 
 struct RouteTable: Decodable, Equatable {
   let safe: RouteSettings
@@ -123,10 +127,40 @@ struct RouteTable: Decodable, Equatable {
     case .risky: return risky
     }
   }
+}
+
+
+// A "min" to "max" count in Data/map.json
+
+struct CountRange: Decodable, Equatable {
+  let min: Int
+  let max: Int
+
+  // At least one, even if min and max are swapped or below 1
+  var range: ClosedRange<Int> {
+    let low = Swift.max(1, Swift.min(min, max))
+    return low ... Swift.max(low, min, max)
+  }
+}
+
+
+// Data/map.json: everything about the system map that can be tuned. The
+// file explains each entry; Tuning.Map reads them.
+
+struct MapSettings: Decodable, Equatable {
+  let stationsPerRegion: CountRange
+  let routesPerStation: CountRange
+  let firstLegStages: Int
+  let startDifficulty: Int
+  // By region key: "earth", "mars", "mainBelt" ...
+  let regionDifficulty: [String: Int]
+  let winBonus: Int
+  let winBonusPerHull: Int
+  let routes: RouteTable
 
   // The file, or the built-in numbers if it can't be read
-  static func load() -> RouteTable {
-    return GameData.load(RouteTable.self, from: "routes") ?? Tuning.Map.builtInRoutes
+  static func load() -> MapSettings {
+    return GameData.load(MapSettings.self, from: "map") ?? Tuning.Map.builtIn
   }
 }
 

@@ -103,7 +103,7 @@ enum Tuning {
     static let coinPoints = 250
 
     // How often pickups turn up, how many can be items, and coins for
-    // each depend on the route being flown: see Data/routes.json.
+    // each depend on the route being flown: see Data/map.json.
 
     // How often each pickup turns up, relative to the others
     static let weights: [(pickup: Pickup, weight: Int)] = [
@@ -132,7 +132,7 @@ enum Tuning {
     static let maxWaves = 5
 
     // Coins for picking up a coin and for clearing a stage depend on the
-    // route: see Data/routes.json.
+    // route: see Data/map.json.
 
     // Base prices in coins. Each station's multipliers adjust them.
     static func price(_ item: ItemType) -> Int {
@@ -236,29 +236,32 @@ enum Tuning {
   // Regions from Earth to Neptune, stations in each, routes between.
   // See docs/system-map.md.
 
+  // The numbers are in Data/map.json; edit them there. These read them.
+
   enum Map {
-    static let stationsPerRegion = 2 ... 3
-    static let routesPerStation = 2 ... 3
+    static let settings = MapSettings.load()
+
+    static var stationsPerRegion: ClosedRange<Int> { return settings.stationsPerRegion.range }
+    static var routesPerStation: ClosedRange<Int> { return settings.routesPerStation.range }
     // The first leg, from launch to a station near Earth
-    static let firstLegLength = 3
-    static let startDifficulty = 1
-    // Difficulty on arriving in each region, Earth to Neptune. A leg
-    // ramps from the region it leaves to the one it reaches, eased just
-    // after a station by Pacing.relief.
-    static let regionDifficulty = [3, 7, 11, 15, 19, 22, 25]
+    static var firstLegLength: Int { return max(1, settings.firstLegStages) }
+    static var startDifficulty: Int { return max(1, settings.startDifficulty) }
 
-    // Each kind of route's length, difficulty and loot, from
-    // Data/routes.json; edit them there
-    static let routes = RouteTable.load()
+    // Difficulty on arriving in a region
+    static func regionDifficulty(_ region: Region) -> Int {
+      return settings.regionDifficulty[region.key] ?? builtIn.regionDifficulty[region.key] ?? 1
+    }
 
-    // Used only if routes.json can't be read. Keep in step with the file.
-    static let builtInRoutes = RouteTable(
-      safe: RouteSettings(minStages: 4, maxStages: 5, difficulty: -2, pickupChance: 0.045,
-                          maxItemsPerWave: 1, coinPickup: 4, stageClearCoins: 2),
-      normal: RouteSettings(minStages: 3, maxStages: 4, difficulty: 0, pickupChance: 0.06,
-                            maxItemsPerWave: 2, coinPickup: 5, stageClearCoins: 3),
-      risky: RouteSettings(minStages: 2, maxStages: 3, difficulty: 2, pickupChance: 0.09,
-                           maxItemsPerWave: 3, coinPickup: 8, stageClearCoins: 6))
+    // Points for reaching Neptune, plus more for each point of hull left
+    static var neptuneBonus: Int { return max(0, settings.winBonus) }
+    static var neptuneBonusPerHull: Int { return max(0, settings.winBonusPerHull) }
+
+    static func winBonus(hullLeft: Int) -> Int {
+      return neptuneBonus + neptuneBonusPerHull * max(0, hullLeft)
+    }
+
+    // Each kind of route's length, difficulty and loot
+    static var routes: RouteTable { return settings.routes }
 
     static func legLengths(_ danger: RouteDanger) -> ClosedRange<Int> {
       return routes[danger].stages
@@ -271,6 +274,25 @@ enum Tuning {
     static func loot(_ danger: RouteDanger) -> RouteLoot {
       return routes[danger].loot
     }
+
+    // Used only if map.json can't be read: the file as first written. It
+    // doesn't need to follow later edits to the file.
+    static let builtIn = MapSettings(
+      stationsPerRegion: CountRange(min: 2, max: 3),
+      routesPerStation: CountRange(min: 2, max: 3),
+      firstLegStages: 3,
+      startDifficulty: 1,
+      regionDifficulty: ["earth": 3, "mars": 7, "mainBelt": 11, "jupiter": 15,
+                         "saturn": 19, "uranus": 22, "neptune": 25],
+      winBonus: 10_000,
+      winBonusPerHull: 2_000,
+      routes: RouteTable(
+        safe: RouteSettings(minStages: 4, maxStages: 5, difficulty: -2, pickupChance: 0.045,
+                            maxItemsPerWave: 1, coinPickup: 4, stageClearCoins: 2),
+        normal: RouteSettings(minStages: 3, maxStages: 4, difficulty: 0, pickupChance: 0.06,
+                              maxItemsPerWave: 2, coinPickup: 5, stageClearCoins: 3),
+        risky: RouteSettings(minStages: 2, maxStages: 3, difficulty: 2, pickupChance: 0.09,
+                             maxItemsPerWave: 3, coinPickup: 8, stageClearCoins: 6)))
   }
 
 

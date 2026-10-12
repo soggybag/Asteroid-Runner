@@ -11,6 +11,7 @@ import SpriteKit
 class Menu: SKSpriteNode {
 
   var titleLabel: SKLabelNode!
+  var subtitleLabel: SKLabelNode!
   var label: SKLabelNode!
   var bestLabel: SKLabelNode!
   var stageLabel: SKLabelNode!
@@ -45,8 +46,16 @@ class Menu: SKSpriteNode {
     titleLabel.fontColor = Colors.highScore
     titleLabel.fontName = Fonts.fontName
     titleLabel.fontSize = 34
-    titleLabel.position = CGPoint(x: 0, y: button.size.height / 2 + 30)
+    titleLabel.position = CGPoint(x: 0, y: button.size.height / 2 + 56)
     titleLabel.isHidden = true
+
+    subtitleLabel = SKLabelNode()
+    addChild(subtitleLabel)
+    subtitleLabel.fontColor = Colors.highScore
+    subtitleLabel.fontName = Fonts.fontName
+    subtitleLabel.fontSize = 17
+    subtitleLabel.position = CGPoint(x: 0, y: button.size.height / 2 + 22)
+    subtitleLabel.isHidden = true
 
     label = SKLabelNode()
     addChild(label)
@@ -102,11 +111,15 @@ class Menu: SKSpriteNode {
     show()
   }
 
-  // A big line above the button, or none
+  // A big line above the button and a smaller one under it, or none
 
-  func show(title: String?) {
+  func show(title: String?, subtitle: String? = nil) {
+    // Lower on the screen with a title, clear of the ship docked above
+    position.y = Screen.sharedInstance.center.y - (title == nil ? 0 : 60)
     titleLabel.text = title
     titleLabel.isHidden = title == nil
+    subtitleLabel.text = subtitle
+    subtitleLabel.isHidden = subtitle == nil
   }
 
   // Show how far the run got
