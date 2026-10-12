@@ -462,6 +462,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
+**Up next (revised 2026-10-12):** the **system map is built** (steps 1–5 in [system-map.md](system-map.md#building-it)): choose routes, loot by danger, and reaching Neptune wins. Next, **playtest round 8** on the map build, then **trade and missions**, and the **return mission** from Neptune. Map numbers, station dialog and the intro are edited in commented data files ([data-files.md](data-files.md)).
+
 **Up next (revised 2026-10-09, after round 7):** ~~ship upgrades~~ (done), playtest round 8, then the **system map**: choose the next station; safe or risky routes set the difficulty. Design draft in [system-map.md](system-map.md). Then **trade and missions**. Modules replace upgrades once the module art and design are ready.
 
 6. ~~**Station screen rework**~~ Done 2026-10-07: Buy, Sell and Repair tabs, explicit buttons, navy and station-blue look.
@@ -502,7 +504,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Ship upgrades (2026-10-08): six upgrades with tiers bought at stations, kept for the run: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor. Each station fits its own set (`stations.json`); prices in `Tuning.Upgrades`. Upgrade tab on the station screen
 - [x] Playtest round 6 ([playtest-round-6.md](playtest-round-6.md)): stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row (2026-10-09)
 - [x] Playtest round 7 ([playtest-round-7.md](playtest-round-7.md)): four runs lost at the stage 9 swarm, one reached stage 24. Fixed swarm spacing for brass, gentler swarms, more maze stagger (2026-10-09)
-- [ ] Playtest round 8: check the swarm fixes, and whether the gate is met
+- [ ] Playtest round 8: check the swarm fixes, the system map (routes, loot, the win at Neptune), and whether the gate is met
+- [x] Data files with comments (2026-10-12): `Data/*.json` read as JSON5; all map tuning in `map.json`; `stations.json` and `intro.json` explain each entry. Guide and a proposed missions format in [data-files.md](data-files.md)
 - [x] System map step 5 (2026-10-12): reaching Neptune wins the run, with a win screen (`RunWonState.swift`) and a bonus of 10,000 points plus 2,000 per hull point left; no routes past Neptune; the map card and scanner warn when a leg ends the run
 - [x] System map step 4 (2026-10-12): loot by route danger: risky routes send more pickups and pay more coins, safe ones less (`Data/map.json`); the map card shows ◆ loot marks
 - [x] System map step 3 (2026-10-09): the map screen after Launch (`MapPanel.swift`): route tabs and cards, Set course and Back; the scanner shows "Stage 2 of 4 to …"
@@ -601,6 +604,8 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-12 | System map built (steps 1–5): routes chosen on a map after each station; safe routes longer, easier and pay less, risky ones shorter, harder and pay more; reaching Neptune wins, with a bonus of 10,000 plus 2,000 per hull point left. Next: playtest round 8 |
+| 2026-10-12 | Data files: JSON with comments (JSON5), read by Foundation with no new library. All map tuning in `Data/map.json`; station dialog in `stations.json`; mission dialog will go in a `missions.json` in the same style ([data-files.md](data-files.md)) |
 | 2026-10-09 | After Neptune: a surprise return mission to the inner system, carrying something fragile (dodge more, shoot less) through a system that has changed since the way out. Shorter than the way out. Replaces endless play for now; a pursuer may come later |
 | 2026-10-09 | System map decisions: reaching Neptune wins the run; same regions every run, new stations and routes; made-up station names |
 | 2026-10-09 | System map design drafted ([system-map.md](system-map.md)): regions from Earth to Neptune, 2–3 routes per station, safe or risky routes set difficulty and loot, reaching Neptune wins (proposed). Next after playtest round 8 |
