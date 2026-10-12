@@ -247,6 +247,13 @@ class MapPanel: SKNode {
     card.addChild(label("On the way: \(waves)", size: 13, color: Colors.station, at: CGPoint(x: x, y: y)))
     y -= 20
 
+    // The run ends at Neptune, so there's no shop to visit
+    if offer.station.region == .neptune {
+      card.addChild(label("Reaching Neptune wins the run", size: 13, color: Colors.highScore,
+                          at: CGPoint(x: x, y: y)))
+      return
+    }
+
     let items = station.itemsForSale.map(\.name)
     let upgrades = station.upgradesForSale.map(\.name)
     var sells = items.isEmpty ? "nothing" : items.joined(separator: ", ")

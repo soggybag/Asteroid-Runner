@@ -154,8 +154,6 @@ struct StationRoute {
   private(set) var legWaves: [WavePlan] = []
   private(set) var legStartStage = 1
   private(set) var legDifficulty = LegDifficulty(start: 1, end: 1, offset: 0)
-  // Legs flown past Neptune, until reaching it wins the run
-  private(set) var legsPastLastRegion = 0
   // The routes out of the station last docked at, each with its waves
   // planned, for the map screen to show and choose from
   private(set) var offers: [LegOffer] = []
@@ -180,6 +178,13 @@ struct StationRoute {
     return next != nil && wavesLeft == 1
   }
 
+  // True on the last leg: the next station is at Neptune, and reaching
+  // it wins the run
+  var nextWinsTheRun: Bool {
+    guard let next = next else { return false }
+    return map?.station(next.id)?.region == .neptune
+  }
+
   // What the route being flown pays. Normal before the map and without one.
   var loot: RouteLoot {
     return (route?.danger ?? .normal).loot
@@ -202,12 +207,7 @@ struct StationRoute {
   // stage number of the first wave after this station. The normal route
   // is set as the default; the map screen can choose another.
   mutating func docked(at station: Station, nextStage: Int) {
-    visited.insert(station.id)
-    let arrived = map?.station(station.id)
-    if current?.region == .neptune && arrived?.region == .neptune {
-      legsPastLastRegion += 1
-    }
-    current = arrived
+    arrived(at: station)
     let previous = legWaves.last?.recipe
     offers = routesOut.compactMap { route in
       guard let to = map?.station(route.to) else { return nil }
@@ -221,6 +221,17 @@ struct StationRoute {
       return
     }
     choose(offer)
+  }
+
+  // Reached a station: remember it, and it's no longer ahead. At
+  // Neptune, where the run ends, this is all that happens.
+  mutating func arrived(at station: Station) {
+    visited.insert(station.id)
+    current = map?.station(station.id)
+    if next?.id == station.id {
+      next = nil
+      wavesLeft = 0
+    }
   }
 
   // The route taken unless the player picks another: the normal one
@@ -244,18 +255,13 @@ struct StationRoute {
   }
 
   // How hard a route from the current station would be: from the region
-  // it leaves to the region it reaches, shifted by its danger. Past
-  // Neptune, each leg a step harder.
+  // it leaves to the region it reaches, shifted by its danger
   func difficulty(of route: MapRoute) -> LegDifficulty {
     let offset = route.danger.difficultyOffset
     guard let current = current else {
       return LegDifficulty(start: Tuning.Map.startDifficulty, end: Region.earth.difficulty, offset: offset)
     }
     let arriving = map?.station(route.to)?.region ?? current.region
-    if arriving == current.region {
-      let base = Region.neptune.difficulty + Tuning.Map.pastLastRegionStep * legsPastLastRegion
-      return LegDifficulty(start: base, end: base + Tuning.Map.pastLastRegionStep, offset: offset)
-    }
     return LegDifficulty(start: current.region.difficulty, end: arriving.difficulty, offset: offset)
   }
 

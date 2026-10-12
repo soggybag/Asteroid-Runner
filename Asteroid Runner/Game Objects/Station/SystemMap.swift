@@ -233,13 +233,11 @@ struct SystemMap {
       }
     }
 
-    // Each station leads to stations in the next region out. Past
-    // Neptune, to the other Neptune stations, until there's a win.
+    // Each station leads to stations in the next region out. Neptune's
+    // have none: reaching Neptune wins the run.
     var routes: [String: [MapRoute]] = [:]
     for from in stations {
-      let targets = stations.filter {
-        $0.region == (from.region.next ?? from.region) && $0.id != from.id
-      }.shuffled()
+      let targets = stations.filter { $0.region == from.region.next }.shuffled()
       let count = min(Int.random(in: Tuning.Map.routesPerStation), targets.count)
       let dangers = RouteDanger.allCases.shuffled().prefix(count)
       routes[from.id] = zip(targets, dangers).map { target, danger in

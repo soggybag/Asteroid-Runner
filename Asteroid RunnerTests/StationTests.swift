@@ -117,7 +117,8 @@ struct StationRouteTests {
 
   @Test func nextStationIsADifferentOne() {
     var route = StationRoute(stations: [makeStation(id: "a"), makeStation(id: "b")])
-    for _ in 0 ..< 20 {
+    // Every station up to Neptune, where the run ends
+    for _ in 0 ..< Region.allCases.count - 1 {
       let current = route.next!
       route.docked(at: current, nextStage: 1)
       #expect(route.next != current)
@@ -294,14 +295,14 @@ struct SystemMapTests {
       let map = SystemMap.generate(kinds: kinds, names: names)!
       for from in map.stations {
         let routes = map.routes(from: from.id)
-        #expect(!routes.isEmpty)
+        // Neptune is the end of the run
+        #expect(routes.isEmpty == (from.region == .neptune))
         #expect(routes.count <= Tuning.Map.routesPerStation.upperBound)
         #expect(Set(routes.map(\.to)).count == routes.count)
         #expect(Set(routes.map(\.danger)).count == routes.count)
         for route in routes {
           let to = map.station(route.to)!
-          #expect(to.region == (from.region.next ?? from.region))
-          #expect(to.id != from.id)
+          #expect(to.region == from.region.next)
           #expect(route.danger.lengths.contains(route.length))
         }
       }
@@ -333,11 +334,28 @@ struct SystemMapTests {
       stage += route.legLength
       route.docked(at: next, nextStage: stage)
     }
-    // Past Neptune, legs stay at Neptune and keep getting harder
-    let past = route.legDifficulty.start
-    #expect(past >= Region.neptune.difficulty)
-    route.docked(at: route.next!, nextStage: stage + route.legLength)
-    #expect(route.legDifficulty.start > past)
+    // Nowhere to go from Neptune: the run is won
+    #expect(route.next == nil)
+    #expect(route.offers.isEmpty)
+  }
+
+  @Test func onlyTheLegToNeptuneWinsTheRun() {
+    var route = StationRoute(stations: kinds, names: names)
+    var stage = 1
+    for region in Region.allCases {
+      #expect(route.nextWinsTheRun == (region == .neptune))
+      let next = route.next!
+      stage += route.legLength
+      if region == .neptune {
+        route.arrived(at: next)
+      } else {
+        route.docked(at: next, nextStage: stage)
+      }
+    }
+    #expect(route.visited.count == Region.allCases.count)
+    #expect(route.current?.region == .neptune)
+    #expect(!route.nextWinsTheRun)
+    #expect(!StationRoute(stations: []).nextWinsTheRun)
   }
 
   @Test func defaultsToTheNormalRoute() {

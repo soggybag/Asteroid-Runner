@@ -34,8 +34,9 @@ class NextLevelState: GKState {
     let route = scene.stationRoute
     var routeLine: String?
     if let next = route.next {
+      let ahead = route.nextWinsTheRun ? "Neptune ahead" : "Station ahead"
       routeLine = route.stationAfterThisWave
-        ? "Station ahead: \(next.name)"
+        ? "\(ahead): \(next.name)"
         : "Stage \(route.legWaveNumber) of \(route.legLength) to \(next.name)"
     }
 

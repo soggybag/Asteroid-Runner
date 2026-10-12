@@ -220,10 +220,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let introState = IntroState(scene: self)
     let nextLevel = NextLevelState(scene: self)
     let station = StationState(scene: self)
+    let runWon = RunWonState(scene: self)
 
     gameState = GKStateMachine(states: [
       introState, readyState, playingState,
-      gameOverState, countDownState, gameEndingState, nextLevel, station
+      gameOverState, countDownState, gameEndingState, nextLevel, station, runWon
     ])
   }
 
@@ -867,6 +868,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   // Touch Events
   // ----------------------------------
 
+  // At a station, or arrived at Neptune: no steering or firing
+  var shipDocked: Bool {
+    return gameState.currentState is StationState || gameState.currentState is RunWonState
+  }
+
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     if gamePaused {
       resumeGame()
@@ -883,6 +889,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       return
     }
 
+    if let won = gameState.currentState as? RunWonState {
+      won.touched()
+      return
+    }
+
     activeTouches.formUnion(touches)
   }
 
@@ -894,7 +905,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let touch = touches.first, !gamePaused, !ship.isHidden, !powerPanelOpen,
-          !(gameState.currentState is StationState) else { return }
+          !shipDocked else { return }
     let dx = touch.location(in: self).x - touch.previousLocation(in: self).x
     let halfWidth = ship.size.width / 2
     let x = (dragTargetX ?? ship.position.x) + dx
@@ -1189,10 +1200,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     // Fire on auto, or while a finger is held down, at the weapon's rate.
-    // Hold fire while docked.
+    // Hold fire while docked or at Neptune.
     timeSinceLastMissile = min(timeSinceLastMissile + seconds, missileFireTime)
     let firing = autoFireOn || !activeTouches.isEmpty
-    if firing && !(gameState.currentState is StationState) && timeSinceLastMissile >= missileFireTime {
+    if firing && !shipDocked && timeSinceLastMissile >= missileFireTime {
       timeSinceLastMissile = 0
       if !ship.isHidden {
         shootMissile()

@@ -175,8 +175,7 @@ Each step can be played on its own:
    `mapNames` in `stations.json`), 2–3 routes per station, each with a
    danger and length. A new map each run. Difficulty ramps from the region
    a leg leaves to the one it reaches, eased after a station and shifted
-   by danger; numbers in `Tuning.Map`. Past Neptune, legs stay at Neptune
-   and get harder until the win screen exists. Every station of a kind
+   by danger; numbers in `Tuning.Map`. Every station of a kind
    shares its keeper and greetings for now.
 3. ~~**The map screen**~~ Done 2026-10-09. `MapPanel.swift`: Launch at a
    station opens the map. Tap a station or a route tab (Safe, Normal,
@@ -202,9 +201,16 @@ Each step can be played on its own:
 
    Risky pays more for a leg though it's shorter; safe a little less
    though it's longer. Rich ore on risky routes comes with ores.
-5. **Reaching Neptune** wins the run: a win screen with distance, stages
-   and stations visited. The return mission comes later (see After
-   Neptune).
+5. ~~**Reaching Neptune wins the run.**~~ Done 2026-10-12.
+   `RunWonState.swift`: clearing the last wave of a leg into Neptune
+   brings the Neptune station in, as when docking (tap to skip), then
+   "NEPTUNE REACHED" over the score, best, stage, distance, stations
+   visited and waves met, with Play Again. Neptune stations have no
+   routes out, so the run can't go past them. The map card for a route
+   into Neptune says "Reaching Neptune wins the run", and the scanner
+   says "Neptune ahead" on the last wave. Game over also shows stations
+   visited now. No score bonus for the win yet. The return mission comes
+   later (see After Neptune).
 6. **Playtest.**
 
 Ores, trade goods and missions come after this. Rich and poor routes are

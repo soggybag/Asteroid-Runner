@@ -246,8 +246,6 @@ enum Tuning {
     // ramps from the region it leaves to the one it reaches, eased just
     // after a station by Pacing.relief.
     static let regionDifficulty = [3, 7, 11, 15, 19, 22, 25]
-    // Past Neptune, until reaching it wins the run, each leg this much harder
-    static let pastLastRegionStep = 3
 
     // Each kind of route's length, difficulty and loot, from
     // Data/routes.json; edit them there

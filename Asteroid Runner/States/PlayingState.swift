@@ -83,12 +83,20 @@ class PlayingState: GKState {
   
   // ---------------------------------
   // Dock at a station if one is here,
-  // otherwise start the next wave
+  // otherwise start the next wave.
+  // A station at Neptune wins the run.
   // ---------------------------------
   
   func startNextLevel() {
-    if let station = scene.stationRoute.waveCleared(),
-       let docking = scene.gameState.state(forClass: StationState.self) {
+    let headingForNeptune = scene.stationRoute.nextWinsTheRun
+    guard let station = scene.stationRoute.waveCleared() else {
+      scene.gameState.enter(NextLevelState.self)
+      return
+    }
+    if headingForNeptune, let won = scene.gameState.state(forClass: RunWonState.self) {
+      won.station = station
+      scene.gameState.enter(RunWonState.self)
+    } else if let docking = scene.gameState.state(forClass: StationState.self) {
       docking.station = station
       scene.gameState.enter(StationState.self)
     } else {
@@ -102,7 +110,8 @@ class PlayingState: GKState {
   // ---------------------------------
   
   override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-    if stateClass == GameEndingState.self || stateClass == NextLevelState.self || stateClass == StationState.self {
+    if stateClass == GameEndingState.self || stateClass == NextLevelState.self || stateClass == StationState.self
+      || stateClass == RunWonState.self {
       return true
     }
     return false

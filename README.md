@@ -37,6 +37,8 @@ Editing story, dialog and route numbers: [docs/data-files.md](docs/data-files.md
   more coins for each coin and each stage cleared). Tap a station or a route tab to see how many
   stages, the kinds of wave on the way, and what the station sells, then
   tap Set course.
+- Reaching a station at Neptune wins the run. Seven legs out from Earth,
+  about 25 stages on normal routes.
 - Ship upgrades last for the rest of the run. Each station fits its own set:
 
   | Upgrade | Each tier | Tiers |

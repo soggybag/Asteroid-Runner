@@ -10,6 +10,7 @@ import SpriteKit
 
 class Menu: SKSpriteNode {
 
+  var titleLabel: SKLabelNode!
   var label: SKLabelNode!
   var bestLabel: SKLabelNode!
   var stageLabel: SKLabelNode!
@@ -37,6 +38,15 @@ class Menu: SKSpriteNode {
     button.buttonAction = {
       self.tapToPlay()
     }
+
+    // Above the button, shown only for a win
+    titleLabel = SKLabelNode()
+    addChild(titleLabel)
+    titleLabel.fontColor = Colors.highScore
+    titleLabel.fontName = Fonts.fontName
+    titleLabel.fontSize = 34
+    titleLabel.position = CGPoint(x: 0, y: button.size.height / 2 + 30)
+    titleLabel.isHidden = true
 
     label = SKLabelNode()
     addChild(label)
@@ -92,10 +102,17 @@ class Menu: SKSpriteNode {
     show()
   }
 
+  // A big line above the button, or none
+
+  func show(title: String?) {
+    titleLabel.text = title
+    titleLabel.isHidden = title == nil
+  }
+
   // Show how far the run got
 
-  func show(stage: Int, stats: RunStats) {
-    stageLabel.text = "Stage \(stage)  ·  \(stats.distanceText)"
+  func show(stage: Int, stats: RunStats, stations: Int) {
+    stageLabel.text = "Stage \(stage)  ·  \(stats.distanceText)  ·  Stations \(stations)"
     killsLabel.text = "Asteroids \(stats.asteroidsDestroyed)  ·  Turrets \(stats.turretsDestroyed)"
     wavesLabel.text = stats.wavesText
   }

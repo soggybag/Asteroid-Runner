@@ -503,6 +503,7 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Playtest round 6 ([playtest-round-6.md](playtest-round-6.md)): stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row (2026-10-09)
 - [x] Playtest round 7 ([playtest-round-7.md](playtest-round-7.md)): four runs lost at the stage 9 swarm, one reached stage 24. Fixed swarm spacing for brass, gentler swarms, more maze stagger (2026-10-09)
 - [ ] Playtest round 8: check the swarm fixes, and whether the gate is met
+- [x] System map step 5 (2026-10-12): reaching Neptune wins the run, with a win screen (`RunWonState.swift`); no routes past Neptune; the map card and scanner warn when a leg ends the run
 - [x] System map step 4 (2026-10-12): loot by route danger: risky routes send more pickups and pay more coins, safe ones less (`Data/routes.json`); the map card shows ◆ loot marks
 - [x] System map step 3 (2026-10-09): the map screen after Launch (`MapPanel.swift`): route tabs and cards, Set course and Back; the scanner shows "Stage 2 of 4 to …"
 - [x] System map step 2 (2026-10-09): regions, map stations with made-up names, routes with danger and length; difficulty from the region and route (`SystemMap.swift`, `Tuning.Map`)

@@ -16,6 +16,7 @@
 		A1B2C3D4E5F6000000000041 /* Power.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000040 /* Power.swift */; };
 		A1B2C3D4E5F600000000003A /* StationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000039 /* StationTests.swift */; };
 		A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000037 /* StationState.swift */; };
+		A1B2C3D4E5F6000000000079 /* RunWonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000078 /* RunWonState.swift */; };
 		A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000035 /* StationPanel.swift */; };
 		A1B2C3D4E5F6000000000075 /* MapPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000074 /* MapPanel.swift */; };
 		A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000033 /* StationNode.swift */; };
@@ -102,6 +103,7 @@
 		A1B2C3D4E5F6000000000042 /* PowerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000040 /* Power.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Power.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000039 /* StationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000078 /* RunWonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunWonState.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000037 /* StationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationState.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000035 /* StationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000074 /* MapPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPanel.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				D8AFDFF8205F313C00BC11D8 /* GameEndingState.swift */,
 				D84E374D205D874000512E12 /* PlayingState.swift */,
 				A1B2C3D4E5F6000000000037 /* StationState.swift */,
+				A1B2C3D4E5F6000000000078 /* RunWonState.swift */,
 				D84E374A205D873F00512E12 /* ReadyState.swift */,
 				D8AFE0002061F0A800BC11D8 /* IntroState.swift */,
 				D8AFE0082066B5CB00BC11D8 /* NextLevelState.swift */,
@@ -558,6 +561,7 @@
 				A1B2C3D4E5F6000000000043 /* PowerPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000041 /* Power.swift in Sources */,
 				A1B2C3D4E5F6000000000038 /* StationState.swift in Sources */,
+				A1B2C3D4E5F6000000000079 /* RunWonState.swift in Sources */,
 				A1B2C3D4E5F6000000000036 /* StationPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000075 /* MapPanel.swift in Sources */,
 				A1B2C3D4E5F6000000000034 /* StationNode.swift in Sources */,
