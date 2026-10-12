@@ -415,6 +415,41 @@ struct SystemMapTests {
     #expect(LegDifficulty(start: 1, end: 1, offset: -2).at(progress: 0) == 1)
   }
 
+  @Test func riskierRoutesPayMore() {
+    let loots = RouteDanger.allCases.map(\.loot)
+    for (easier, harder) in zip(loots, loots.dropFirst()) {
+      #expect(easier.pickupChance < harder.pickupChance)
+      #expect(easier.maxItemsPerWave <= harder.maxItemsPerWave)
+      #expect(easier.coinPickup < harder.coinPickup)
+      #expect(easier.stageClearCoins < harder.stageClearCoins)
+    }
+    #expect(RouteDanger.safe.loot.maxItemsPerWave >= 1)
+    #expect(RouteDanger.allCases.allSatisfy { $0.loot.pickupChance <= 0.1 })
+    #expect(RouteDanger.allCases.map(\.level) == [1, 2, 3])
+  }
+
+  @Test func riskyLegsPayMoreCoinsThanSafeOnes() {
+    // Stage-clear coins over a leg of average length
+    func perLeg(_ danger: RouteDanger) -> Double {
+      let lengths = danger.lengths
+      return Double(danger.loot.stageClearCoins) * Double(lengths.lowerBound + lengths.upperBound) / 2
+    }
+    #expect(perLeg(.risky) > perLeg(.normal))
+    #expect(perLeg(.normal) > perLeg(.safe))
+  }
+
+  @Test func lootFollowsTheChosenRoute() {
+    var route = StationRoute(stations: kinds, names: names)
+    #expect(route.loot == RouteDanger.normal.loot)
+    let first = route.map!.station(route.map!.start.to)!
+    route.docked(at: first.station, nextStage: 4)
+    for offer in route.offers {
+      route.choose(offer)
+      #expect(route.loot == offer.route.danger.loot)
+    }
+    #expect(StationRoute(stations: []).loot == RouteDanger.normal.loot)
+  }
+
   @Test func harderRegionsFurtherOut() {
     let values = Region.allCases.map(\.difficulty)
     #expect(values == values.sorted())

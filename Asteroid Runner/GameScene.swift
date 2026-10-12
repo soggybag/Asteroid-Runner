@@ -49,7 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var level = 0
   var timeSinceLastMissile: TimeInterval = 0
 
-  // Items that have drifted in this wave, capped by Tuning.PowerUps.maxItemsPerWave
+  // Items that have drifted in this wave, capped by the route's loot
   var itemsThisWave = 0
 
   // Counts for the game over screen
@@ -613,7 +613,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let points = powerup.name == PowerUp.PU_COIN ? Tuning.PowerUps.coinPoints : Tuning.PowerUps.points
     score += points
     if powerup.name == PowerUp.PU_COIN {
-      coins += Tuning.Stations.coinPickup
+      coins += stationRoute.loot.coinPickup
     }
     show(points: points, at: powerup.position)
     powerup.removeFromParent()
@@ -634,9 +634,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   func makeAsteroid() -> TimeInterval {
     // Now and then a pickup instead of a rock. Items are capped per wave.
-    if Double.random(in: 0 ..< 1) < Tuning.PowerUps.pickupChance {
+    // Riskier routes send more.
+    let loot = stationRoute.loot
+    if Double.random(in: 0 ..< 1) < loot.pickupChance {
       let pickup = Pickup.random()
-      if !pickup.isItem || itemsThisWave < Tuning.PowerUps.maxItemsPerWave {
+      if !pickup.isItem || itemsThisWave < loot.maxItemsPerWave {
         if pickup.isItem {
           itemsThisWave += 1
         }

@@ -234,10 +234,12 @@ class MapPanel: SKNode {
     card.addChild(label("To \(station.name)\(kind)", size: 15, color: Colors.stationText, at: CGPoint(x: x, y: y)))
     y -= 22
 
+    // Danger and loot rise together. The region shows on the map.
     let danger = offer.route.danger
-    let marks = String(repeating: "▲", count: RouteDanger.allCases.firstIndex(of: danger)! + 1)
+    let marks = String(repeating: "▲", count: danger.level)
+    let loot = String(repeating: "◆", count: danger.level)
     let stages = "\(offer.route.length) stage\(offer.route.length == 1 ? "" : "s")"
-    card.addChild(label("\(stages)  ·  \(danger.name) \(marks)  ·  \(offer.station.region.name)",
+    card.addChild(label("\(stages)  ·  \(danger.name) \(marks)  ·  Loot \(loot)",
                         size: 13, color: MapPanel.color(danger), at: CGPoint(x: x, y: y)))
     y -= 20
 

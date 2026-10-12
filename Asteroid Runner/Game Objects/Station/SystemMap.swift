@@ -58,6 +58,76 @@ enum RouteDanger: CaseIterable {
   var difficultyOffset: Int {
     return Tuning.Map.dangerOffset(self)
   }
+
+  var loot: RouteLoot {
+    return Tuning.Map.loot(self)
+  }
+
+  // 1 for safe up to 3 for risky, for the map's marks
+  var level: Int {
+    return RouteDanger.allCases.firstIndex(of: self)! + 1
+  }
+}
+
+
+// What a route pays: how often pickups drift in, how many of them can be
+// items, and coins for a coin pickup and for clearing a stage
+
+struct RouteLoot: Equatable {
+  let pickupChance: Double
+  let maxItemsPerWave: Int
+  let coinPickup: Int
+  let stageClearCoins: Int
+}
+
+
+// One kind of route's numbers, as written in Data/routes.json. The file
+// explains each one.
+
+struct RouteSettings: Decodable, Equatable {
+  let minStages: Int
+  let maxStages: Int
+  let difficulty: Int
+  let pickupChance: Double
+  let maxItemsPerWave: Int
+  let coinPickup: Int
+  let stageClearCoins: Int
+
+  // At least one stage, even if min and max are swapped or below 1
+  var stages: ClosedRange<Int> {
+    let low = max(1, min(minStages, maxStages))
+    return low ... max(low, maxStages, minStages)
+  }
+
+  // Kept in range: a chance from 0 to 1, no negative counts
+  var loot: RouteLoot {
+    return RouteLoot(pickupChance: min(max(pickupChance, 0), 1),
+                     maxItemsPerWave: max(0, maxItemsPerWave),
+                     coinPickup: max(0, coinPickup),
+                     stageClearCoins: max(0, stageClearCoins))
+  }
+}
+
+
+// Data/routes.json: settings for each danger
+
+struct RouteTable: Decodable, Equatable {
+  let safe: RouteSettings
+  let normal: RouteSettings
+  let risky: RouteSettings
+
+  subscript(danger: RouteDanger) -> RouteSettings {
+    switch danger {
+    case .safe: return safe
+    case .normal: return normal
+    case .risky: return risky
+    }
+  }
+
+  // The file, or the built-in numbers if it can't be read
+  static func load() -> RouteTable {
+    return GameData.load(RouteTable.self, from: "routes") ?? Tuning.Map.builtInRoutes
+  }
 }
 
 

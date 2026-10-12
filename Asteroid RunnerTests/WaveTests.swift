@@ -97,10 +97,6 @@ struct PickupTests {
     }
   }
 
-  @Test func pickupsAreRare() {
-    #expect(Tuning.PowerUps.pickupChance <= 0.1)
-    #expect(Tuning.PowerUps.maxItemsPerWave >= 1)
-  }
 }
 
 struct AsteroidSizeTests {

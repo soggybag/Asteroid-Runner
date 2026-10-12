@@ -4,7 +4,9 @@
 //
 
 // Text and settings the game reads from JSON files in the Data folder,
-// so story and dialog can be edited without touching code.
+// so story and dialog can be edited without touching code. The files are
+// read as JSON5, so they can have // comments and trailing commas. See
+// docs/data-files.md.
 
 import Foundation
 
@@ -19,7 +21,9 @@ enum GameData {
     }
     do {
       let data = try Data(contentsOf: url)
-      return try JSONDecoder().decode(T.self, from: data)
+      let decoder = JSONDecoder()
+      decoder.allowsJSON5 = true
+      return try decoder.decode(T.self, from: data)
     } catch {
       print("GameData: couldn't read \(name).json: \(error)")
       return nil

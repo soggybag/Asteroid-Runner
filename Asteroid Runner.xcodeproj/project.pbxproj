@@ -25,6 +25,7 @@
 		A1B2C3D4E5F600000000002C /* intro.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002B /* intro.json */; };
 		A1B2C3D4E5F600000000002E /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000002D /* DataTests.swift */; };
 		A1B2C3D4E5F6000000000028 /* stations.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000027 /* stations.json */; };
+		A1B2C3D4E5F6000000000077 /* routes.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000076 /* routes.json */; };
 		A1B2C3D4E5F6000000000025 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000024 /* InventoryTests.swift */; };
 		A1B2C3D4E5F6000000000023 /* ItemTray.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000022 /* ItemTray.swift */; };
 		A1B2C3D4E5F6000000000021 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000020 /* Inventory.swift */; };
@@ -110,6 +111,7 @@
 		A1B2C3D4E5F6000000000029 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000002B /* intro.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = intro.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000002D /* DataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000076 /* routes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = routes.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000027 /* stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stations.json; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000024 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000022 /* ItemTray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTray.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F6000000000027 /* stations.json */,
+				A1B2C3D4E5F6000000000076 /* routes.json */,
 				A1B2C3D4E5F600000000002B /* intro.json */,
 			);
 			path = Data;
@@ -481,6 +484,7 @@
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
 				D8DB9C23205CD2DB006455F9 /* LaunchScreen.storyboard in Resources */,
 				A1B2C3D4E5F6000000000028 /* stations.json in Resources */,
+				A1B2C3D4E5F6000000000077 /* routes.json in Resources */,
 				A1B2C3D4E5F600000000002C /* intro.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

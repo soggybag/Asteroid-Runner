@@ -187,7 +187,21 @@ Each step can be played on its own:
    (`StationRoute.offers`), so the card shows what will really come. The
    scanner briefing shows "Stage 2 of 4 to …", and "Station ahead" on the
    last wave.
-4. **Loot by danger:** coins and pickup chance scaled by route danger.
+4. ~~**Loot by danger.**~~ Done 2026-10-12. Each danger has its loot
+   (`Data/routes.json`, with stages and difficulty; see
+   [data-files.md](data-files.md)); the route being flown sets it
+   (`StationRoute.loot`). Normal is the loot as before; the first leg is
+   normal. The card shows the loot as ◆ marks next to the danger; the
+   region left the card, since the map shows it.
+
+   | Route | Pickup chance | Items per wave | Coin pickup | Stage clear | Clear coins per leg |
+   | --- | --- | --- | --- | --- | --- |
+   | Safe | 4.5% | 1 | 4 | 2 | about 9 |
+   | Normal | 6% | 2 | 5 | 3 | about 10 |
+   | Risky | 9% | 3 | 8 | 6 | about 15 |
+
+   Risky pays more for a leg though it's shorter; safe a little less
+   though it's longer. Rich ore on risky routes comes with ores.
 5. **Reaching Neptune** wins the run: a win screen with distance, stages
    and stations visited. The return mission comes later (see After
    Neptune).

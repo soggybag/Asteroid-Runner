@@ -180,6 +180,11 @@ struct StationRoute {
     return next != nil && wavesLeft == 1
   }
 
+  // What the route being flown pays. Normal before the map and without one.
+  var loot: RouteLoot {
+    return (route?.danger ?? .normal).loot
+  }
+
   // The routes out of the station last docked at
   var routesOut: [MapRoute] {
     guard let map = map, let current = current else { return [] }

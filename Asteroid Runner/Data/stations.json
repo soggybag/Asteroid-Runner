@@ -1,12 +1,13 @@
+// The kinds of space station, their keepers, dialog and shops. Every
+// line marked TODO is waiting for real writing. Comments (// and /* */)
+// and trailing commas are fine here. See docs/data-files.md.
+//
+// On the system map, each station is one of these kinds under a name
+// from mapNames: it shares the kind's keeper, dialog and shop.
 {
-  "_about": [
-    "Placeholder station data. Every line marked TODO is waiting for real writing.",
-    "greetings: lines picked by situation when the ship docks. The game uses the first situation that applies, in this order: shipDamaged, lowFuel, carryingWanted, returnVisit, firstVisit. Each situation can list several lines; one is picked at random.",
-    "conversation: optional, for later. A decision tree like Star Control: each node has the keeper's text and the player's options. An option points to the next node, or to null to end the talk. An effect is a hint for later code, such as a discount, a gift or opening the shop.",
-    "shop: what the station sells and how it prices things. Multipliers are against a base price; 1.0 is normal.",
-    "shop.upgrades: ship upgrades the station can fit: reactor, cargoRack, hullPlating, thrusters, weaponFocus, shieldCapacitor. Prices are in Tuning.Upgrades, times the station's buyMultiplier.",
-    "mapNames: made-up names for the system map's stations, placeholders until real ones are written. Each map station takes one, and is one of the stations below (its kind: shop, keeper, greetings) under that name. A run uses up to 21."
-  ],
+  // Made-up names for the system map's stations, placeholders until real
+  // ones are written. A run uses up to 21, so keep at least 21, with no
+  // repeats.
   "mapNames": [
     "Gannet Yard",
     "Kestrel Station",
@@ -33,13 +34,26 @@
     "Orrin's Folly",
     "Lowmarket"
   ],
+  // The station kinds. The first one has a comment on each entry; the
+  // others work the same way.
   "stations": [
     {
+      // Used by the code and saved games. Don't change it once it's in use.
       "id": "outpost",
+      // The kind's own name. Map stations use a name from mapNames instead.
       "name": "Halden's Rock",
+      // Who runs the shop, shown on the station screen
       "keeper": { "name": "Mara Halden", "title": "Outpost foreman" },
+      // A note for the writer on how the keeper talks. Not shown in the game.
       "personality": "Gruff, practical, fair. Respects pilots who bring back salvage.",
+      // What kind of place it is. The first sentence is shown on the map
+      // card ("Mining outpost"); the rest is a note for the writer.
       "specialty": "Mining outpost. Pays well for salvage, sells fuel cheap.",
+      // What the keeper says when the ship docks, by situation. The game
+      // uses the first that applies, in this order: shipDamaged, lowFuel,
+      // carryingWanted, returnVisit, firstVisit. List several lines for a
+      // situation and one is picked at random. A missing situation falls
+      // back to firstVisit. lowFuel waits for fuel to be built.
       "greetings": {
         "firstVisit": ["TODO: first meeting. Halden sizes up the ship."],
         "returnVisit": ["TODO: Halden recognises the ship."],
@@ -47,13 +61,25 @@
         "lowFuel": ["TODO: Halden offers fuel."],
         "carryingWanted": ["TODO: Halden notices the salvage in the hold."]
       },
+      // Said on launch. One is picked at random.
       "farewell": ["TODO: short send-off."],
       "shop": {
+        // Items for sale: bomb, shield, multiShot, rapidFire. fuel waits
+        // for fuel to be built and is skipped until then.
         "sells": ["fuel", "shield", "bomb"],
+        // Times the base price when buying here. Below 1 is cheap.
         "buyMultiplier": 0.9,
+        // Times the resale price when selling here. Above 1 pays well.
         "sellMultiplier": 1.2,
+        // Ship upgrades fitted here: reactor, cargoRack, hullPlating,
+        // thrusters, weaponFocus, shieldCapacitor. Prices are in
+        // Tuning.Upgrades, times buyMultiplier.
         "upgrades": ["reactor", "hullPlating", "cargoRack"]
       },
+      // Not used yet; for later. A talk like Star Control's: each node has
+      // the keeper's text and the player's options. An option's next is
+      // another node, or null to end the talk. effect is a hint for later
+      // code: openShop, discount, a gift.
       "conversation": {
         "start": "hello",
         "nodes": {

@@ -102,13 +102,8 @@ enum Tuning {
     static let points = 100
     static let coinPoints = 250
 
-    // Chance that a spawn is a pickup instead of a rock. Was 24%.
-    static let pickupChance = 0.06
-
-    // At most this many items (bomb, shield, multi-shot, rapid fire) drift
-    // in per wave. Points and coins don't count. Items dropped by destroyed
-    // turrets and bases don't count either.
-    static let maxItemsPerWave = 2
+    // How often pickups turn up, how many can be items, and coins for
+    // each depend on the route being flown: see Data/routes.json.
 
     // How often each pickup turns up, relative to the others
     static let weights: [(pickup: Pickup, weight: Int)] = [
@@ -136,9 +131,8 @@ enum Tuning {
     static let minWaves = 1
     static let maxWaves = 5
 
-    // Coins for picking up a coin, and for clearing a stage
-    static let coinPickup = 5
-    static let stageClearCoins = 3
+    // Coins for picking up a coin and for clearing a stage depend on the
+    // route: see Data/routes.json.
 
     // Base prices in coins. Each station's multipliers adjust them.
     static func price(_ item: ItemType) -> Int {
@@ -255,21 +249,29 @@ enum Tuning {
     // Past Neptune, until reaching it wins the run, each leg this much harder
     static let pastLastRegionStep = 3
 
-    // Waves on a route, and how much harder it is, by danger
+    // Each kind of route's length, difficulty and loot, from
+    // Data/routes.json; edit them there
+    static let routes = RouteTable.load()
+
+    // Used only if routes.json can't be read. Keep in step with the file.
+    static let builtInRoutes = RouteTable(
+      safe: RouteSettings(minStages: 4, maxStages: 5, difficulty: -2, pickupChance: 0.045,
+                          maxItemsPerWave: 1, coinPickup: 4, stageClearCoins: 2),
+      normal: RouteSettings(minStages: 3, maxStages: 4, difficulty: 0, pickupChance: 0.06,
+                            maxItemsPerWave: 2, coinPickup: 5, stageClearCoins: 3),
+      risky: RouteSettings(minStages: 2, maxStages: 3, difficulty: 2, pickupChance: 0.09,
+                           maxItemsPerWave: 3, coinPickup: 8, stageClearCoins: 6))
+
     static func legLengths(_ danger: RouteDanger) -> ClosedRange<Int> {
-      switch danger {
-      case .safe: return 4 ... 5
-      case .normal: return 3 ... 4
-      case .risky: return 2 ... 3
-      }
+      return routes[danger].stages
     }
 
     static func dangerOffset(_ danger: RouteDanger) -> Int {
-      switch danger {
-      case .safe: return -2
-      case .normal: return 0
-      case .risky: return 2
-      }
+      return routes[danger].difficulty
+    }
+
+    static func loot(_ danger: RouteDanger) -> RouteLoot {
+      return routes[danger].loot
     }
   }
 
