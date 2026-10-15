@@ -22,6 +22,20 @@ class Asteroid: SKSpriteNode {
 
   static let NAME = "asteroid"
 
+  // Hand-drawn rocks, a few drawings per size, from the asteroid-*.atlas
+  // folders. Huge, massive and bosstroid use the large drawings, scaled
+  // up, until they have their own. A size with no drawings is a plain
+  // colored square.
+  static let textures: [AsteroidSize: [SKTexture]] = {
+    var textures = [AsteroidSize: [SKTexture]]()
+    for size in [AsteroidSize.tiny, .small, .average, .large, .huge, .massive, .bosstroid] {
+      let art = [.huge, .massive, .bosstroid].contains(size) ? AsteroidSize.large : size
+      let atlas = SKTextureAtlas(named: "asteroid-\(art.toString().lowercased())")
+      textures[size] = atlas.textureNames.sorted().map { atlas.textureNamed($0) }
+    }
+    return textures
+  }()
+
   // --------------------------------
   // MARK: Class properties
   // --------------------------------
@@ -52,7 +66,7 @@ class Asteroid: SKSpriteNode {
     let radius = asteroidSize.rawValue
     let size = CGSize(width: radius * 2, height: radius * 2)
 
-    super.init(texture: nil, color: .white, size: size)
+    super.init(texture: Asteroid.textures[asteroidSize]?.randomElement(), color: .white, size: size)
 
     // Set name
     name = Asteroid.NAME
@@ -63,7 +77,10 @@ class Asteroid: SKSpriteNode {
     // Set hits
     hits = asteroidSize.rawValue / 5 * type.toughness
 
+    // Plain rocks show the drawing as it is. Other types are tinted
+    // their color so they can be told apart.
     color = type.color()
+    colorBlendFactor = texture == nil || type != .normal ? 1 : 0
 
     configurePhysics(radius: radius)
     configureType()
@@ -130,6 +147,7 @@ class Asteroid: SKSpriteNode {
   func makeWall(speed: CGFloat) {
     hits = .greatestFiniteMagnitude
     color = Colors.mazeWall
+    colorBlendFactor = 1
     physicsBody?.isDynamic = false
     let distance = position.y + size.height
     run(.sequence([.moveBy(x: 0, y: -distance, duration: TimeInterval(distance / speed)), .removeFromParent()]))

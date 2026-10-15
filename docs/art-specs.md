@@ -17,10 +17,16 @@ and line are given so you can check or change them.
 - **Format:** PNG, 32-bit RGBA with transparency, sRGB. Trim nothing off
   the canvas: keep the object centered, because SpriteKit positions and
   rotates a sprite around its center.
-- **Where it goes:** a sprite atlas in `Assets.xcassets` (New Sprite Atlas),
-  one image set per image, with the @2x and @3x files in their slots.
-  Name frames `name_1`, `name_2`, … for animations. Xcode packs the atlas
-  into one texture, which is faster to draw.
+- **Where it goes:** a `.atlas` folder in `Asteroid Runner/`, added to
+  the Xcode project (it's already done for `ship.atlas` and the four
+  `asteroid-*.atlas` folders). Name each file with its scale:
+  `Ship-1@3x.png`, `Ship-1@2x.png`. The code asks for `Ship-1` and gets
+  the right one for the phone. Xcode packs each atlas into one texture,
+  which is faster to draw. A new atlas folder must be dragged into the
+  project once, or the game won't find it.
+- **Clean edges:** everything outside the drawing must be fully
+  transparent. Faint scan or selection edges show as a box around the
+  sprite in the game, and tints make them stronger.
 - **Facing:** things that fly up the screen (ship, shots) face **up**.
   Enemy shots are rotated to their direction of travel with angle 0 to the
   **right**, so draw them facing right.
@@ -34,10 +40,10 @@ On-screen size in points, and pixel size of the files to make.
 
 | Object | On screen (pt) | @2x (px) | @3x (px) | Notes |
 |---|---|---|---|---|
-| Ship | 32 × 32 | 64 × 64 | 96 × 96 | Hit circle radius 15. Animated: 5 frames at 0.1 s each (`Ship.swift:66`). Faces up |
+| Ship | 32 × 32 | 64 × 64 | 96 × 96 | Hit circle radius 15. `Ship-1` in `ship.atlas`; Ship-2 … 10 are other designs, not used yet (`Ship.swift`). Faces up |
 | Ship shield ring | 44 across | 88 × 88 | 132 × 132 | Drawn around the ship (`ShipShield.swift:22`) |
 | Shield charge ring | 48 across | 96 × 96 | 144 × 144 | Faint ring showing powered shield (`Ship.swift:29`) |
-| Lives icon (HUD) | 22 × 22 | 44 × 44 | 66 × 66 | Uses the ship's first frame now (`Hud.swift:121`) |
+| Lives icon (HUD) | 22 × 22 | 44 × 44 | 66 × 66 | Uses the ship drawing now (`Hud.swift`) |
 | Asteroid, tiny | 10 | 20 | 30 | Diameter. All rocks spin, so draw them roughly round |
 | Asteroid, small | 20 | 40 | 60 | Comets are always small |
 | Asteroid, average | 30 | 60 | 90 | Smallest turret |
@@ -55,6 +61,13 @@ On-screen size in points, and pixel size of the files to make.
 | Item tray slot | 44 × 28 | 88 × 56 | 132 × 84 | The slot frame. An icon inside should be about 22 × 22 pt (`ItemTray.swift:15`) |
 
 Asteroid sizes are in `AsteroidSize.swift` (the numbers there are radii).
+Each rock picks one of its size's drawings at random from
+`asteroid-tiny.atlas`, `-small`, `-average` and `-large`; add more files to
+an atlas and they're used. Huge, massive and bosstroid use the large
+drawings scaled up until they have atlases of their own (that needs a line
+in `Asteroid.textures`). Plain rocks show the drawing as it is; every other
+type is tinted its color (`AsteroidType.color()`), so draw rocks in light
+gray and keep the outline dark.
 The hit circle for a rock is its full radius, so keep the visible rock
 filling the circle; a little rough edge past it is fine.
 

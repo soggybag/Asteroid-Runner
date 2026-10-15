@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000080 /* ship.atlas */; };
+		A1B2C3D4E5F6000000000083 /* asteroid-tiny.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */; };
+		A1B2C3D4E5F6000000000085 /* asteroid-small.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000084 /* asteroid-small.atlas */; };
+		A1B2C3D4E5F6000000000087 /* asteroid-average.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000086 /* asteroid-average.atlas */; };
+		A1B2C3D4E5F6000000000089 /* asteroid-large.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000088 /* asteroid-large.atlas */; };
 		A1B2C3D4E5F6000000000071 /* Upgrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000070 /* Upgrades.swift */; };
 		A1B2C3D4E5F6000000000063 /* ScannerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */; };
 		A1B2C3D4E5F6000000000061 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000060 /* Wave.swift */; };
@@ -95,6 +100,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000080 /* ship.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = ship.atlas; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-tiny.atlas; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000084 /* asteroid-small.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-small.atlas; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000086 /* asteroid-average.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-average.atlas; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000088 /* asteroid-large.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-large.atlas; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000070 /* Upgrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrades.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerPanel.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000060 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
@@ -377,6 +387,11 @@
 				D8DB9C1A205CD2DB006455F9 /* GameViewController.swift */,
 				D8DB9C1C205CD2DB006455F9 /* Main.storyboard */,
 				D8DB9C1F205CD2DB006455F9 /* Assets.xcassets */,
+				A1B2C3D4E5F6000000000080 /* ship.atlas */,
+				A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */,
+				A1B2C3D4E5F6000000000084 /* asteroid-small.atlas */,
+				A1B2C3D4E5F6000000000086 /* asteroid-average.atlas */,
+				A1B2C3D4E5F6000000000088 /* asteroid-large.atlas */,
 				D8DB9C21205CD2DB006455F9 /* LaunchScreen.storyboard */,
 				D8DB9C24205CD2DB006455F9 /* Info.plist */,
 			);
@@ -485,6 +500,11 @@
 				D84E373B205CFBEB00512E12 /* Starfield.sks in Resources */,
 				D84E3753205D898600512E12 /* ShipExplosion.sks in Resources */,
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
+				A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */,
+				A1B2C3D4E5F6000000000083 /* asteroid-tiny.atlas in Resources */,
+				A1B2C3D4E5F6000000000085 /* asteroid-small.atlas in Resources */,
+				A1B2C3D4E5F6000000000087 /* asteroid-average.atlas in Resources */,
+				A1B2C3D4E5F6000000000089 /* asteroid-large.atlas in Resources */,
 				D8DB9C23205CD2DB006455F9 /* LaunchScreen.storyboard in Resources */,
 				A1B2C3D4E5F6000000000028 /* stations.json in Resources */,
 				A1B2C3D4E5F6000000000077 /* map.json in Resources */,

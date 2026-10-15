@@ -30,6 +30,10 @@ class Ship: SKSpriteNode {
 
   static var shipSize = CGSize(width: 32, height: 32)
 
+  // The hand-drawn ship, from ship.atlas. The atlas has other designs
+  // (Ship-2 … Ship-10) for later.
+  static let texture = SKTexture(imageNamed: "Ship-1")
+
   static let INVULNERABLE = "INVULNERABLE"
 
   var shield: ShipShield?
@@ -64,15 +68,8 @@ class Ship: SKSpriteNode {
   // MARK: Setup methods
 
   func setupTextures() {
-    var textures = [SKTexture]()
-    for i in 1 ... 5 {
-      let texture = SKTexture(imageNamed: "Satellite_4_\(i).png")
-      textures.append(texture)
-    }
-
-    self.size = textures[0].size()
-    self.texture = textures[0]
-    run(.repeatForever(.animate(with: textures, timePerFrame: 0.1)))
+    texture = Ship.texture
+    size = Ship.shipSize
   }
 
 

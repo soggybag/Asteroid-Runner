@@ -118,7 +118,7 @@ class Hud: SKSpriteNode {
   // one ship and a count.
   func update(lives: Int) {
     livesNode.removeAllChildren()
-    let texture = SKTexture(imageNamed: "Satellite_4_1.png")
+    let texture = Ship.texture
     let icons = lives > 3 ? 1 : max(lives, 0)
     for i in 0 ..< icons {
       let icon = SKSpriteNode(texture: texture)
