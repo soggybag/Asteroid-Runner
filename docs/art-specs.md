@@ -76,8 +76,19 @@ filling the circle; a little rough edge past it is fine.
 Particle textures are small, soft white images, tinted and scaled in
 code: `spark` and `bokeh` are 64 × 64 px in the Particle Sprite Atlas.
 Keep new ones at 64 × 64 or 128 × 128 px, white on transparent, no @2x/@3x
-needed. The comet tail and hit sparks use `spark`; the starfield and ship
-explosion are `.sks` files in `Particles/`.
+needed. The comet tail and hit sparks use `spark`; the ship explosion is
+an `.sks` file in `Particles/`. Effects are drawn as ink (normal blending),
+not glows: additive blending turns white on the paper and disappears.
+
+## Paper and ink
+
+The background is cream notebook paper with a dot grid
+(`UI/Paper.swift`), drawn in code and scrolling down to show speed. Dots
+are 20 pt apart. All colors are in `Utilities/Colors.swift`: graphite
+(`ink`) for most text and lines, red, blue and green pens, and a few
+marker colors. Art should read on cream: dark outlines, no white or pale
+glows. Pale colors are for things meant to be hard to see (glass and
+black rocks).
 
 ## Full-screen art
 

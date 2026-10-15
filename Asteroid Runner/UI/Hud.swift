@@ -23,7 +23,7 @@ class Hud: SKSpriteNode {
   private(set) var tray = ItemTray(capacity: Tuning.Items.slots)
 
   init() {
-    let color = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2)
+    let color = Colors.ink.withAlphaComponent(0.07)
     let w = Screen.sharedInstance.width
     let h = Screen.sharedInstance.hudHeight
     let size = CGSize(width: w, height: h)

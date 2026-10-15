@@ -45,7 +45,7 @@ class PowerPanel: SKNode {
     zPosition = 1500
 
     let back = SKShapeNode(rect: CGRect(origin: .zero, size: size), cornerRadius: 12)
-    back.fillColor = Colors.backgroundBlack.withAlphaComponent(0.75)
+    back.fillColor = Colors.paper.withAlphaComponent(0.92)
     back.strokeColor = Colors.buttonColorActive
     back.lineWidth = 2
     addChild(back)

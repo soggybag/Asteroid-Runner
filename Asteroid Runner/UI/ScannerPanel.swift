@@ -26,7 +26,7 @@ class ScannerPanel: SKNode {
 
     let size = CGSize(width: width, height: ScannerPanel.height)
     let back = SKShapeNode(rect: CGRect(origin: .zero, size: size), cornerRadius: 10)
-    back.fillColor = Colors.backgroundBlack.withAlphaComponent(0.7)
+    back.fillColor = Colors.paper.withAlphaComponent(0.92)
     back.strokeColor = Colors.buttonColorActive
     back.lineWidth = 1.5
     addChild(back)

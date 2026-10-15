@@ -29,7 +29,7 @@ class Menu: SKSpriteNode {
   }
 
   init() {
-    let color = UIColor(white: 0, alpha: 0.5)
+    let color = Colors.paper.withAlphaComponent(0.75)
     let size = Screen.sharedInstance.size
     super.init(texture: nil, color: color, size: size)
 

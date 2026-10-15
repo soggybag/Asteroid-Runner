@@ -425,10 +425,7 @@ class MapStationButton: SKSpriteNode {
   private let nameLabel = SKLabelNode()
 
   var isSelected = false {
-    didSet {
-      dot.fillColor = isSelected ? Colors.stationText : Colors.stationPanel
-      nameLabel.fontColor = isSelected ? Colors.stationText : Colors.station
-    }
+    didSet { updateColors() }
   }
 
   init(name text: String) {
@@ -448,7 +445,13 @@ class MapStationButton: SKSpriteNode {
     nameLabel.position = CGPoint(x: 0, y: 12)
     addChild(nameLabel)
 
-    isSelected = false
+    // didSet doesn't run in init
+    updateColors()
+  }
+
+  private func updateColors() {
+    dot.fillColor = isSelected ? Colors.stationText : Colors.stationPanel
+    nameLabel.fontColor = isSelected ? Colors.stationText : Colors.station
   }
 
   required init?(coder aDecoder: NSCoder) {

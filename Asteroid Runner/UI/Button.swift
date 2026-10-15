@@ -61,7 +61,7 @@ class Button: SKSpriteNode {
     //// fillPath Drawing
     let fillPath = UIBezierPath(roundedRect: CGRect(x: -65, y: -15, width: 130, height: 30), cornerRadius: 15)
     fillNode.path = fillPath.cgPath
-    fillNode.fillColor = Colors.buttonColorNormal
+    fillNode.fillColor = Colors.buttonColorSelected
     fillNode.strokeColor = UIColor.clear
     
     addChild(strokeNode)

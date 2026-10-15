@@ -50,7 +50,7 @@ class StationNode: SKNode {
     let port = SKShapeNode(rectOf: CGSize(width: 26, height: 14), cornerRadius: 3)
     port.position.y = -StationNode.radius - 6
     port.strokeColor = Colors.station
-    port.fillColor = Colors.backgroundBlack
+    port.fillColor = Colors.paper
     port.lineWidth = 2
     addChild(port)
 

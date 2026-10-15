@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F600000000008D /* Paper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000008C /* Paper.swift */; };
 		A1B2C3D4E5F600000000008B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000008A /* SceneDelegate.swift */; };
 		A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000080 /* ship.atlas */; };
 		A1B2C3D4E5F6000000000083 /* asteroid-tiny.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */; };
@@ -47,8 +48,6 @@
 		D84E3735205CDAF400512E12 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3734205CDAF400512E12 /* PhysicsCategory.swift */; };
 		D84E3737205CDC1300512E12 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3736205CDC1300512E12 /* Missile.swift */; };
 		D84E3739205CF98C00512E12 /* Hud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3738205CF98C00512E12 /* Hud.swift */; };
-		D84E373B205CFBEB00512E12 /* Starfield.sks in Resources */ = {isa = PBXBuildFile; fileRef = D84E373A205CFBEB00512E12 /* Starfield.sks */; };
-		D84E3741205CFD2400512E12 /* Starfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3740205CFD2300512E12 /* Starfield.swift */; };
 		D84E3743205CFF2100512E12 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3742205CFF2100512E12 /* Button.swift */; };
 		D84E3745205D0A3E00512E12 /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3744205D0A3E00512E12 /* PowerUp.swift */; };
 		D84E3747205D6A4000512E12 /* PowerUpBomb.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84E3746205D6A4000512E12 /* PowerUpBomb.swift */; };
@@ -101,6 +100,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F600000000008C /* Paper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000008A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000080 /* ship.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = ship.atlas; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-tiny.atlas; sourceTree = "<group>"; };
@@ -142,8 +142,6 @@
 		D84E3734205CDAF400512E12 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 		D84E3736205CDC1300512E12 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 		D84E3738205CF98C00512E12 /* Hud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hud.swift; sourceTree = "<group>"; };
-		D84E373A205CFBEB00512E12 /* Starfield.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Starfield.sks; sourceTree = "<group>"; };
-		D84E3740205CFD2300512E12 /* Starfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starfield.swift; sourceTree = "<group>"; };
 		D84E3742205CFF2100512E12 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D84E3744205D0A3E00512E12 /* PowerUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		D84E3746205D6A4000512E12 /* PowerUpBomb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpBomb.swift; sourceTree = "<group>"; };
@@ -282,6 +280,7 @@
 		D84E375D205DD15A00512E12 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3D4E5F600000000008C /* Paper.swift */,
 				D84E3754205D941800512E12 /* Menu.swift */,
 				D84E3738205CF98C00512E12 /* Hud.swift */,
 				A1B2C3D4E5F6000000000062 /* ScannerPanel.swift */,
@@ -328,9 +327,7 @@
 		D84E3760205DD1B000512E12 /* Particles */ = {
 			isa = PBXGroup;
 			children = (
-				D84E3740205CFD2300512E12 /* Starfield.swift */,
 				D84E3752205D898600512E12 /* ShipExplosion.sks */,
-				D84E373A205CFBEB00512E12 /* Starfield.sks */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -500,7 +497,6 @@
 			files = (
 				D8DB9C1E205CD2DB006455F9 /* Main.storyboard in Resources */,
 				D8DB9C20205CD2DB006455F9 /* Assets.xcassets in Resources */,
-				D84E373B205CFBEB00512E12 /* Starfield.sks in Resources */,
 				D84E3753205D898600512E12 /* ShipExplosion.sks in Resources */,
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
 				A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */,
@@ -614,10 +610,10 @@
 				A1B2C3D4E5F6000000000006 /* EnemyShot.swift in Sources */,
 				A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */,
 				D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */,
+				A1B2C3D4E5F600000000008D /* Paper.swift in Sources */,
 				A1B2C3D4E5F600000000008B /* SceneDelegate.swift in Sources */,
 				D8AFDFFF2060CCB200BC11D8 /* Shapes.swift in Sources */,
 				D84E3733205CD55200512E12 /* Asteroid.swift in Sources */,
-				D84E3741205CFD2400512E12 /* Starfield.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

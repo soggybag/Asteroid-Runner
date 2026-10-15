@@ -55,7 +55,7 @@ class Missile: SKSpriteNode {
       glow.fillColor = color
       glow.strokeColor = .clear
       glow.alpha = level >= 4 ? 0.4 : 0.25
-      glow.blendMode = .add
+      glow.blendMode = .alpha
       glow.zPosition = -1
       addChild(glow)
     }

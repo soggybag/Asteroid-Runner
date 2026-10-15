@@ -242,10 +242,7 @@ class TabButton: SKSpriteNode {
   private let label = SKLabelNode()
 
   var isSelected = false {
-    didSet {
-      shape.fillColor = isSelected ? Colors.station : .clear
-      label.fontColor = isSelected ? Colors.stationPanel : Colors.station
-    }
+    didSet { updateColors() }
   }
 
   init(title: String, width: CGFloat) {
@@ -264,7 +261,13 @@ class TabButton: SKSpriteNode {
     label.verticalAlignmentMode = .center
     addChild(label)
 
-    isSelected = false
+    // didSet doesn't run in init
+    updateColors()
+  }
+
+  private func updateColors() {
+    shape.fillColor = isSelected ? Colors.station : .clear
+    label.fontColor = isSelected ? Colors.stationPanel : Colors.station
   }
 
   required init?(coder aDecoder: NSCoder) {

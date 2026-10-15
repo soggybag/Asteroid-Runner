@@ -73,7 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
   var menu: Menu!
   var hud: Hud!
-  var starfield: Starfield!
+  var paper: Paper!
   let pauseLabel = SKLabelNode()
 
   // Set by the view controller before the scene is presented
@@ -161,14 +161,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     Screen.sharedInstance.setSize(size: size, safeArea: safeArea)
 
     name = "Scene"
-    backgroundColor = Colors.backgroundBlack
+    backgroundColor = Colors.paper
 
     setupMenu()
     setupStateMachine()
     setupCamera()
     setupGestures()
     setupPhysicsWorld()
-    setupStarfield()
+    setupPaper()
     setupship()
     setupHud()
     setupPause()
@@ -289,13 +289,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
   // ----------------------------------
-  // Setup Starfield
+  // Setup Paper: the dot grid background
   // ----------------------------------
 
-  func setupStarfield() {
-    starfield = Starfield(size: size)
-    addChild(starfield)
-    starfield.zPosition = -1
+  func setupPaper() {
+    paper = Paper(size: size)
+    addChild(paper)
+    paper.zPosition = -1
   }
 
 
@@ -754,7 +754,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     emitter.particleAlphaSpeed = -3
     emitter.particleColor = color
     emitter.particleColorBlendFactor = 1
-    emitter.particleBlendMode = .add
+    emitter.particleBlendMode = .alpha
     addChild(emitter)
     emitter.run(.sequence([.wait(forDuration: 0.5), .removeFromParent()]))
   }
@@ -1134,6 +1134,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   func explode(at point: CGPoint) {
     guard let shipExplosion = SKEmitterNode(fileNamed: "ShipExplosion") else { return }
     shipExplosion.position = point
+    // The effect file glows (additive), which vanishes on the paper: ink
+    shipExplosion.particleBlendMode = .alpha
+    shipExplosion.particleColorSequence = nil
+    shipExplosion.particleColor = Colors.redPen
+    shipExplosion.particleColorBlendFactor = 1
     addChild(shipExplosion)
 
     let wait = SKAction.wait(forDuration: 2)

@@ -13,7 +13,7 @@ enum AsteroidType {
   case normal
   case lowMass    // Knocked back by every shot
   case glass      // Glassteroid - nearly invisible, shatters in one hit
-  case black      // Blacksteroid - dark and hard to see against space
+  case black      // Blacksteroid - paper-pale and hard to see
   case ice        // Icestroid - bursts into sharp shards
   case comet      // Small and fast, flies in at an angle
   case gas        // Gasteroid - explodes, damaging everything nearby
@@ -117,9 +117,9 @@ enum AsteroidType {
     case .normal: return Colors.randomAsteroidColor()
     case .lowMass: return UIColor(r: 170, g: 160, b: 150)
     case .glass: return UIColor(r: 180, g: 240, b: 255, alpha: 0.3)
-    case .black: return UIColor(r: 22, g: 22, b: 44)
-    case .ice: return UIColor(r: 180, g: 230, b: 255)
-    case .comet: return UIColor(r: 235, g: 245, b: 255)
+    case .black: return UIColor(r: 228, g: 220, b: 202)
+    case .ice: return UIColor(r: 110, g: 185, b: 225)
+    case .comet: return UIColor(r: 120, g: 165, b: 215)
     case .gas: return UIColor(r: 120, g: 200, b: 60)
     case .elastic: return UIColor(r: 150, g: 90, b: 230)
     case .brass: return UIColor(r: 190, g: 150, b: 60)

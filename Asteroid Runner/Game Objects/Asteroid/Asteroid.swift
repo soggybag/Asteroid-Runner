@@ -223,9 +223,9 @@ class Asteroid: SKSpriteNode {
       tail.particleScale = 0.15
       tail.particleScaleSpeed = -0.2
       tail.particleAlphaSpeed = -1.6
-      tail.particleColor = UIColor(r: 150, g: 210, b: 255)
+      tail.particleColor = UIColor(r: 90, g: 140, b: 200)
       tail.particleColorBlendFactor = 1
-      tail.particleBlendMode = .add
+      tail.particleBlendMode = .alpha
       tail.particlePositionRange = CGVector(dx: 6, dy: 6)
       tail.zPosition = -1
       addChild(tail)

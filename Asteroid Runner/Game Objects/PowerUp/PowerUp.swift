@@ -22,7 +22,7 @@ class PowerUp: SKSpriteNode {
   
   init() {
     
-    super.init(texture: nil, color: .cyan, size: CGSize(width: 20, height: 20))
+    super.init(texture: nil, color: Colors.powerupPoints, size: CGSize(width: 20, height: 20))
     
     name = PowerUp.PU_POINTS
     
