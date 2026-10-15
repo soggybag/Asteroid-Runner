@@ -104,6 +104,51 @@ looks wrong.
 **Text stays in code** for anything that changes: names, prices, scores,
 dialog. Fixed words can be drawn: see the title and headings below.
 
+## Font
+
+The game uses **Patrick Hand** (2026-10-15), neat printed handwriting
+that sits well next to pen drawings and stays readable small, with clear
+numbers. It's free (SIL Open Font License), bundled in
+`Asteroid Runner/Fonts/` with its license, and listed under `UIAppFonts`
+in `Info.plist`. The font is set in one place, `Utilities/Fonts.swift`;
+`Fonts.din` is the old font (DIN Alternate Bold, built into iOS) for
+comparing.
+
+Other fonts considered:
+
+- **Architects Daughter**: engineering-notebook lettering. Suits the dot
+  grid and ship-designer theme, but wider and harder to read under 12 pt.
+- **Your own handwriting** as a font (Calligraphr and similar services
+  make one from a filled-in template). Everything would match the art
+  exactly. More work; Patrick Hand can stand in until then.
+
+Notes:
+
+- Handwriting fonts blur at small sizes. Patrick Hand also looks a bit
+  smaller and lighter than DIN Bold at the same point size. Some labels
+  are 10–11 pt (map region names, hints); raise the smallest to about
+  12 pt if they read poorly on a phone.
+- Its digits aren't all the same width, so a number shifts a little as it
+  changes. The score is right-aligned, so this is fine.
+- Pick drawn lettering and the font to look alike, so drawn headings and
+  typed text sit together.
+
+## Title and headings
+
+Words that never change can be drawn by hand instead of set in the font.
+This does the most for the look, especially the title.
+
+| Draw | Size (pt) | Notes |
+|---|---|---|
+| Title: ASTEROID RUNNER | about 300 × 60 (900 × 180 px) | Title screen. Set at 34 pt in the font now (`Menu.swift`) |
+| GAME OVER, PAUSED, the Neptune win heading, SYSTEM MAP | about 200–300 wide, 30–40 tall | One image each |
+| Region names on the map (7) | 10–12 tall | Fixed words, and they'd suit the orbit bands. Letter them small and check they read on a phone |
+
+Keep in the font: tab labels (BUY, SELL, SAFE, NORMAL, RISKY), station
+names, prices, dialog and scores. They're small or they change, and
+redrawing a word every time it's edited gets old fast. Drawn words can't
+be translated; fine unless the game is localized.
+
 ## Particles
 
 Particle textures are small, soft white images, tinted and scaled in

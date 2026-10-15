@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6000000000092 /* PatrickHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000091 /* PatrickHand-Regular.ttf */; };
+		A1B2C3D4E5F6000000000094 /* PatrickHand-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000093 /* PatrickHand-OFL.txt */; };
 		A1B2C3D4E5F600000000008D /* Paper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000008C /* Paper.swift */; };
 		A1B2C3D4E5F600000000008B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000008A /* SceneDelegate.swift */; };
 		A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000080 /* ship.atlas */; };
@@ -100,6 +102,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F6000000000091 /* PatrickHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PatrickHand-Regular.ttf; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000000000093 /* PatrickHand-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PatrickHand-OFL.txt; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000008C /* Paper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F600000000008A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000080 /* ship.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = ship.atlas; sourceTree = "<group>"; };
@@ -204,6 +208,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1B2C3D4E5F6000000000090 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6000000000091 /* PatrickHand-Regular.ttf */,
+				A1B2C3D4E5F6000000000093 /* PatrickHand-OFL.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		A1B2C3D4E5F6000000000030 /* Station */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,6 +397,7 @@
 				D84E3760205DD1B000512E12 /* Particles */,
 				D84E375F205DD18F00512E12 /* Utilities */,
 				A1B2C3D4E5F6000000000026 /* Data */,
+				A1B2C3D4E5F6000000000090 /* Fonts */,
 				D8DB9C1A205CD2DB006455F9 /* GameViewController.swift */,
 				D8DB9C1C205CD2DB006455F9 /* Main.storyboard */,
 				D8DB9C1F205CD2DB006455F9 /* Assets.xcassets */,
@@ -499,6 +513,8 @@
 				D8DB9C20205CD2DB006455F9 /* Assets.xcassets in Resources */,
 				D84E3753205D898600512E12 /* ShipExplosion.sks in Resources */,
 				D8AFF7D7207452A80027750A /* Satellite_4.atlas in Resources */,
+				A1B2C3D4E5F6000000000092 /* PatrickHand-Regular.ttf in Resources */,
+				A1B2C3D4E5F6000000000094 /* PatrickHand-OFL.txt in Resources */,
 				A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */,
 				A1B2C3D4E5F6000000000083 /* asteroid-tiny.atlas in Resources */,
 				A1B2C3D4E5F6000000000085 /* asteroid-small.atlas in Resources */,

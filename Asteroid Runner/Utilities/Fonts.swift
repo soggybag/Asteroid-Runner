@@ -8,6 +8,14 @@
 
 import SpriteKit
 
+// The game's one font. Patrick Hand is printed handwriting to go with the
+// pen art; it's bundled in Fonts/ (free, SIL Open Font License) and listed
+// under UIAppFonts in Info.plist. DIN Alternate is the font from before,
+// built into iOS: set fontName to Fonts.din to compare.
+
 struct Fonts {
-  static let fontName = "DINAlternate-Bold"
+  static let handwriting = "PatrickHand-Regular"
+  static let din = "DINAlternate-Bold"
+
+  static let fontName = handwriting
 }
