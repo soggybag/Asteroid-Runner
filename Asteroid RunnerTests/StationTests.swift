@@ -359,6 +359,8 @@ struct SystemMapTests {
       }
     }
     #expect(route.visited.count == Region.allCases.count)
+    // One station per region, outward, in the order flown
+    #expect(route.path.compactMap { route.map?.station($0)?.region } == Region.allCases)
     #expect(route.current?.region == .neptune)
     #expect(!route.nextWinsTheRun)
     #expect(!StationRoute(stations: []).nextWinsTheRun)

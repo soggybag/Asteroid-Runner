@@ -210,7 +210,7 @@ class StationState: GKState {
     let bottom = screen.safeArea.bottom + 24
     let top = screen.height - screen.hudScoreHeight - 44
     let selected = route.offers.firstIndex { $0.route == route.route } ?? 0
-    let mapPanel = MapPanel(map: map, current: current, offers: route.offers, visited: route.visited,
+    let mapPanel = MapPanel(map: map, current: current, offers: route.offers, path: route.path,
                             selected: selected, size: CGSize(width: screen.width - 16, height: top - bottom))
     mapPanel.position = CGPoint(x: 8, y: bottom)
     mapPanel.onBack = { self.closeMap() }

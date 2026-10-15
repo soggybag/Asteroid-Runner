@@ -191,6 +191,8 @@ Each step can be played on its own:
    (`art/IMG_20261015_0002`). Names tilt along the bands, and route lines
    curve from band to band like transfer orbits. `sunX` and `earthRadius`
    in `MapPanel` set the curve.
+   A dashed line shows the way flown so far, from Earth through every
+   station docked at (`StationRoute.path`), asked for in playtest round 8.
 4. ~~**Loot by danger.**~~ Done 2026-10-12. Each danger has its loot
    (`Data/map.json`, with stages and difficulty; see
    [data-files.md](data-files.md)); the route being flown sets it

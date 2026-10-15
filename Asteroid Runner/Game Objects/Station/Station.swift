@@ -150,6 +150,8 @@ struct StationRoute {
   // Waves from the last station to the next
   private(set) var legLength = 0
   private(set) var visited = Set<String>()
+  // The stations docked at, in order, for the map's line of the way flown
+  private(set) var path: [String] = []
   // The leg's waves, in order, and the stage number of the first one
   private(set) var legWaves: [WavePlan] = []
   private(set) var legStartStage = 1
@@ -227,6 +229,9 @@ struct StationRoute {
   // Neptune, where the run ends, this is all that happens.
   mutating func arrived(at station: Station) {
     visited.insert(station.id)
+    if path.last != station.id {
+      path.append(station.id)
+    }
     current = map?.station(station.id)
     if next?.id == station.id {
       next = nil

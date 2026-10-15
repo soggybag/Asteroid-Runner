@@ -8,7 +8,8 @@
 // the way it flies up the screen. Each region is a band: an arc around the
 // sun, which sits far off the bottom left, so the bands curve down to the
 // right like orbits. Stations reached are ticked, the one docked at is
-// ringed, and curved lines lead to the stations in the next region out. Tap a station or a route tab to see its card, then Set course.
+// ringed, and a dashed line shows the way flown from Earth. Curved lines
+// lead to the stations in the next region out. Tap a station or a route tab to see its card, then Set course.
 // The panel only draws and reports taps; StationState sets the course.
 
 import SpriteKit
@@ -21,6 +22,8 @@ class MapPanel: SKNode {
   let map: SystemMap
   let current: MapStation
   let offers: [LegOffer]
+  // The stations docked at, in order
+  let path: [String]
   let visited: Set<String>
   let size: CGSize
 
@@ -44,12 +47,13 @@ class MapPanel: SKNode {
   private var targets = [String: MapStationButton]()
   private var tabs = [TabButton]()
 
-  init(map: SystemMap, current: MapStation, offers: [LegOffer], visited: Set<String>,
+  init(map: SystemMap, current: MapStation, offers: [LegOffer], path: [String],
        selected: Int, size: CGSize) {
     self.map = map
     self.current = current
     self.offers = offers
-    self.visited = visited
+    self.path = path
+    self.visited = Set(path)
     self.size = size
     super.init()
 
@@ -72,8 +76,10 @@ class MapPanel: SKNode {
     here.position = CGPoint(x: size.width - pad, y: size.height - pad)
     addChild(here)
 
+    drawBands()
+    drawTrail()
     addChild(routeLines)
-    drawRegions()
+    drawStations()
 
     // A tab per route, by danger, safest first
     let tabY = cardTop + 26
@@ -180,11 +186,8 @@ class MapPanel: SKNode {
 
   // MARK: Drawing
 
-  // A row per region with its stations. Unvisited stations further out
-  // are plain dots without names.
-  private func drawRegions() {
-    let targetIds = Set(offers.map(\.station.id))
-
+  // A band per region, with its name
+  private func drawBands() {
     let sun = SKShapeNode(circleOfRadius: 7)
     sun.fillColor = Colors.highScore
     sun.strokeColor = .clear
@@ -212,7 +215,33 @@ class MapPanel: SKNode {
       name.zRotation = bandAngle(at: start)
       name.position.y += 4
       addChild(name)
+    }
+  }
 
+  // The way flown so far: from Earth, at the left of its band, through
+  // every station docked at
+  private func drawTrail() {
+    let points = path.compactMap { map.station($0) }.map(stationPoint)
+    guard !points.isEmpty else { return }
+    let trail = CGMutablePath()
+    var from = bandPoint(.earth, x: pad)
+    trail.move(to: from)
+    for point in points {
+      trail.addPath(transferPath(from: from, to: point))
+      from = point
+    }
+    let line = SKShapeNode(path: trail.copy(dashingWithPhase: 0, lengths: [5, 4]))
+    line.strokeColor = Colors.stationText.withAlphaComponent(0.5)
+    line.lineWidth = 2
+    addChild(line)
+  }
+
+  // The stations on each band. Unvisited stations further out are plain
+  // dots without names.
+  private func drawStations() {
+    let targetIds = Set(offers.map(\.station.id))
+
+    for region in Region.allCases {
       for station in map.stations(in: region) {
         let point = stationPoint(station)
         if targetIds.contains(station.id) {
