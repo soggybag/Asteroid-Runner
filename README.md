@@ -14,6 +14,8 @@ System map design (draft): [docs/system-map.md](docs/system-map.md)
 
 Editing story, dialog and route numbers: [docs/data-files.md](docs/data-files.md)
 
+Art sizes and formats: [docs/art-specs.md](docs/art-specs.md)
+
 ## Controls
 
 - Drag anywhere to steer, or tilt the phone. The ship follows your finger as
