@@ -5,9 +5,10 @@
 
 // The system map, shown when the player taps Launch at a station. The sun
 // is at the bottom and Neptune at the top, so the ship flies up the map
-// the way it flies up the screen. Stations reached are ticked, the one
-// docked at is ringed, and lines lead to the stations in the next region
-// out. Tap a station or a route tab to see its card, then Set course.
+// the way it flies up the screen. Each region is a band: an arc around the
+// sun, which sits far off the bottom left, so the bands curve down to the
+// right like orbits. Stations reached are ticked, the one docked at is
+// ringed, and curved lines lead to the stations in the next region out. Tap a station or a route tab to see its card, then Set course.
 // The panel only draws and reports taps; StationState sets the course.
 
 import SpriteKit
@@ -31,6 +32,11 @@ class MapPanel: SKNode {
   // Rows spread out to fill the space, up to this far apart
   private let maxRowStep: CGFloat = 64
   private let cardHeight: CGFloat = 112
+  // Where the sun is across the map, and the Earth band's radius, both in
+  // map widths. At 0 the bands start flat at the left edge and bend down
+  // to the right. A bigger radius makes flatter bands.
+  private let sunX: CGFloat = 0
+  private let earthRadius: CGFloat = 5
 
   // Redrawn when the selection changes
   private let routeLines = SKNode()
@@ -117,10 +123,49 @@ class MapPanel: SKNode {
     return cardTop + 26 + 17 + 40
   }
 
+  // A region's height at the left edge, where its name is. The bands
+  // curve down from there, so the Earth band's drop is left free below.
+  // Space the rows don't need is split above and below.
   private func rowY(_ region: Region) -> CGFloat {
     let top = size.height - titleHeight - rowHeight / 2
-    let step = min(maxRowStep, (top - mapBottom - rowHeight / 2) / CGFloat(Region.allCases.count - 1))
-    return top - CGFloat(Region.allCases.count - 1 - region.rawValue) * step
+    let gaps = CGFloat(Region.allCases.count - 1)
+    let space = top - mapBottom - rowHeight / 2 - earthDrop
+    let step = min(maxRowStep, space / gaps)
+    let slack = space - step * gaps
+    return top - slack / 2 - CGFloat(Region.allCases.count - 1 - region.rawValue) * step
+  }
+
+  // How far the Earth band drops from the left edge to the right
+  private var earthDrop: CGFloat {
+    let r = earthRadius * size.width
+    let left = pad - sunX * size.width
+    let right = size.width - pad - sunX * size.width
+    return (r * r - left * left).squareRoot() - (r * r - right * right).squareRoot()
+  }
+
+  // The center of every band
+  private var sun: CGPoint {
+    let r = earthRadius * size.width
+    let left = pad - sunX * size.width
+    return CGPoint(x: sunX * size.width, y: rowY(.earth) - (r * r - left * left).squareRoot())
+  }
+
+  private func radius(_ region: Region) -> CGFloat {
+    let left = pad - sun.x
+    let height = rowY(region) - sun.y
+    return (left * left + height * height).squareRoot()
+  }
+
+  // The point on a region's band at x
+  private func bandPoint(_ region: Region, x: CGFloat) -> CGPoint {
+    let r = radius(region)
+    let dx = x - sun.x
+    return CGPoint(x: x, y: sun.y + (r * r - dx * dx).squareRoot())
+  }
+
+  // The angle to turn something so it lies along the band at a point
+  private func bandAngle(at point: CGPoint) -> CGFloat {
+    return atan2(point.y - sun.y, point.x - sun.x) - .pi / 2
   }
 
   private func stationPoint(_ station: MapStation) -> CGPoint {
@@ -129,7 +174,7 @@ class MapPanel: SKNode {
     let left: CGFloat = 132
     let span = size.width - left - pad - 40
     let x = inRegion.count > 1 ? left + span * index / CGFloat(inRegion.count - 1) : left + span / 2
-    return CGPoint(x: x, y: rowY(station.region))
+    return bandPoint(station.region, x: x)
   }
 
 
@@ -147,10 +192,25 @@ class MapPanel: SKNode {
     addChild(sun)
 
     for region in Region.allCases {
-      let y = rowY(region)
+      // The band, edge to edge
+      let path = CGMutablePath()
+      let steps = 40
+      for i in 0...steps {
+        let x = pad + (size.width - pad * 2) * CGFloat(i) / CGFloat(steps)
+        let point = bandPoint(region, x: x)
+        if i == 0 { path.move(to: point) } else { path.addLine(to: point) }
+      }
+      let band = SKShapeNode(path: path)
+      band.strokeColor = Colors.station.withAlphaComponent(0.3)
+      band.lineWidth = 1
+      addChild(band)
+
+      // The name sits on the band at the left
+      let start = bandPoint(region, x: pad)
       let name = label(region.name.uppercased(), size: 10, color: Colors.station.withAlphaComponent(0.7))
-      name.verticalAlignmentMode = .center
-      name.position = CGPoint(x: pad, y: y)
+      name.position = start
+      name.zRotation = bandAngle(at: start)
+      name.position.y += 4
       addChild(name)
 
       for station in map.stations(in: region) {
@@ -158,6 +218,7 @@ class MapPanel: SKNode {
         if targetIds.contains(station.id) {
           let button = MapStationButton(name: station.station.name)
           button.position = point
+          button.zRotation = bandAngle(at: point)
           button.tapped = { [weak self] in
             guard let self = self,
                   let i = self.offers.firstIndex(where: { $0.station.id == station.id }) else { return }
@@ -182,7 +243,7 @@ class MapPanel: SKNode {
           addName("✓ \(station.station.name)", at: point, color: Colors.station.withAlphaComponent(0.6))
         } else {
           let dot = SKShapeNode(circleOfRadius: 3)
-          dot.fillColor = .clear
+          dot.fillColor = Colors.stationPanel
           dot.strokeColor = Colors.station.withAlphaComponent(0.35)
           dot.lineWidth = 1
           dot.position = point
@@ -192,11 +253,35 @@ class MapPanel: SKNode {
     }
   }
 
+  // A name under a station, turned to lie along its band
   private func addName(_ text: String, at point: CGPoint, color: UIColor) {
-    let name = label(text, size: 10, color: color)
+    let holder = SKNode()
+    holder.position = point
+    holder.zRotation = bandAngle(at: point)
+    addChild(holder)
+    let name = label(text, size: 10, color: color, at: CGPoint(x: 0, y: -18))
     name.horizontalAlignmentMode = .center
-    name.position = CGPoint(x: point.x, y: point.y - 18)
-    addChild(name)
+    holder.addChild(name)
+  }
+
+  // A transfer orbit from one point to another: it leaves along the first
+  // band, climbs, and arrives along the next
+  private func transferPath(from: CGPoint, to: CGPoint) -> CGPath {
+    let r0 = hypot(from.x - sun.x, from.y - sun.y)
+    let r1 = hypot(to.x - sun.x, to.y - sun.y)
+    let a0 = atan2(from.y - sun.y, from.x - sun.x)
+    let a1 = atan2(to.y - sun.y, to.x - sun.x)
+    let path = CGMutablePath()
+    path.move(to: from)
+    let steps = 24
+    for i in 1...steps {
+      let t = CGFloat(i) / CGFloat(steps)
+      let climb = t * t * (3 - 2 * t)
+      let r = r0 + (r1 - r0) * climb
+      let a = a0 + (a1 - a0) * t
+      path.addLine(to: CGPoint(x: sun.x + r * cos(a), y: sun.y + r * sin(a)))
+    }
+    return path
   }
 
   // Lines from here to each route's station, the chosen one bright
@@ -204,10 +289,7 @@ class MapPanel: SKNode {
     routeLines.removeAllChildren()
     let from = stationPoint(current)
     for (i, offer) in offers.enumerated() {
-      let path = CGMutablePath()
-      path.move(to: from)
-      path.addLine(to: stationPoint(offer.station))
-      let line = SKShapeNode(path: path)
+      let line = SKShapeNode(path: transferPath(from: from, to: stationPoint(offer.station)))
       let chosen = i == selected
       line.strokeColor = MapPanel.color(offer.route.danger).withAlphaComponent(chosen ? 1 : 0.35)
       line.lineWidth = chosen ? 3 : 1.5

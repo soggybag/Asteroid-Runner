@@ -186,6 +186,11 @@ Each step can be played on its own:
    (`StationRoute.offers`), so the card shows what will really come. The
    scanner briefing shows "Stage 2 of 4 to …", and "Station ahead" on the
    last wave.
+   2026-10-15: each region is drawn as an orbital band, an arc around a
+   sun off the bottom left, after the paper sketch
+   (`art/IMG_20261015_0002`). Names tilt along the bands, and route lines
+   curve from band to band like transfer orbits. `sunX` and `earthRadius`
+   in `MapPanel` set the curve.
 4. ~~**Loot by danger.**~~ Done 2026-10-12. Each danger has its loot
    (`Data/map.json`, with stages and difficulty; see
    [data-files.md](data-files.md)); the route being flown sets it
