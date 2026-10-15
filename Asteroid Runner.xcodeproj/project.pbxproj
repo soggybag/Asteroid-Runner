@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F600000000008B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F600000000008A /* SceneDelegate.swift */; };
 		A1B2C3D4E5F6000000000081 /* ship.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000080 /* ship.atlas */; };
 		A1B2C3D4E5F6000000000083 /* asteroid-tiny.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */; };
 		A1B2C3D4E5F6000000000085 /* asteroid-small.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000000000084 /* asteroid-small.atlas */; };
@@ -100,6 +101,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1B2C3D4E5F600000000008A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000080 /* ship.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = ship.atlas; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000082 /* asteroid-tiny.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-tiny.atlas; sourceTree = "<group>"; };
 		A1B2C3D4E5F6000000000084 /* asteroid-small.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = asteroid-small.atlas; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				D8DB9C12205CD2DB006455F9 /* AppDelegate.swift */,
+				A1B2C3D4E5F600000000008A /* SceneDelegate.swift */,
 				D8DB9C18205CD2DB006455F9 /* GameScene.swift */,
 				D8AFE00A2066ED9100BC11D8 /* GameSceneContact.swift */,
 				D84E375D205DD15A00512E12 /* UI */,
@@ -611,6 +614,7 @@
 				A1B2C3D4E5F6000000000006 /* EnemyShot.swift in Sources */,
 				A1B2C3D4E5F6000000000004 /* AsteroidType.swift in Sources */,
 				D8DB9C13205CD2DB006455F9 /* AppDelegate.swift in Sources */,
+				A1B2C3D4E5F600000000008B /* SceneDelegate.swift in Sources */,
 				D8AFDFFF2060CCB200BC11D8 /* Shapes.swift in Sources */,
 				D84E3733205CD55200512E12 /* Asteroid.swift in Sources */,
 				D84E3741205CFD2400512E12 /* Starfield.swift in Sources */,
