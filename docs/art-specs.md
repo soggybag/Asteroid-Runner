@@ -124,10 +124,11 @@ Other fonts considered:
 
 Notes:
 
-- Handwriting fonts blur at small sizes. Patrick Hand also looks a bit
-  smaller and lighter than DIN Bold at the same point size. Some labels
-  are 10–11 pt (map region names, hints); raise the smallest to about
-  12 pt if they read poorly on a phone.
+- Handwriting fonts blur at small sizes, and Patrick Hand looks a bit
+  smaller and lighter than DIN Bold at the same point size. So the
+  smallest text in the game is 12 pt (raised from 10–11 for the map
+  names, item tray, scanner and power panel hints). Keep new text at 12
+  or more.
 - Its digits aren't all the same width, so a number shifts a little as it
   changes. The score is right-aligned, so this is fine.
 - Pick drawn lettering and the font to look alike, so drawn headings and

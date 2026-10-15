@@ -73,7 +73,7 @@ class ItemSlot: SKSpriteNode {
     addChild(chargeBar)
 
     label.fontName = Fonts.fontName
-    label.fontSize = 11
+    label.fontSize = 12
     label.verticalAlignmentMode = .center
     label.horizontalAlignmentMode = .center
     label.position.y = 1

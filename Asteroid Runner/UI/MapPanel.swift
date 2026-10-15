@@ -210,7 +210,7 @@ class MapPanel: SKNode {
 
       // The name sits on the band at the left
       let start = bandPoint(region, x: pad)
-      let name = label(region.name.uppercased(), size: 10, color: Colors.station.withAlphaComponent(0.7))
+      let name = label(region.name.uppercased(), size: 12, color: Colors.station.withAlphaComponent(0.7))
       name.position = start
       name.zRotation = bandAngle(at: start)
       name.position.y += 4
@@ -288,7 +288,7 @@ class MapPanel: SKNode {
     holder.position = point
     holder.zRotation = bandAngle(at: point)
     addChild(holder)
-    let name = label(text, size: 10, color: color, at: CGPoint(x: 0, y: -18))
+    let name = label(text, size: 12, color: color, at: CGPoint(x: 0, y: -18))
     name.horizontalAlignmentMode = .center
     holder.addChild(name)
   }
@@ -438,7 +438,7 @@ class MapStationButton: SKSpriteNode {
 
     nameLabel.text = text
     nameLabel.fontName = Fonts.fontName
-    nameLabel.fontSize = 11
+    nameLabel.fontSize = 12
     nameLabel.horizontalAlignmentMode = .center
     nameLabel.verticalAlignmentMode = .baseline
     // Above the dot, clear of the route line coming up from below

@@ -95,7 +95,7 @@ class PowerPanel: SKNode {
 
       // Steps that cost more than one unit are marked
       for i in 0 ..< maxLevel where PowerGrid.stepCost(system, toLevel: i + 1) > 1 {
-        let mark = label("×\(PowerGrid.stepCost(system, toLevel: i + 1))", size: 10, color: color)
+        let mark = label("×\(PowerGrid.stepCost(system, toLevel: i + 1))", size: 12, color: color)
         mark.horizontalAlignmentMode = .right
         mark.verticalAlignmentMode = .center
         mark.position = CGPoint(x: x - PowerPanel.segment.width / 2 - 4, y: segments[i].position.y)
@@ -123,7 +123,7 @@ class PowerPanel: SKNode {
     autoFireLabel.verticalAlignmentMode = .center
     autoFireButton.addChild(autoFireLabel)
 
-    let hint = label("Swipe down to close", size: 11, color: Colors.buttonColorActive)
+    let hint = label("Swipe down to close", size: 12, color: Colors.buttonColorActive)
     hint.position = CGPoint(x: size.width / 2, y: 14)
     addChild(hint)
   }

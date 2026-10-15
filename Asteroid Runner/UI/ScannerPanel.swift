@@ -37,7 +37,7 @@ class ScannerPanel: SKNode {
     let x = 16 + ScannerPanel.radarRadius * 2 + 16
     var y = size.height - 24
 
-    addLabel("SCANNER  ·  STAGE \(wave.stage)", size: 11, color: Colors.buttonColorActive, at: CGPoint(x: x, y: y))
+    addLabel("SCANNER  ·  STAGE \(wave.stage)", size: 12, color: Colors.buttonColorActive, at: CGPoint(x: x, y: y))
     y -= 26
     addLabel(wave.recipe.name.uppercased(), size: 20, color: Colors.buttonLabelColor, at: CGPoint(x: x, y: y))
     y -= 22
@@ -64,7 +64,7 @@ class ScannerPanel: SKNode {
 
     let hint = SKLabelNode(text: "Tap to begin")
     hint.fontName = Fonts.fontName
-    hint.fontSize = 10
+    hint.fontSize = 12
     hint.fontColor = Colors.buttonColorActive
     hint.horizontalAlignmentMode = .right
     hint.position = CGPoint(x: size.width - 10, y: 8)
