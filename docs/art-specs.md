@@ -27,6 +27,10 @@ and line are given so you can check or change them.
 - **Clean edges:** everything outside the drawing must be fully
   transparent. Faint scan or selection edges show as a box around the
   sprite in the game, and tints make them stronger.
+  `swift scripts/clean-sprite-edges.swift path/to/*.png` clears them after
+  an export: it keeps the drawing (and anything inside it) and erases the
+  rest. Paint that runs past an outline is part of the drawing to it, so
+  fix that in the source.
 - **Facing:** things that fly up the screen (ship, shots) face **up**.
   Enemy shots are rotated to their direction of travel with angle 0 to the
   **right**, so draw them facing right.
@@ -70,6 +74,35 @@ type is tinted its color (`AsteroidType.color()`), so draw rocks in light
 gray and keep the outline dark.
 The hit circle for a rock is its full radius, so keep the visible rock
 filling the circle; a little rough edge past it is fine.
+
+## HUD, panels and buttons
+
+Sizes as the code draws them now, in points, with @3x pixels. Widths
+depend on the phone, so the table gives iPhone 17 (402 pt wide) and SE
+(375 pt). Corner radius is what the code uses, for reference.
+
+| Piece | Size (pt) | @3x (px) | Notes |
+|---|---|---|---|
+| Score strip (top) | full width × 40, plus the top safe area: 102 tall on iPhone 17, 60 on SE | 1320 × 306 covers the biggest | Lives at left, score at right, in the bottom 40 pt. The top part sits behind the Dynamic Island: keep it plain (`Hud.swift`) |
+| Item tray slot | 44 × 28, three in a row 4 apart | 132 × 84 | Under the strip at left. Icon inside about 22 × 22; a charge bar 38 × 3 along the bottom (`ItemTray.swift`). Radius 6 |
+| Menu button | 140 × 40 | 420 × 120 | Title and game over screens (`Button.swift`). Radius 20 |
+| Tab button | 34 tall, 80–180 wide | 102 tall | Shop tabs, map route tabs, Back, Set course, Launch. Radius 17 |
+| Shop button | 112 × 36; the power screen's + and − are 64 × 36 | 336 × 108 | Tinted by what it does: buy, sell, fit, repair. Radius 8 |
+| Scanner panel | width − 32 × 156: 370 × 156 on iPhone 17 | 1110 × 468 | The briefing before each stage (`ScannerPanel.swift`). Radius 10 |
+| Power panel | width − 16 × 316: 386 × 316 | 1158 × 948 | Swipe-up power controls (`PowerPanel.swift`). Radius 12 |
+| Station and map panels | width − 16 × most of the screen: 386 × 712 on iPhone 17, 359 × 539 on SE | 1158 × 2136 | Same frame for both (`StationPanel.swift`, `MapPanel.swift`). The station's greeting band is full width × 78 at the top. Radius 14 |
+
+**Draw frames to stretch.** Most of these change size with the phone or
+the text in them, so a frame should be drawn as a "9-slice": four corners
+that stay as drawn, edges that stretch along their length, and a middle
+that fills. SpriteKit does this from one image (`centerRect`). Keep the
+corners within about 16 pt (48 px) of the edge, keep detail in the
+corners, and keep the edges plain enough to stretch. Draw each frame near
+its usual size so it doesn't stretch much: a wobbly pen line stretched 3×
+looks wrong.
+
+**Text stays in code** for anything that changes: names, prices, scores,
+dialog. Fixed words can be drawn: see the title and headings below.
 
 ## Particles
 
