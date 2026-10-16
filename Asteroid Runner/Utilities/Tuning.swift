@@ -287,8 +287,8 @@ enum Tuning {
       winBonus: 10_000,
       winBonusPerHull: 2_000,
       routes: RouteTable(
-        safe: RouteSettings(minStages: 4, maxStages: 5, difficulty: -2, pickupChance: 0.045,
-                            maxItemsPerWave: 1, coinPickup: 4, stageClearCoins: 2),
+        safe: RouteSettings(minStages: 4, maxStages: 5, difficulty: -2, pickupChance: 0.06,
+                            maxItemsPerWave: 2, coinPickup: 4, stageClearCoins: 2),
         normal: RouteSettings(minStages: 3, maxStages: 4, difficulty: 0, pickupChance: 0.06,
                               maxItemsPerWave: 2, coinPickup: 5, stageClearCoins: 3),
         risky: RouteSettings(minStages: 2, maxStages: 3, difficulty: 2, pickupChance: 0.09,

@@ -457,8 +457,9 @@ struct SystemMapTests {
 
   @Test func riskierRoutesPayMore() {
     let loots = RouteDanger.allCases.map(\.loot)
+    // Items: safe may match normal (round 8), never beat it. Coins: strictly more.
     for (easier, harder) in zip(loots, loots.dropFirst()) {
-      #expect(easier.pickupChance < harder.pickupChance)
+      #expect(easier.pickupChance <= harder.pickupChance)
       #expect(easier.maxItemsPerWave <= harder.maxItemsPerWave)
       #expect(easier.coinPickup < harder.coinPickup)
       #expect(easier.stageClearCoins < harder.stageClearCoins)

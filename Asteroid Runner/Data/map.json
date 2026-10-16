@@ -65,14 +65,16 @@
   // for a leg are about stageClearCoins x the average stages. The tests
   // check this order.
   "routes": {
-    // Longer and easier, pays less. For catching your breath and fitting
-    // upgrades before a hard region.
+    // Longer and easier, pays fewer coins. For catching your breath and
+    // fitting upgrades before a hard region. Items come as often as on a
+    // normal route (since round 8, 2026-10-16): a struggling player picks
+    // safe, and starving them of items made the hard regions worse.
     "safe": {
       "minStages": 4,
       "maxStages": 5,
       "difficulty": -2,
-      "pickupChance": 0.045,
-      "maxItemsPerWave": 1,
+      "pickupChance": 0.06,
+      "maxItemsPerWave": 2,
       "coinPickup": 4,
       "stageClearCoins": 2,
     },

@@ -202,12 +202,13 @@ Each step can be played on its own:
 
    | Route | Pickup chance | Items per wave | Coin pickup | Stage clear | Clear coins per leg |
    | --- | --- | --- | --- | --- | --- |
-   | Safe | 4.5% | 1 | 4 | 2 | about 9 |
+   | Safe | 6% (was 4.5%) | 2 (was 1) | 4 | 2 | about 9 |
    | Normal | 6% | 2 | 5 | 3 | about 10 |
    | Risky | 9% | 3 | 8 | 6 | about 15 |
 
    Risky pays more for a leg though it's shorter; safe a little less
-   though it's longer. Rich ore on risky routes comes with ores.
+   though it's longer. Since round 8 (2026-10-16), safe routes send items
+   as often as normal ones and pay only fewer coins. Rich ore on risky routes comes with ores.
 5. ~~**Reaching Neptune wins the run.**~~ Done 2026-10-12.
    `RunWonState.swift`: clearing the last wave of a leg into Neptune
    brings the Neptune station in, as when docking (tap to skip), then

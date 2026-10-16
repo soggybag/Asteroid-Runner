@@ -45,7 +45,7 @@ Five games on builds 61 and 66; details in [playtest-round-8.md](playtest-round-
 
 **To decide before round 9:**
 
-- **Make safe routes less poor.** Recommended: give safe routes normal item numbers (up to 2 a wave, 6%) and keep only their coins lower, so safe means easier, not starved. Another option: pay more coins for stages further out, so every route earns more where upgrades matter most.
+- ~~**Make safe routes less poor.**~~ Done 2026-10-16: safe routes send items like normal ones (up to 2 a wave, 6%) and keep only their coins lower, so safe means easier, not starved. Adjust after round 9. The other option, paying more coins for stages further out, is held in reserve.
 
 ## Playtest round 7 findings (2026-10-09)
 
@@ -478,7 +478,7 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
-**Up next (revised 2026-10-15):** round 8 is written up ([findings](#playtest-round-8-findings-2026-10-15)): decide whether safe routes should be less poor, then playtest round 9 with the new coin and route stats on the end screen. Then **trade and missions** and the **return mission**. In parallel, art: drawn HUD and panel frames, the title and headings, pickups and stations ([art-specs.md](art-specs.md)).
+**Up next (revised 2026-10-15):** round 8 is written up ([findings](#playtest-round-8-findings-2026-10-15)): safe routes now send normal items (2026-10-16); next, playtest round 9 with the new coin and route stats on the end screen. Then **trade and missions** and the **return mission**. In parallel, art: drawn HUD and panel frames, the title and headings, pickups and stations ([art-specs.md](art-specs.md)).
 
 **Up next (revised 2026-10-12):** the **system map is built** (steps 1–5 in [system-map.md](system-map.md#building-it)): choose routes, loot by danger, and reaching Neptune wins. Next, **playtest round 8** on the map build, then **trade and missions**, and the **return mission** from Neptune. Map numbers, station dialog and the intro are edited in commented data files ([data-files.md](data-files.md)).
 
@@ -626,6 +626,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-16 | Safe routes send items like normal routes (up to 2 a wave, 6%); only their coins stay lower. To adjust after round 9 |
 | 2026-10-15 | Missions will let the player revisit regions before reaching Neptune, and may require it (material or an upgrade found further in). Routes inward come with missions; until then routes lead outward |
 | 2026-10-15 | Round 8 playtest: stages 17–25 in four of five runs, best 38,620; nobody reached Neptune; the stage 9 wall is gone. Safe routes leave the ship short of items and coins late in a run. The end screen now shows coins earned and spent, upgrades and routes taken |
 | 2026-10-15 | Look pulled forward from Phase 7: hand-drawn pen-on-paper style. Cream paper with a scrolling dot grid replaces the starfield; pen-ink palette; Patrick Hand font, smallest text 12 pt; first ship and rock drawings in the game (placeholder). Map regions drawn as curved orbital bands, with a dashed line along the way flown (round 8 request). Art sources in Git LFS; sizes and drawing guide in [art-specs.md](art-specs.md). App moved to the UIScene life cycle (required by the iOS 26 SDK) |

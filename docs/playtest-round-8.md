@@ -52,9 +52,9 @@ by danger.**
 **To decide before round 9** (see
 [design-notes.md](design-notes.md#playtest-round-8-findings-2026-10-15)):
 
-- **Safe routes too poor?** Options: give safe routes normal item numbers
-  (up to 2 a wave, 6%) and keep only the coins lower; or pay more for
-  stages further out, so every route earns more in the hard regions.
+- **Safe routes too poor?** Decided 2026-10-16: safe routes send items
+  like normal routes (up to 2 a wave, 6%) and keep only their coins
+  lower. Adjust after round 9.
 - **The gates:** Phase 3's gate is that a strong player needs the HUD to get
   past stage 20. Three runs passed 20; note in round 9 whether the HUD was
   used to do it.
