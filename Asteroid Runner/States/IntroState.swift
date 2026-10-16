@@ -47,6 +47,8 @@ class IntroState: GKState {
     scene.run(.sequence(array), withKey: GameScene.FLOW)
     
     let hint = PopupLabelNode(message: "Tap to skip", location: CGPoint(x: Screen.sharedInstance.centerX, y: Screen.sharedInstance.shipY), fontSize: 14, time: 4)
+    // Ink, darker than other popups: it fades as it rises and is easy to miss
+    hint.fontColor = Colors.ink
     scene.addChild(hint)
   }
   
