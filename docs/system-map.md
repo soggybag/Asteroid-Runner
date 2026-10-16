@@ -231,8 +231,14 @@ where ores will come in.
 - [x] After the win? **A surprise return mission to the inner system,
       carrying something fragile through a system that has changed**
       (2026-10-09). Endless play in the Kuiper belt is set aside for now.
-- [ ] Can the player go back toward the sun? Proposed: not in the first
-      version.
+- [x] Can the player go back toward the sun? **Yes, once missions exist**
+      (2026-10-15). A mission may need material or an upgrade found only in
+      an inner region, so revisiting regions before Neptune is possible and
+      sometimes required. Until then, routes only lead outward.
+- [ ] What stops a player farming the easy inner regions for coins? See
+      the design notes (fuel, loot that drops on routes already flown,
+      mission deadlines).
+- [ ] With backtracking, runs get longer: is saving at a station needed?
 - [x] Same map every run? **Same regions, new stations and routes each
       run** (2026-10-09).
 - [ ] Is 2–3 routes per station enough choice?

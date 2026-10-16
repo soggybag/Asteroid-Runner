@@ -609,7 +609,10 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 - [ ] Should powerups mostly come from stations, with space giving loot and coins?
 - [ ] Left and right HUD panels (shields left, weapons right): worth it, or one top panel?
 - [ ] How hard should flying be once commerce and other tasks are added? Calm stretches between hard ones, or difficulty by distance from the sun?
-- [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add? Can the player go back toward the sun?
+- [ ] System map: how much does a route hint show by default, and what does a sensor upgrade add?
+- [x] Can the player go back toward the sun? Yes, once missions exist (2026-10-15): revisiting regions before Neptune is possible, and a mission may require it to collect material or an upgrade
+- [ ] What limits going back: fuel, less loot on routes already flown, mission deadlines? Without a limit, players farm the easy inner regions
+- [ ] Runs get longer with backtracking: save and resume at a station?
 - [x] Tap-to-fire: replaced by hold to fire at the weapon's rate (2026-10-06)
 - [x] Weapons at max beats every other setting. Chosen 2026-10-07: weapons cost more power per level near the top, and faster maneuvering at high engine power. Other options were: weapons cost more power per level near the top; heat that forces weapons to cool down; enemy shots that only engines or shields can answer; faster maneuvering at high engine power
 - [ ] Distance: give it meaning (system map, voyage goals) or drop it? Round 6 suggests distance replaces score (2026-10-09)
@@ -623,6 +626,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-15 | Missions will let the player revisit regions before reaching Neptune, and may require it (material or an upgrade found further in). Routes inward come with missions; until then routes lead outward |
 | 2026-10-15 | Round 8 playtest: stages 17–25 in four of five runs, best 38,620; nobody reached Neptune; the stage 9 wall is gone. Safe routes leave the ship short of items and coins late in a run. The end screen now shows coins earned and spent, upgrades and routes taken |
 | 2026-10-15 | Look pulled forward from Phase 7: hand-drawn pen-on-paper style. Cream paper with a scrolling dot grid replaces the starfield; pen-ink palette; Patrick Hand font, smallest text 12 pt; first ship and rock drawings in the game (placeholder). Map regions drawn as curved orbital bands, with a dashed line along the way flown (round 8 request). Art sources in Git LFS; sizes and drawing guide in [art-specs.md](art-specs.md). App moved to the UIScene life cycle (required by the iOS 26 SDK) |
 | 2026-10-12 | System map built (steps 1–5): routes chosen on a map after each station; safe routes longer, easier and pay less, risky ones shorter, harder and pay more; reaching Neptune wins, with a bonus of 10,000 plus 2,000 per hull point left. Next: playtest round 8 |
