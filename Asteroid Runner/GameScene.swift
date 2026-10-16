@@ -615,6 +615,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     score += points
     if powerup.name == PowerUp.PU_COIN {
       coins += stationRoute.loot.coinPickup
+      stats.coinsEarned += stationRoute.loot.coinPickup
     }
     show(points: points, at: powerup.position)
     powerup.removeFromParent()

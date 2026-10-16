@@ -74,6 +74,7 @@ class PlayingState: GKState {
     let bonus = scene.level * Tuning.Stages.bonusPerStage
     scene.score += bonus
     scene.coins += scene.stationRoute.loot.stageClearCoins
+    scene.stats.coinsEarned += scene.stationRoute.loot.stageClearCoins
     scene.addText(message: "Stage Clear +\(bonus)")
     scene.run(.sequence([.wait(forDuration: Tuning.Stages.stageClearPause), .run {
       self.startNextLevel()

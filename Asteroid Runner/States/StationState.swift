@@ -144,6 +144,7 @@ class StationState: GKState {
       refresh(message: "Tray is full. Sell something first.")
     } else {
       scene.coins -= price
+      scene.stats.coinsSpent += price
       scene.inventory.add(item)
       scene.lightImpact.impactOccurred()
       refresh(message: "Bought \(item.name.lowercased())")
@@ -154,6 +155,7 @@ class StationState: GKState {
     guard let station = station, let item = scene.inventory.take(slot: slot) else { return }
     let price = station.sellPrice(item.type)
     scene.coins += price
+    scene.stats.coinsEarned += price
     scene.lightImpact.impactOccurred()
     refresh(message: "Sold \(item.type.name.lowercased()) for \(price)")
   }
@@ -164,6 +166,7 @@ class StationState: GKState {
       refresh(message: "Not enough coins")
     } else {
       scene.coins -= station.repairPrice
+      scene.stats.coinsSpent += station.repairPrice
       scene.lives += 1
       scene.lightImpact.impactOccurred()
       refresh(message: "Hull repaired")
@@ -181,6 +184,8 @@ class StationState: GKState {
       refresh(message: "Not enough coins")
     } else {
       scene.coins -= price
+      scene.stats.coinsSpent += price
+      scene.stats.upgradesBought += 1
       scene.install(upgrade)
       scene.impact.impactOccurred()
       refresh(message: "\(upgrade.name) installed")
@@ -216,6 +221,7 @@ class StationState: GKState {
     mapPanel.onBack = { self.closeMap() }
     mapPanel.onSetCourse = { offer in
       self.scene.stationRoute.choose(offer)
+      self.scene.stats.routesTaken[offer.route.danger, default: 0] += 1
       self.closeMap()
       self.launch()
     }

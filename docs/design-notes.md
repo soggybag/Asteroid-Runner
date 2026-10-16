@@ -31,6 +31,22 @@ About 10 games on an iPhone 11 Pro, build v2.0 (35); details in [playtest-notes.
 | Docking flies the ship through everything on screen, and is too quick | Wait for the screen to clear before the station appears |
 | Tilt, haptics, pause and performance all good | No change |
 
+## Playtest round 8 findings (2026-10-15)
+
+Five games on builds 61 and 66; details in [playtest-round-8.md](playtest-round-8.md). Four runs reached stages 17–25 (best 38,620 at stage 25), one ended at stage 9. **Nobody reached Neptune** (about 21–27 stages on normal routes); run 4 got to stage 23. **The stage 9 swarm wall is gone.**
+
+| Finding | What it means |
+| --- | --- |
+| Runs 1–2 (before loot by danger) got several upgrades | Coins were enough when every route paid normal loot |
+| Run 4 took safe routes: two upgrades, out of power-ups near the end | Safe routes send fewer items (1 a wave, 4.5%) and pay 2 coins a stage; the route a struggling player picks leaves them poorer for the hardest regions |
+| Coins earned weren't recorded | Fixed: the end screen shows coins earned and spent, upgrades bought and routes taken |
+| Wants a line on the map along the path taken | Done 2026-10-15 |
+| Three runs passed stage 20 | Phase 3's gate needs the HUD to be what got them there: note HUD use in round 9 |
+
+**To decide before round 9:**
+
+- **Make safe routes less poor.** Recommended: give safe routes normal item numbers (up to 2 a wave, 6%) and keep only their coins lower, so safe means easier, not starved. Another option: pay more coins for stages further out, so every route earns more where upgrades matter most.
+
 ## Playtest round 7 findings (2026-10-09)
 
 Five games on build 56; details in [playtest-round-7.md](playtest-round-7.md). Four runs ended at the stage 9 swarm; one reached stage 24, changing the HUD power settings every stage. **The stage 9 swarm was a wall,** caused by a spacing bug: stage 9 introduces brasserteroids (always large, three times the hits), but a swarm spaced them as if they were tiny.
@@ -462,7 +478,7 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
-**Up next (revised 2026-10-15):** finish **playtest round 8** (five runs logged: stages 9–25, nobody reached Neptune yet; short on pickups and coins late in the run) and write up its findings, then **trade and missions** and the **return mission**. In parallel, art: drawn HUD and panel frames, the title and headings, pickups and stations ([art-specs.md](art-specs.md)).
+**Up next (revised 2026-10-15):** round 8 is written up ([findings](#playtest-round-8-findings-2026-10-15)): decide whether safe routes should be less poor, then playtest round 9 with the new coin and route stats on the end screen. Then **trade and missions** and the **return mission**. In parallel, art: drawn HUD and panel frames, the title and headings, pickups and stations ([art-specs.md](art-specs.md)).
 
 **Up next (revised 2026-10-12):** the **system map is built** (steps 1–5 in [system-map.md](system-map.md#building-it)): choose routes, loot by danger, and reaching Neptune wins. Next, **playtest round 8** on the map build, then **trade and missions**, and the **return mission** from Neptune. Map numbers, station dialog and the intro are edited in commented data files ([data-files.md](data-files.md)).
 
@@ -506,7 +522,8 @@ Stations were built early, ahead of their phase, to see how they work; trade wai
 - [x] Ship upgrades (2026-10-08): six upgrades with tiers bought at stations, kept for the run: reactor, cargo rack, hull plating, thrusters, weapon focus, shield capacitor. Each station fits its own set (`stations.json`); prices in `Tuning.Upgrades`. Upgrade tab on the station screen
 - [x] Playtest round 6 ([playtest-round-6.md](playtest-round-6.md)): stages 10–14; upgrades not felt, coins stretched thin. Tray moved to its own row (2026-10-09)
 - [x] Playtest round 7 ([playtest-round-7.md](playtest-round-7.md)): four runs lost at the stage 9 swarm, one reached stage 24. Fixed swarm spacing for brass, gentler swarms, more maze stagger (2026-10-09)
-- [ ] Playtest round 8: check the swarm fixes, the system map (routes, loot, the win at Neptune), and whether the gate is met
+- [x] Playtest round 8 ([playtest-round-8.md](playtest-round-8.md)): stages 17–25 in four runs, nobody reached Neptune; stage 9 wall gone; safe routes leave the ship short of items and coins. End screen now shows coins and routes (2026-10-15)
+- [ ] Playtest round 9: the coin and route stats, safe route loot, and whether the HUD gets runs past stage 20
 - [x] Data files with comments (2026-10-12): `Data/*.json` read as JSON5; all map tuning in `map.json`; `stations.json` and `intro.json` explain each entry. Guide and a proposed missions format in [data-files.md](data-files.md)
 - [x] System map step 5 (2026-10-12): reaching Neptune wins the run, with a win screen (`RunWonState.swift`) and a bonus of 10,000 points plus 2,000 per hull point left; no routes past Neptune; the map card and scanner warn when a leg ends the run
 - [x] System map step 4 (2026-10-12): loot by route danger: risky routes send more pickups and pay more coins, safe ones less (`Data/map.json`); the map card shows ◆ loot marks
@@ -606,6 +623,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-15 | Round 8 playtest: stages 17–25 in four of five runs, best 38,620; nobody reached Neptune; the stage 9 wall is gone. Safe routes leave the ship short of items and coins late in a run. The end screen now shows coins earned and spent, upgrades and routes taken |
 | 2026-10-15 | Look pulled forward from Phase 7: hand-drawn pen-on-paper style. Cream paper with a scrolling dot grid replaces the starfield; pen-ink palette; Patrick Hand font, smallest text 12 pt; first ship and rock drawings in the game (placeholder). Map regions drawn as curved orbital bands, with a dashed line along the way flown (round 8 request). Art sources in Git LFS; sizes and drawing guide in [art-specs.md](art-specs.md). App moved to the UIScene life cycle (required by the iOS 26 SDK) |
 | 2026-10-12 | System map built (steps 1–5): routes chosen on a map after each station; safe routes longer, easier and pay less, risky ones shorter, harder and pay more; reaching Neptune wins, with a bonus of 10,000 plus 2,000 per hull point left. Next: playtest round 8 |
 | 2026-10-12 | Data files: JSON with comments (JSON5), read by Foundation with no new library. All map tuning in `Data/map.json`; station dialog in `stations.json`; mission dialog will go in a `missions.json` in the same style ([data-files.md](data-files.md)) |

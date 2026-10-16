@@ -16,6 +16,8 @@ class Menu: SKSpriteNode {
   var bestLabel: SKLabelNode!
   var stageLabel: SKLabelNode!
   var killsLabel: SKLabelNode!
+  var coinsLabel: SKLabelNode!
+  var routesLabel: SKLabelNode!
   var wavesLabel: SKLabelNode!
 
   var message = "" {
@@ -76,8 +78,14 @@ class Menu: SKSpriteNode {
     stageLabel = statLabel(y: bestLabel.position.y - 44)
     killsLabel = statLabel(y: stageLabel.position.y - 26)
 
+    // Where the coins went, and the routes chosen
+    coinsLabel = statLabel(y: killsLabel.position.y - 22)
+    coinsLabel.fontSize = 13
+    routesLabel = statLabel(y: coinsLabel.position.y - 18)
+    routesLabel.fontSize = 13
+
     // The kinds of wave met, wrapping onto a second line if needed
-    wavesLabel = statLabel(y: killsLabel.position.y - 24)
+    wavesLabel = statLabel(y: routesLabel.position.y - 20)
     wavesLabel.fontSize = 13
     wavesLabel.numberOfLines = 3
     wavesLabel.preferredMaxLayoutWidth = Screen.sharedInstance.width - 40
@@ -114,8 +122,12 @@ class Menu: SKSpriteNode {
   // A big line above the button and a smaller one under it, or none
 
   func show(title: String?, subtitle: String? = nil) {
-    // Lower on the screen with a title, clear of the ship docked above
-    position.y = Screen.sharedInstance.center.y - (title == nil ? 0 : 60)
+    // Lower on the screen with a title, clear of the ship docked above,
+    // but never so low that the stats' last line (up to three lines of
+    // waves) runs off the bottom on a small phone
+    let screen = Screen.sharedInstance
+    let lowest = wavesLabel.position.y - 48
+    position.y = max(screen.center.y - (title == nil ? 0 : 60), screen.safeArea.bottom + 12 - lowest)
     titleLabel.text = title
     titleLabel.isHidden = title == nil
     subtitleLabel.text = subtitle
@@ -127,6 +139,8 @@ class Menu: SKSpriteNode {
   func show(stage: Int, stats: RunStats, stations: Int) {
     stageLabel.text = "Stage \(stage)  ·  \(stats.distanceText)  ·  Stations \(stations)"
     killsLabel.text = "Asteroids \(stats.asteroidsDestroyed)  ·  Turrets \(stats.turretsDestroyed)"
+    coinsLabel.text = stats.coinsText
+    routesLabel.text = stats.routesText
     wavesLabel.text = stats.wavesText
   }
 

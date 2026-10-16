@@ -184,6 +184,20 @@ struct RunStatsTests {
     stats.distance = 1.234
     #expect(stats.distanceText == "1.23 AU")
   }
+
+  @Test func coinsAndRoutesRead() {
+    var stats = RunStats()
+    #expect(stats.coinsText == "Coins 0 earned, 0 spent  ·  Upgrades 0")
+    #expect(stats.routesText == nil)
+    stats.coinsEarned = 142
+    stats.coinsSpent = 120
+    stats.upgradesBought = 3
+    stats.routesTaken[.normal] = 4
+    stats.routesTaken[.safe] = 2
+    #expect(stats.coinsText == "Coins 142 earned, 120 spent  ·  Upgrades 3")
+    // Safest first, and dangers never taken are left out
+    #expect(stats.routesText == "Routes: Safe 2  ·  Normal 4")
+  }
 }
 
 
