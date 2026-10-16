@@ -462,6 +462,8 @@ Ten phases, each ending at a gate it must pass before the next begins. Phase 0 i
 3. ~~**Quick wins**~~ Done 2026-10-05: pickups pulled in before docking; stats at game over.
 4. ~~**Round 3 bug fixes**~~ Done 2026-10-06: brasstroid splitting, missing bosstroids, edge swipes.
 5. ~~**Waves and pacing**~~ Done 2026-10-06: wave recipes, difficulty that eases after stations, scanner briefing, hold to fire.
+**Up next (revised 2026-10-15):** finish **playtest round 8** (five runs logged: stages 9–25, nobody reached Neptune yet; short on pickups and coins late in the run) and write up its findings, then **trade and missions** and the **return mission**. In parallel, art: drawn HUD and panel frames, the title and headings, pickups and stations ([art-specs.md](art-specs.md)).
+
 **Up next (revised 2026-10-12):** the **system map is built** (steps 1–5 in [system-map.md](system-map.md#building-it)): choose routes, loot by danger, and reaching Neptune wins. Next, **playtest round 8** on the map build, then **trade and missions**, and the **return mission** from Neptune. Map numbers, station dialog and the intro are edited in commented data files ([data-files.md](data-files.md)).
 
 **Up next (revised 2026-10-09, after round 7):** ~~ship upgrades~~ (done), playtest round 8, then the **system map**: choose the next station; safe or risky routes set the difficulty. Design draft in [system-map.md](system-map.md). Then **trade and missions**. Modules replace upgrades once the module art and design are ready.
@@ -604,6 +606,7 @@ Good ideas with no phase yet; pull them in when a phase needs them.
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-15 | Look pulled forward from Phase 7: hand-drawn pen-on-paper style. Cream paper with a scrolling dot grid replaces the starfield; pen-ink palette; Patrick Hand font, smallest text 12 pt; first ship and rock drawings in the game (placeholder). Map regions drawn as curved orbital bands, with a dashed line along the way flown (round 8 request). Art sources in Git LFS; sizes and drawing guide in [art-specs.md](art-specs.md). App moved to the UIScene life cycle (required by the iOS 26 SDK) |
 | 2026-10-12 | System map built (steps 1–5): routes chosen on a map after each station; safe routes longer, easier and pay less, risky ones shorter, harder and pay more; reaching Neptune wins, with a bonus of 10,000 plus 2,000 per hull point left. Next: playtest round 8 |
 | 2026-10-12 | Data files: JSON with comments (JSON5), read by Foundation with no new library. All map tuning in `Data/map.json`; station dialog in `stations.json`; mission dialog will go in a `missions.json` in the same style ([data-files.md](data-files.md)) |
 | 2026-10-09 | After Neptune: a surprise return mission to the inner system, carrying something fragile (dodge more, shoot less) through a system that has changed since the way out. Shorter than the way out. Replaces endless play for now; a pursuer may come later |
